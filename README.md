@@ -2,11 +2,19 @@
 
 ## Getting started
 
-1. create a Python virtual environment
-2. install dependencies
-3. run the application
+### Run via docker:
 
-### For Linux and Mac
+To run application via docker, use next command line in 
+project's root directory:
+
+```bash
+make -C docker clean && make -C docker build && make -C docker run
+```
+
+### Run using source files:
+
+To run application using source files, use next commands 
+in project's root directory:
 
 ```bash
 python -m venv venv
@@ -15,17 +23,5 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
-python src/main.py
-```
-
-### For Windows
-
-```bash
-py -3.11 -m venv venv
-
-venv\Scripts\activate
-
-pip install -r requirements.txt
-
-python src/main.py
+uvicorn src.main:app --host <Ypur host here> --port <Your por here> --reload
 ```

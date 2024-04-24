@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  benefit_bistro:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    entrypoint: /app/docker/entrypoint.sh
+    environment:
+      HOST: "0.0.0.0"
+      PORT: 8080
+    ports:
+      - "8080:8080"
