@@ -1,2 +1,5 @@
 [project]
 name = "Benefit Bistro"
+
+[tool.mypy]
+plugins = [ "pydantic.mypy" ]
