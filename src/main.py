@@ -35,7 +35,7 @@ async def homepage(request: Request):
         request=request,
         context=generate_html_context(
             title=PageNamesConfig.HOMEPAGE
-        ),
+        )
     )
 
 
