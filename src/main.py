@@ -6,10 +6,12 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import PathsConfig, cors_config, PageNamesConfig, uvicorn_config
+from src.auth.router import router as auth_router
 
 
 app = FastAPI()
 
+# Middlewares:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_config.ALLOW_ORIGINS,
@@ -18,8 +20,11 @@ app.add_middleware(
     allow_headers=cors_config.ALLOW_HEADERS,
 )
 
-app.mount('/static', StaticFiles(directory=PathsConfig.STATIC), name='static')
+# Routers:
+app.include_router(auth_router)
 
+# Mounts:
+app.mount('/static', StaticFiles(directory=PathsConfig.STATIC), name='static')
 templates = Jinja2Templates(directory=PathsConfig.TEMPLATES.__str__())
 
 
