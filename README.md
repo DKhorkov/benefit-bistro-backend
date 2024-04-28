@@ -33,7 +33,7 @@ uvicorn src.main:app --host <Ypur host here> --port <Your por here> --reload
 ### Linters
 
 ```bash
-flake8 ./src
+flake8 ./src -v
 ```
 
 ### Type Checkers

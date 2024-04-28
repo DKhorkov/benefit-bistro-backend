@@ -19,8 +19,8 @@ jobs:
           python-version: "3.12"
       - name: Install requirements
         run: pip install -r ./requirements/prod.txt
-      - name: flake8 Lint
-        uses: py-actions/flake8@v2
+      - name: Run flake8
+        run: flake8 ./src -v
   type-cheks:
     runs-on: ubuntu-latest
     steps:
@@ -31,5 +31,4 @@ jobs:
       - name: Install requirements
         run: pip install -r ./requirements/prod.txt
       - name: Run mypy
-        uses: sasanquaneuf/mypy-github-action@releases/v1
-      - run: mypy ./src
+        run: mypy ./src
