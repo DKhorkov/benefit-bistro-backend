@@ -4,7 +4,7 @@ from starlette.templating import Jinja2Templates
 
 from src.config import PathsConfig, PageNamesConfig
 
-from src.auth.config import RouterConfig
+from src.auth.config import RouterConfig, URLPathsConfig, URLNamesConfig
 from src.core.utils import generate_html_context
 
 router = APIRouter(
@@ -16,7 +16,7 @@ router = APIRouter(
 templates = Jinja2Templates(directory=PathsConfig.TEMPLATES.__str__())
 
 
-@router.get('/register', response_class=HTMLResponse)
+@router.get(path=URLPathsConfig.REGISTER, response_class=HTMLResponse, name=URLNamesConfig.REGISTER)
 async def register(request: Request):
     return templates.TemplateResponse(
         name=PathsConfig.REGISTER_PAGE.__str__(),
@@ -27,7 +27,7 @@ async def register(request: Request):
     )
 
 
-@router.get('/login', response_class=HTMLResponse)
+@router.get(path=URLPathsConfig.LOGIN, response_class=HTMLResponse, name=URLNamesConfig.LOGIN)
 async def login(request: Request):
     return templates.TemplateResponse(
         name=PathsConfig.LOGIN_PAGE.__str__(),
