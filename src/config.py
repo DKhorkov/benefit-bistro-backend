@@ -9,12 +9,24 @@ class PathsConfig:
     TEMPLATES: Path = Path('./templates')
     STATIC: Path = Path('./static')
 
-    INDEX_PAGE: Path = Path('index.html')
+    HOMEPAGE: Path = Path('homepage.html')
 
 
 @dataclass(frozen=True)
 class PageNamesConfig:
-    INDEX_PAGE: str = 'Benefit Bistro'
+    HOMEPAGE: str = 'Benefit Bistro'
+
+
+@dataclass(frozen=True)
+class URLPathsConfig:
+    HOMEPAGE: str = '/'
+    STATIC: str = '/static'
+
+
+@dataclass(frozen=True)
+class URLNamesConfig:
+    HOMEPAGE: str = 'homepage'
+    STATIC: str = 'static'
 
 
 class CORSConfig(BaseSettings):

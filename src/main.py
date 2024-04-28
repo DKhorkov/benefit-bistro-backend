@@ -5,9 +5,9 @@ from starlette.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.config import PathsConfig, cors_config, PageNamesConfig, uvicorn_config
+from src.config import PathsConfig, cors_config, PageNamesConfig, uvicorn_config, URLPathsConfig, URLNamesConfig
 from src.auth.router import router as auth_router
-
+from src.core.utils import generate_html_context
 
 app = FastAPI()
 
@@ -24,16 +24,18 @@ app.add_middleware(
 app.include_router(auth_router)
 
 # Mounts:
-app.mount('/static', StaticFiles(directory=PathsConfig.STATIC), name='static')
+app.mount(path=URLPathsConfig.STATIC, app=StaticFiles(directory=PathsConfig.STATIC), name=URLNamesConfig.STATIC)
 templates = Jinja2Templates(directory=PathsConfig.TEMPLATES.__str__())
 
 
-@app.get('/', response_class=HTMLResponse)
+@app.get(path=URLPathsConfig.HOMEPAGE, response_class=HTMLResponse, name=URLNamesConfig.HOMEPAGE)
 async def homepage(request: Request):
     return templates.TemplateResponse(
-        name=PathsConfig.INDEX_PAGE.__str__(),
+        name=PathsConfig.HOMEPAGE.__str__(),
         request=request,
-        context={'title': PageNamesConfig.INDEX_PAGE},
+        context=generate_html_context(
+            title=PageNamesConfig.HOMEPAGE
+        ),
     )
 
 

@@ -8,7 +8,7 @@ else
 fi
 
 if [[ -z "${PORT}" ]]; then
-  PORT=8080
+  PORT=8000
 else
   PORT="${PORT}"
 fi
