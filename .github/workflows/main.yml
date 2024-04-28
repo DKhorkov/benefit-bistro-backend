@@ -1,11 +1,6 @@
 name: main-workflow
 run-name: ${{ github.actor }} is testing changes
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-
+on: [push, pull_request]
 jobs:
   flake8-lint:
     runs-on: ubuntu-latest
