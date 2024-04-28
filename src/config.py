@@ -6,20 +6,31 @@ from typing import List
 
 @dataclass(frozen=True)
 class PathsConfig:
-
     TEMPLATES: Path = Path('./templates')
     STATIC: Path = Path('./static')
 
-    INDEX_PAGE: Path = Path('index.html')
+    HOMEPAGE: Path = Path('homepage.html')
     REGISTER_PAGE = Path('register.html')
     LOGIN_PAGE = Path('login.html')
 
 
 @dataclass(frozen=True)
 class PageNamesConfig:
-    INDEX_PAGE: str = 'Benefit Bistro'
-    REGISTER_PAGE: str = INDEX_PAGE
-    LOGIN_PAGE: str = INDEX_PAGE
+    HOMEPAGE: str = 'Benefit Bistro'
+    REGISTER_PAGE: str = HOMEPAGE
+    LOGIN_PAGE: str = HOMEPAGE
+
+
+@dataclass(frozen=True)
+class URLPathsConfig:
+    HOMEPAGE: str = '/'
+    STATIC: str = '/static'
+
+
+@dataclass(frozen=True)
+class URLNamesConfig:
+    HOMEPAGE: str = 'homepage'
+    STATIC: str = 'static'
 
 
 class CORSConfig(BaseSettings):

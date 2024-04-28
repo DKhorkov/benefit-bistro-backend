@@ -8,7 +8,11 @@ To run application via docker, use next command line in
 project's root directory:
 
 ```bash
-make -C docker clean && make -C docker build && make -C docker run
+make -C docker local
+```
+or
+```bash
+make -C docker prod
 ```
 
 ### Run using source files:
@@ -35,5 +39,5 @@ flake8 ./src -v
 ### Type Checkers
 
 ```bash
-mypy ./src -v
+mypy ./src
 ```

@@ -4,10 +4,12 @@ from starlette.templating import Jinja2Templates
 
 from src.config import PathsConfig, PageNamesConfig
 
+from src.auth.config import RouterConfig
+
 
 router = APIRouter(
-    prefix="/auth",
-    tags=["Auth"],
+    prefix=RouterConfig.PREFIX,
+    tags=RouterConfig.tags_list(),
 )
 
 # Mounts:

@@ -6,8 +6,7 @@ services:
       context: ../
       dockerfile: ./docker/Dockerfile
     entrypoint: /app/docker/entrypoint.sh
-    environment:
-      HOST: "0.0.0.0"
-      PORT: 8080
+    env_file:
+      - ../.env
     ports:
-      - "8080:8080"
+      - "8000:8000"
