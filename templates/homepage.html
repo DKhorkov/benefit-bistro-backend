@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block body %}
 Some text for test
+register -->
+<a  href="{{ url_for('register') }}">
+    <img src="{{ url_for('static', path='/images/reg.png') }}" alt="Иконка" width="150" height="50">
+</a>
+log in -->
+<a  href="{{ url_for('login') }}">
+    <img src="{{ url_for('static', path='/images/reg.png') }}" alt="Иконка" width="150" height="50">
+</a>
+
 {% endblock %}
