@@ -16,7 +16,7 @@ class AuthUserScheme(BaseModel):
 
     @classmethod
     @field_validator('password', mode='before')
-    async def validate_username(cls, value: str) -> str:
+    async def validate_password(cls, value: str) -> str:
         if not PasswordConfig.MIN_LENGTH <= len(value) <= PasswordConfig.MAX_LENGTH:
             raise ValueError(Error.PASSWORD_ERROR)
 
