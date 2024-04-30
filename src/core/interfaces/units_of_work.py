@@ -1,10 +1,10 @@
-from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import Self
 
 
 class AbstractUnitOfWork(ABC):
 
-    async def __aenter__(self) -> AbstractUnitOfWork:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(self, *args, **kwargs) -> None:
