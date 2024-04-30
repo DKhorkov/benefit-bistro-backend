@@ -16,14 +16,17 @@ jobs:
         run: pip install -r ./requirements/prod.txt
       - name: Run flake8
         run: flake8 ./src -v
-  type-cheks:
+  mypy-checks:
     runs-on: ubuntu-latest
+    name: Type checker
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
       - name: Set up Python environment
         uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
       - name: Install requirements
         run: pip install -r ./requirements/prod.txt
       - name: Run mypy
-        run: mypy ./src
+        run: mypy ./src -v
