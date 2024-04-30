@@ -29,4 +29,4 @@ jobs:
       - name: Install requirements
         run: pip install -r ./requirements/prod.txt
       - name: Run mypy
-        run: mypy ./src -v
+        run: mypy ./src

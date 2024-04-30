@@ -17,4 +17,3 @@ class AbstractUnitOfWork(ABC):
     @abstractmethod
     async def rollback(self) -> None:
         raise NotImplementedError
-    
