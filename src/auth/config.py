@@ -41,4 +41,4 @@ class JWTConfig(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
 
-jwt_config = JWTConfig()
+jwt_config: JWTConfig = JWTConfig()

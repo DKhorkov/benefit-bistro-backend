@@ -7,7 +7,7 @@ from src.auth.constants import Error
 
 class JWTDataScheme(BaseModel):
     user_id: PositiveInt
-    expires: datetime = datetime.now(timezone.utc) + timedelta(minutes=jwt_config.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expires: datetime = datetime.now(tz=timezone.utc) + timedelta(minutes=jwt_config.ACCESS_TOKEN_EXPIRE_MINUTES)
 
 
 class AuthUserScheme(BaseModel):

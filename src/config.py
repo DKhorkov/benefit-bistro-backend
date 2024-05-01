@@ -47,5 +47,5 @@ class UvicornConfig(BaseSettings):
     RELOAD: bool = True
 
 
-cors_config = CORSConfig()
-uvicorn_config = UvicornConfig()
+cors_config: CORSConfig = CORSConfig()
+uvicorn_config: UvicornConfig = UvicornConfig()
