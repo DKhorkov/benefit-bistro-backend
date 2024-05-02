@@ -2,7 +2,7 @@ from dataclasses import dataclass, asdict
 from typing import Optional, Any, Dict, List
 
 
-@dataclass(frozen=True)
+@dataclass
 class BaseModel:
 
     async def to_dict(
