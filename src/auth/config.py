@@ -41,4 +41,19 @@ class JWTConfig(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
 
+class CookiesConfig(BaseSettings):
+    COOKIES_KEY: str
+    COOKIES_LIFESPAN_DAYS: int
+    SECURE_COOKIES: bool
+    HTTP_ONLY: bool
+    SAME_SITE: str
+
+
+class PasslibConfig(BaseSettings):
+    PASSLIB_SCHEME: str
+    PASSLIB_DEPRECATED: str
+
+
 jwt_config: JWTConfig = JWTConfig()
+cookies_config: CookiesConfig = CookiesConfig()
+passlib_config: PasslibConfig = PasslibConfig()

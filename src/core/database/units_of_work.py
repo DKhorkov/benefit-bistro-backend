@@ -1,12 +1,13 @@
 from typing import Self
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
-from src.core.interfaces.units_of_work import AbstractUnitOfWork
+from src.core.interfaces import AbstractUnitOfWork
+from src.core.database.connection import session_factory as default_session_factory
 
 
 class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
 
-    def __init__(self, session_factory: async_sessionmaker) -> None:
+    def __init__(self, session_factory: async_sessionmaker = default_session_factory) -> None:
         self._session_factory: async_sessionmaker = session_factory
 
     async def __aenter__(self) -> Self:

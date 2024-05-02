@@ -9,6 +9,9 @@ help:
 	@echo "make run							 - run docker."
 	@echo "make clean                        - cleanup docker kitchen."
 
+network:
+	sudo docker network create benefit_bistro_network
+
 build:
 	sudo docker compose build
 
@@ -23,3 +26,11 @@ prod: build run
 local: clean
 	sudo docker compose -f docker-compose-local.yml up --build
 
+makemigrations:
+	sudo docker compose exec benefit_bistro scripts/makemigrations ${name}
+
+migrate:
+	 sudo docker compose exec benefit_bistro scripts/migrate
+
+downgrade:
+	sudo docker compose exec benefit_bistro scripts/downgrade ${to}
