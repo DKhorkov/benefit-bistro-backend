@@ -32,8 +32,20 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
-uvicorn src.main:app --host <Ypur host here> --port <Your por here> --reload
+uvicorn src.app:app --env-file .env --host <Ypur host here> --port <Your por here> --reload 
 ```
+
+### Run via IDE:
+
+Only for local development set the permissions to launch debugger:
+
+```bash
+sudo chmod -R 777 database_data
+sudo chmod -R 777 database_backups
+```
+
+Run ```src/main.py``` file, using project's root directory as Working Directory and 
+provide path to .env.local file as the environments file.
 
 ## Linters
 

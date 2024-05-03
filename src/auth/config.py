@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Tuple, List
+from typing import Tuple, List, Literal
 from enum import Enum
 
 from pydantic_settings import BaseSettings
@@ -7,22 +7,28 @@ from pydantic_settings import BaseSettings
 
 @dataclass(frozen=True)
 class URLPathsConfig:
+    REGISTER_PAGE: str = '/register_page'
+    LOGIN_PAGE: str = '/login_page'
     REGISTER: str = '/register'
     LOGIN: str = '/login'
-    TOKEN: str = '/token'
+    LOGOUT: str = '/logout'
 
 
 @dataclass(frozen=True)
 class URLNamesConfig:
+    REGISTER_PAGE: str = 'register_page'
+    LOGIN_PAGE: str = 'login_page'
     REGISTER: str = 'register'
     LOGIN: str = 'login'
-    TOKEN: str = 'token'
+    LOGOUT: str = 'logout'
 
 
 @dataclass(frozen=True)
-class PasswordConfig:
-    MIN_LENGTH: int = 8
-    MAX_LENGTH: int = 30
+class UserValidationConfig:
+    PASSWORD_MIN_LENGTH: int = 8
+    PASSWORD_MAX_LENGTH: int = 30
+    USERNAME_MIN_LENGTH: int = 5
+    USERNAME_MAX_LENGTH: int = 20
 
 
 @dataclass(frozen=True)
@@ -46,7 +52,7 @@ class CookiesConfig(BaseSettings):
     COOKIES_LIFESPAN_DAYS: int
     SECURE_COOKIES: bool
     HTTP_ONLY: bool
-    SAME_SITE: str
+    SAME_SITE: Literal['strict', 'lax', 'none']
 
 
 class PasslibConfig(BaseSettings):

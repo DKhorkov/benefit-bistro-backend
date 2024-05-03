@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from typing import Optional, Dict
 
 from src.auth.config import URLPathsConfig, jwt_config, cookies_config, passlib_config
-from src.auth.schemas import JWTDataScheme
+from src.auth.models import JWTDataModel
 from src.auth.exceptions import NotAuthenticated
 
 
@@ -44,24 +44,24 @@ class OAuth2Cookie(OAuth2):
 
 
 pwd_context: CryptContext = CryptContext(
-    scheme=[passlib_config.PASSLIB_SCHEME],
+    schemes=[passlib_config.PASSLIB_SCHEME],
     deprecated=passlib_config.PASSLIB_DEPRECATED
 )
 
-oauth2_scheme: OAuth2Cookie = OAuth2Cookie(token_url=URLPathsConfig.TOKEN)
+oauth2_scheme: OAuth2Cookie = OAuth2Cookie(token_url=URLPathsConfig.LOGIN)
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+async def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(secret=plain_password, hash=hashed_password)
 
 
-def get_password_hash(password: str) -> str:
+async def get_password_hash(password: str) -> str:
     return pwd_context.hash(secret=password)
 
 
-def create_access_token(jwt_data: JWTDataScheme) -> str:
+async def create_access_token(jwt_data: JWTDataModel) -> str:
     jwt_token: str = jwt.encode(
-        claims=jwt_data.model_dump(),
+        claims=await jwt_data.to_dict(),
         key=jwt_config.ACCESS_TOKEN_SECRET_KEY,
         algorithm=jwt_config.ACCESS_TOKEN_ALGORITHM
     )

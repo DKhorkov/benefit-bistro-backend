@@ -11,7 +11,7 @@ class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
         self._session_factory: async_sessionmaker = session_factory
 
     async def __aenter__(self) -> Self:
-        self._session: AsyncSession = await self._session_factory()
+        self._session: AsyncSession = self._session_factory()
         return await super().__aenter__()
 
     async def __aexit__(self, *args, **kwargs) -> None:

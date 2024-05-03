@@ -1,13 +1,17 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import List, Optional
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.interfaces.base_model import BaseModel
+from src.core.interfaces import AbstractRepository, BaseModel
 
 
-class AbstractRepository(ABC):
+class SQLAlchemyRepository(AbstractRepository):
+
+    def __init__(self, session: AsyncSession) -> None:
+        self._session: AsyncSession = session
 
     @abstractmethod
-    async def add(self, model: BaseModel):
+    async def add(self, model: BaseModel) -> None:
         raise NotImplementedError
 
     @abstractmethod

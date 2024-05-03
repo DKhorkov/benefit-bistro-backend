@@ -28,3 +28,7 @@ class AlreadyExist(DetailedHTTPException):
 class BadRequest(DetailedHTTPException):
     STATUS_CODE = status.HTTP_400_BAD_REQUEST
     DETAIL = Error.BAD_REQUEST
+
+
+class PreconditionFailed(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_412_PRECONDITION_FAILED

@@ -23,7 +23,7 @@ clean:
 
 prod: build run
 
-local: clean
+local:
 	sudo docker compose -f docker-compose-local.yml up --build
 
 makemigrations:
