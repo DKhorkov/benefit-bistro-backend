@@ -1,28 +1,53 @@
 from dataclasses import dataclass
-from typing import Tuple, List
+from pathlib import Path
+from typing import Tuple, List, Literal
 from enum import Enum
-
 from pydantic_settings import BaseSettings
+
+from src.config import (
+    PageNamesConfig as BasePageNamesConfig,
+    PathsConfig as BasePathsConfig
+)
+
+
+@dataclass(frozen=True)
+class PageNamesConfig(BasePageNamesConfig):
+    REGISTER_PAGE: str = BasePageNamesConfig.HOMEPAGE
+    LOGIN_PAGE: str = BasePageNamesConfig.HOMEPAGE
+
+
+@dataclass(frozen=True)
+class PathsConfig(BasePathsConfig):
+    REGISTER_PAGE = Path('register.html')
+    LOGIN_PAGE = Path('login.html')
 
 
 @dataclass(frozen=True)
 class URLPathsConfig:
+    REGISTER_PAGE: str = '/register_page'
+    LOGIN_PAGE: str = '/login_page'
     REGISTER: str = '/register'
     LOGIN: str = '/login'
-    TOKEN: str = '/token'
+    LOGOUT: str = '/logout'
+    ME: str = '/me'
 
 
 @dataclass(frozen=True)
 class URLNamesConfig:
+    REGISTER_PAGE: str = 'register_page'
+    LOGIN_PAGE: str = 'login_page'
     REGISTER: str = 'register'
     LOGIN: str = 'login'
-    TOKEN: str = 'token'
+    LOGOUT: str = 'logout'
+    ME: str = 'me'
 
 
 @dataclass(frozen=True)
-class PasswordConfig:
-    MIN_LENGTH: int = 8
-    MAX_LENGTH: int = 30
+class UserValidationConfig:
+    PASSWORD_MIN_LENGTH: int = 8
+    PASSWORD_MAX_LENGTH: int = 30
+    USERNAME_MIN_LENGTH: int = 5
+    USERNAME_MAX_LENGTH: int = 20
 
 
 @dataclass(frozen=True)
@@ -41,4 +66,19 @@ class JWTConfig(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
 
+class CookiesConfig(BaseSettings):
+    COOKIES_KEY: str
+    COOKIES_LIFESPAN_DAYS: int
+    SECURE_COOKIES: bool
+    HTTP_ONLY: bool
+    SAME_SITE: Literal['strict', 'lax', 'none']
+
+
+class PasslibConfig(BaseSettings):
+    PASSLIB_SCHEME: str
+    PASSLIB_DEPRECATED: str
+
+
 jwt_config: JWTConfig = JWTConfig()
+cookies_config: CookiesConfig = CookiesConfig()
+passlib_config: PasslibConfig = PasslibConfig()

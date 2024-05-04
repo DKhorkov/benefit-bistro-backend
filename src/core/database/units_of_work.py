@@ -1,22 +1,26 @@
 from typing import Self
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
-from src.core.interfaces.units_of_work import AbstractUnitOfWork
+from src.core.interfaces import AbstractUnitOfWork
+from src.core.database.connection import session_factory as default_session_factory
 
 
 class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
+    """
+    Unit of work interface for SQLAlchemy, from which should be inherited all other units of work,
+    which would be based on SQLAlchemy logics.
+    """
 
-    def __init__(self, session_factory: async_sessionmaker) -> None:
+    def __init__(self, session_factory: async_sessionmaker = default_session_factory) -> None:
         self._session_factory: async_sessionmaker = session_factory
 
     async def __aenter__(self) -> Self:
-        self._session: AsyncSession = await self._session_factory()
+        self._session: AsyncSession = self._session_factory()
         return await super().__aenter__()
 
     async def __aexit__(self, *args, **kwargs) -> None:
-        await self.rollback()
+        await super().__aexit__(*args, **kwargs)
         await self._session.close()
-        return await super().__aexit__(*args, **kwargs)
 
     async def commit(self) -> None:
         await self._session.commit()

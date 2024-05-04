@@ -2,6 +2,8 @@ version: '3'
 
 services:
   benefit_bistro:
+    container_name: benefit_bistro
+    image: benefit_bistro
     build:
       context: ../
       dockerfile: ./docker/Dockerfile
@@ -9,4 +11,27 @@ services:
     env_file:
       - ../.env
     ports:
-      - "8000:8000"
+      - ${PORT}:${PORT}
+    depends_on:
+      - database
+    volumes:
+      - ../alembic/versions:/app/alembic/versions
+
+  database:
+    container_name: database
+    hostname: postgresql
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ../database_data:/var/lib/postgresql/data
+      - ../database_backups:/backups
+      - ../scripts/postgres:/scripts
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
+#networks:
+#  default:
+#    external: true
+#    name: benefit_bistro_network

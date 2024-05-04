@@ -1,1 +1,21 @@
 version: '3'
+
+services:
+  database:
+    container_name: database
+    hostname: postgresql
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ../database_data:/var/lib/postgresql/data
+      - ../database_backups:/backups
+      - ../scripts/postgres:/scripts
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
+#networks:
+#  default:
+#    external: true
+#    name: benefit_bistro_network

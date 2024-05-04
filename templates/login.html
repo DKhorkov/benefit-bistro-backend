@@ -1,11 +1,7 @@
-{% extends 'base.html' %}
-
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', path='/css/register.css') }}">
-{% endblock %}
+{% extends 'register.html' %}
 
 {% block body %}
-register page test
+login page test
 <a  href="{{ url_for('homepage') }}">
     <img src="{{ url_for('static', path='/images/reg.png') }}" alt="Иконка" width="150" height="50">
 </a>

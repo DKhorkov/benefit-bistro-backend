@@ -7,5 +7,6 @@ COPY . /app
 
 # Changing permissions for correct work inside docker:
 RUN chmod +x /app/docker/entrypoint.sh
+RUN chmod +x /app/scripts/*
 
 RUN pip install -r requirements/prod.txt

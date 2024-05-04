@@ -8,17 +8,12 @@ from typing import List
 class PathsConfig:
     TEMPLATES: Path = Path('./templates')
     STATIC: Path = Path('./static')
-
     HOMEPAGE: Path = Path('homepage.html')
-    REGISTER_PAGE = Path('register.html')
-    LOGIN_PAGE = Path('login.html')
 
 
 @dataclass(frozen=True)
 class PageNamesConfig:
     HOMEPAGE: str = 'Benefit Bistro'
-    REGISTER_PAGE: str = HOMEPAGE
-    LOGIN_PAGE: str = HOMEPAGE
 
 
 @dataclass(frozen=True)
