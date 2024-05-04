@@ -5,7 +5,7 @@ from src.auth.models import UserModel
 from src.auth.models import JWTDataModel
 from src.auth.schemas import RegisterUserScheme
 from src.auth.units_of_work import UsersUnitOfWork
-from src.auth.utils import get_password_hash
+from src.auth.utils import hash_password
 from src.core.interfaces import BaseModel
 
 
@@ -15,7 +15,7 @@ class AuthService:
 
     @classmethod
     async def register_user(cls, user_data: RegisterUserScheme) -> None:
-        user_data.password = await get_password_hash(user_data.password)
+        user_data.password = await hash_password(user_data.password)
         user: UserModel = UserModel(**user_data.model_dump())
         async with cls.uow as uow:
             await uow.users.add(user)
@@ -24,7 +24,7 @@ class AuthService:
     @classmethod
     async def check_user_existence(cls, id: Optional[int] = None, email: Optional[str] = None) -> bool:
         if not (id or email):
-            raise ValueError('user_id or email is required')
+            raise ValueError('user id or email is required')
 
         async with cls.uow as uow:
             result: Optional[BaseModel]  # declaring here for mypy passing
@@ -56,4 +56,4 @@ class AuthService:
             if not result:
                 raise UserNotFound
 
-            return UserModel(**await result.to_dict())
+            return UserModel(** await result.to_dict())

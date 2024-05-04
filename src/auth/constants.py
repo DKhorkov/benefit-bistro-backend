@@ -3,6 +3,10 @@ from src.auth.config import UserValidationConfig
 
 
 class Error(BaseError):
+    """
+    Authorization and authentication error messages for custom exceptions.
+    """
+
     USER_NOT_AUTHENTICATED: str = 'User not authenticated'
     PASSWORD_ERROR: str = (f'Password must be between {UserValidationConfig.PASSWORD_MIN_LENGTH} and '
                            f'{UserValidationConfig.PASSWORD_MAX_LENGTH} characters inclusive')

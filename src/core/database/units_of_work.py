@@ -6,6 +6,10 @@ from src.core.database.connection import session_factory as default_session_fact
 
 
 class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
+    """
+    Unit of work interface for SQLAlchemy, from which should be inherited all other units of work,
+    which would be base on SQLAlchemy logics.
+    """
 
     def __init__(self, session_factory: async_sessionmaker = default_session_factory) -> None:
         self._session_factory: async_sessionmaker = session_factory

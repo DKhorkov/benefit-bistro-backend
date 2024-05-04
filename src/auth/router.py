@@ -6,8 +6,7 @@ from fastapi.templating import Jinja2Templates
 from src.auth.dependencies import login_user, register_user, authenticate_user
 from src.auth.models import UserModel
 from src.auth.schemas import RegisterUserScheme
-from src.config import PathsConfig, PageNamesConfig
-from src.auth.config import RouterConfig, URLPathsConfig, URLNamesConfig, cookies_config
+from src.auth.config import RouterConfig, URLPathsConfig, PageNamesConfig, URLNamesConfig, PathsConfig, cookies_config
 from src.core.utils import generate_html_context
 
 

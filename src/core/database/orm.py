@@ -25,6 +25,11 @@ users_table = Table(
 
 
 def start_mappers():
+    """
+    Map all domain models to orm models, for purpose of using domain models directly to work with the database,
+    according to DDD.
+    """
+
     # Imports here not to ruin alembic logics. Also, only for mappers they needed:
     from src.auth.models import UserModel
 

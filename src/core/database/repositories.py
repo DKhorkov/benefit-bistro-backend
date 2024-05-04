@@ -6,6 +6,10 @@ from src.core.interfaces import AbstractRepository, BaseModel
 
 
 class SQLAlchemyRepository(AbstractRepository):
+    """
+    Repository interface for SQLAlchemy, from which should be inherited all other repositories,
+    which would be base on SQLAlchemy logics.
+    """
 
     def __init__(self, session: AsyncSession) -> None:
         self._session: AsyncSession = session

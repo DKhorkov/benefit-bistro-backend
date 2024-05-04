@@ -1,8 +1,25 @@
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Tuple, List, Literal
 from enum import Enum
-
 from pydantic_settings import BaseSettings
+
+from src.config import (
+    PageNamesConfig as BasePageNamesConfig,
+    PathsConfig as BasePathsConfig
+)
+
+
+@dataclass(frozen=True)
+class PageNamesConfig(BasePageNamesConfig):
+    REGISTER_PAGE: str = BasePageNamesConfig.HOMEPAGE
+    LOGIN_PAGE: str = BasePageNamesConfig.HOMEPAGE
+
+
+@dataclass(frozen=True)
+class PathsConfig(BasePathsConfig):
+    REGISTER_PAGE = Path('register.html')
+    LOGIN_PAGE = Path('login.html')
 
 
 @dataclass(frozen=True)

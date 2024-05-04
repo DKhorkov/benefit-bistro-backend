@@ -5,6 +5,12 @@ from src.core.interfaces.base_model import BaseModel
 
 
 class AbstractRepository(ABC):
+    """
+    Interface for any repository, which would be used for work with domain model, according DDD.
+
+    Main purpose is to encapsulate internal logic that is associated with the use of one or another data
+    storage scheme, for example, ORM.
+    """
 
     @abstractmethod
     async def add(self, model: BaseModel):

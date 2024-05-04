@@ -14,11 +14,16 @@ from src.core.utils import generate_html_context
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncGenerator:
-    # Startup
+    """
+    Runs events before applications startup and after application shutdown.
+    """
+
+    # Startup events:
     start_mappers()
+
     yield
 
-    # Shutdown
+    # Shutdown events:
 
 app = FastAPI(lifespan=lifespan)
 

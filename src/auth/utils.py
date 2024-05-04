@@ -34,6 +34,10 @@ class OAuth2Cookie(OAuth2):
         )
 
     async def __call__(self, request: Request) -> Optional[str]:
+        """
+        Retrieves token for user authentication from cookies, if exists.
+        """
+
         token: Optional[str] = request.cookies.get(cookies_config.COOKIES_KEY)
         if not token:
             if self.auto_error:
@@ -55,7 +59,7 @@ async def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(secret=plain_password, hash=hashed_password)
 
 
-async def get_password_hash(password: str) -> str:
+async def hash_password(password: str) -> str:
     return pwd_context.hash(secret=password)
 
 

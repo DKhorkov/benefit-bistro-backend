@@ -10,13 +10,11 @@ class UsersRepository(SQLAlchemyRepository):
 
     async def get(self, id: int) -> Optional[BaseModel]:
         result: Result = await self._session.execute(select(UserModel).filter_by(id=id))
-        user: Optional[UserModel] = result.scalar_one_or_none()
-        return user
+        return result.scalar_one_or_none()
 
     async def get_by_email(self, email: str) -> Optional[BaseModel]:
         result: Result = await self._session.execute(select(UserModel).filter_by(email=email))
-        user: Optional[UserModel] = result.scalar_one_or_none()
-        return user
+        return result.scalar_one_or_none()
 
     async def add(self, model: BaseModel) -> None:
         await self._session.execute(insert(UserModel).values(** await model.to_dict(exclude={'id'})))
@@ -29,5 +27,6 @@ class UsersRepository(SQLAlchemyRepository):
 
     async def list(self) -> List[BaseModel]:
         result: Result = await self._session.execute(select(UserModel))
-        users = result.scalars().all()
-        return [UserModel(**r._asdict()) for r in users]
+
+        # Using this type casting for purpose of passing mypy checks:
+        return [UserModel(** await r.to_dict()) for r in result.scalars().all()]

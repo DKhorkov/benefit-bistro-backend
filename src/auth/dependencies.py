@@ -11,6 +11,10 @@ from src.auth.service import AuthService
 
 
 async def register_user(user_data: RegisterUserScheme) -> None:
+    """
+    Registers a new user, if user with provided credentials doesn't exist.
+    """
+
     if await AuthService.check_user_existence(email=user_data.email):
         raise UserAlreadyExist
 
@@ -18,6 +22,10 @@ async def register_user(user_data: RegisterUserScheme) -> None:
 
 
 async def login_user(user_data: LoginUserScheme) -> str:
+    """
+    Logs in a user with provided credentials, if credentials are valid.
+    """
+
     user: UserModel = await AuthService.get_user_by_email(email=user_data.email)
     if not await verify_password(user_data.password, user.password):
         raise InvalidPassword
@@ -27,6 +35,10 @@ async def login_user(user_data: LoginUserScheme) -> str:
 
 
 async def authenticate_user(token: str = Depends(oauth2_scheme)) -> UserModel:
+    """
+    Authenticates user according to provided JWT token, if token is valid and hadn't expired.
+    """
+
     try:
         payload = jwt.decode(token, jwt_config.ACCESS_TOKEN_SECRET_KEY, algorithms=[jwt_config.ACCESS_TOKEN_ALGORITHM])
         payload['exp'] = datetime.fromtimestamp(payload['exp'], tz=timezone.utc)  # converting to datetime format
