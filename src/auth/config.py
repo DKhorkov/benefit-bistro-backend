@@ -12,6 +12,7 @@ class URLPathsConfig:
     REGISTER: str = '/register'
     LOGIN: str = '/login'
     LOGOUT: str = '/logout'
+    ME: str = '/me'
 
 
 @dataclass(frozen=True)
@@ -21,6 +22,7 @@ class URLNamesConfig:
     REGISTER: str = 'register'
     LOGIN: str = 'login'
     LOGOUT: str = 'logout'
+    ME: str = 'me'
 
 
 @dataclass(frozen=True)

@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from fastapi import Depends
-from jose import jwt, JWTError
+from jose import jwt, JWTError, ExpiredSignatureError
 
 from src.auth.exceptions import InvalidToken, InvalidPassword, UserAlreadyExist
 from src.auth.models import UserModel, JWTDataModel
@@ -29,11 +29,12 @@ async def login_user(user_data: LoginUserScheme) -> str:
 async def authenticate_user(token: str = Depends(oauth2_scheme)) -> UserModel:
     try:
         payload = jwt.decode(token, jwt_config.ACCESS_TOKEN_SECRET_KEY, algorithms=[jwt_config.ACCESS_TOKEN_ALGORITHM])
-    except JWTError:
+        payload['exp'] = datetime.fromtimestamp(payload['exp'], tz=timezone.utc)  # converting to datetime format
+    except (JWTError, ExpiredSignatureError):
         raise InvalidToken
 
     jwt_data: JWTDataModel = JWTDataModel(**payload)
-    if jwt_data.expires < datetime.now(tz=timezone.utc):
+    if jwt_data.exp < datetime.now(tz=timezone.utc):
         raise InvalidToken
 
     return await AuthService.authenticate_user(jwt_data=jwt_data)

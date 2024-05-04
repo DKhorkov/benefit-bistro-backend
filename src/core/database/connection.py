@@ -22,5 +22,5 @@ engine: AsyncEngine = create_async_engine(
 
 session_factory: async_sessionmaker = async_sessionmaker(
     bind=engine,
-    autoflush=database_config.AUTO_FLUSH
+    autoflush=database_config.DATABASE_AUTO_FLUSH
 )

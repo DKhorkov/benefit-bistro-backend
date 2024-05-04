@@ -12,7 +12,7 @@ class DatabaseConfig(BaseSettings):
     DATABASE_ECHO: bool
     DATABASE_POOL_RECYCLE: int
     DATABASE_POOL_PRE_PING: bool
-    AUTO_FLUSH: bool
+    DATABASE_AUTO_FLUSH: bool
 
 
 database_config: DatabaseConfig = DatabaseConfig()

@@ -26,35 +26,34 @@ class AuthService:
         if not (id or email):
             raise ValueError('user_id or email is required')
 
-        result: Optional[BaseModel]  # declaring here for mypy passing
-        if id:
-            async with cls.uow as uow:
+        async with cls.uow as uow:
+            result: Optional[BaseModel]  # declaring here for mypy passing
+            if id:
                 result = await uow.users.get(id=id)
-        elif email:
-            async with cls.uow as uow:
+            elif email:
                 result = await uow.users.get_by_email(email)
 
-        if result:
-            return True
+            if result:
+                return True
 
-        return False
+            return False
 
     @classmethod
     async def get_user_by_email(cls, email: str) -> UserModel:
         async with cls.uow as uow:
             result: Optional[BaseModel] = await uow.users.get_by_email(email)
 
-        if not result:
-            raise UserNotFound
+            if not result:
+                raise UserNotFound
 
-        return UserModel(** await result.to_dict())
+            return UserModel(** await result.to_dict())
 
     @classmethod
     async def authenticate_user(cls, jwt_data: JWTDataModel) -> UserModel:
         async with cls.uow as uow:
             result: Optional[BaseModel] = await uow.users.get(id=jwt_data.user_id)
 
-        if not result:
-            raise UserNotFound
+            if not result:
+                raise UserNotFound
 
-        return UserModel(**await result.to_dict())
+            return UserModel(**await result.to_dict())

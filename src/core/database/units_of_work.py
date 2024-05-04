@@ -15,9 +15,8 @@ class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
         return await super().__aenter__()
 
     async def __aexit__(self, *args, **kwargs) -> None:
-        await self.rollback()
+        await super().__aexit__(*args, **kwargs)
         await self._session.close()
-        return await super().__aexit__(*args, **kwargs)
 
     async def commit(self) -> None:
         await self._session.commit()

@@ -14,7 +14,7 @@ class UsersRepository(SQLAlchemyRepository):
         return user
 
     async def get_by_email(self, email: str) -> Optional[BaseModel]:
-        result: Result = await self._session.execute(select(UserModel).filter_by(email=email))
+        result: Result = await self._session.execute(select(UserModel).options().filter_by(email=email))
         user: Optional[UserModel] = result.scalar_one_or_none()
         return user
 

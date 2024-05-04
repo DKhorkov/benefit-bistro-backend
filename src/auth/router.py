@@ -1,9 +1,10 @@
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Request, Depends, status
-from fastapi.responses import HTMLResponse, Response, RedirectResponse
+from fastapi.responses import HTMLResponse, Response, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
-from src.auth.dependencies import login_user, register_user
+from src.auth.dependencies import login_user, register_user, authenticate_user
+from src.auth.models import UserModel
 from src.auth.schemas import RegisterUserScheme
 from src.config import PathsConfig, PageNamesConfig
 from src.auth.config import RouterConfig, URLPathsConfig, URLNamesConfig, cookies_config
@@ -74,3 +75,8 @@ async def logout():
         samesite=cookies_config.SAME_SITE
     )
     return response
+
+
+@router.get(path=URLPathsConfig.ME, response_class=JSONResponse, response_model=UserModel, name=URLNamesConfig.ME)
+async def get_my_account(user: UserModel = Depends(authenticate_user)):
+    return user
