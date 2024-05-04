@@ -26,7 +26,7 @@ users_table = Table(
 
 def start_mappers():
     """
-    Map all domain models to orm models, for purpose of using domain models directly to work with the database,
+    Map all domain models to ORM models, for purpose of using domain models directly during work with the database,
     according to DDD.
     """
 

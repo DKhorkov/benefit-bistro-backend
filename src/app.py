@@ -15,7 +15,7 @@ from src.core.utils import generate_html_context
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncGenerator:
     """
-    Runs events before applications startup and after application shutdown.
+    Runs events before application startup and after application shutdown.
     """
 
     # Startup events:
