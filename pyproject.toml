@@ -9,5 +9,7 @@ warn_return_any = false
 ignore_missing_imports = false
 disable_error_code = ["empty-body"]
 
-[tool.flakeheaven]
-inline-quotes = "'"
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]

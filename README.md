@@ -102,3 +102,10 @@ To downgrade database run next command:
 ```bash
 alembic downgrade <Number of migrations>  # -1, -2 or base to downgrade to start point
 ```
+
+## Tests
+
+To run tests use next command in project's root directory:
+```bash
+pytest -v
+```

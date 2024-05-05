@@ -16,6 +16,10 @@ class UsersRepository(SQLAlchemyRepository):
         result: Result = await self._session.execute(select(UserModel).filter_by(email=email))
         return result.scalar_one_or_none()
 
+    async def get_by_username(self, username: str) -> Optional[BaseModel]:
+        result: Result = await self._session.execute(select(UserModel).filter_by(username=username))
+        return result.scalar_one_or_none()
+
     async def add(self, model: BaseModel) -> None:
         await self._session.execute(insert(UserModel).values(** await model.to_dict(exclude={'id'})))
 

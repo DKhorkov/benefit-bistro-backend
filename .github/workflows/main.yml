@@ -2,9 +2,9 @@ name: main-workflow
 run-name: ${{ github.actor }} is testing changes
 on: [push, pull_request]
 jobs:
-  flake8-lint:
+  flake8:
     runs-on: ubuntu-latest
-    name: Lint
+    name: Flake8
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -16,9 +16,9 @@ jobs:
         run: pip install -r ./requirements/prod.txt
       - name: Run flake8
         run: flake8 ./src -v
-  mypy-checks:
+  mypy:
     runs-on: ubuntu-latest
-    name: Type checker
+    name: Mypy
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -30,3 +30,17 @@ jobs:
         run: pip install -r ./requirements/prod.txt
       - name: Run mypy
         run: mypy ./src
+  pytest:
+    runs-on: ubuntu-latest
+    name: PyTest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Install requirements
+        run: pip install -r ./requirements/local.txt
+      - name: Run pytest
+        run: pytest -v

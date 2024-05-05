@@ -1,4 +1,4 @@
-class Error:
+class ErrorDetails:
     """
     Base error messages for custom exceptions.
     """

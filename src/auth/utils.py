@@ -7,7 +7,7 @@ from typing import Optional, Dict
 
 from src.auth.config import URLPathsConfig, jwt_config, cookies_config, passlib_config
 from src.auth.models import JWTDataModel
-from src.auth.exceptions import NotAuthenticated
+from src.auth.exceptions import NotAuthenticatedError
 
 
 class OAuth2Cookie(OAuth2):
@@ -25,7 +25,7 @@ class OAuth2Cookie(OAuth2):
     ):
         if not scopes:
             scopes = {}
-        flows = OAuthFlowsModel(password={"tokenUrl": token_url, "scopes": scopes})
+        flows = OAuthFlowsModel(password={'tokenUrl': token_url, 'scopes': scopes})
         super().__init__(
             flows=flows,
             scheme_name=scheme_name,
@@ -41,7 +41,7 @@ class OAuth2Cookie(OAuth2):
         token: Optional[str] = request.cookies.get(cookies_config.COOKIES_KEY)
         if not token:
             if self.auto_error:
-                raise NotAuthenticated
+                raise NotAuthenticatedError
             else:
                 return None
         return token

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.auth.exceptions import UserNotFound
+from src.auth.exceptions import UserNotFoundError
 from src.auth.models import UserModel
 from src.auth.models import JWTDataModel
 from src.auth.schemas import RegisterUserScheme
@@ -22,9 +22,15 @@ class AuthService:
             await uow.commit()
 
     @classmethod
-    async def check_user_existence(cls, id: Optional[int] = None, email: Optional[str] = None) -> bool:
-        if not (id or email):
-            raise ValueError('user id or email is required')
+    async def check_user_existence(
+            cls,
+            id: Optional[int] = None,
+            email: Optional[str] = None,
+            username: Optional[str] = None
+    ) -> bool:
+
+        if not (id or email or username):
+            raise ValueError('user id, email or username is required')
 
         async with cls.uow as uow:
             result: Optional[BaseModel]  # declaring here for mypy passing
@@ -32,6 +38,8 @@ class AuthService:
                 result = await uow.users.get(id=id)
             elif email:
                 result = await uow.users.get_by_email(email)
+            elif username:
+                result = await uow.users.get_by_username(username)
 
             if result:
                 return True
@@ -44,7 +52,7 @@ class AuthService:
             result: Optional[BaseModel] = await uow.users.get_by_email(email)
 
             if not result:
-                raise UserNotFound
+                raise UserNotFoundError
 
             return UserModel(** await result.to_dict())
 
@@ -54,6 +62,6 @@ class AuthService:
             result: Optional[BaseModel] = await uow.users.get(id=jwt_data.user_id)
 
             if not result:
-                raise UserNotFound
+                raise UserNotFoundError
 
             return UserModel(** await result.to_dict())
