@@ -109,3 +109,10 @@ To run tests use next command in project's root directory:
 ```bash
 pytest -v
 ```
+
+To check tests coverage user next commands in project's root directory and 
+open ```htmlcov/index.html``` file in browser:
+```bash
+coverage run -m pytest
+coverage html
+```
