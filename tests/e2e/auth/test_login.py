@@ -1,6 +1,6 @@
 import pytest
 from fastapi import status
-from httpx import Response
+from httpx import Response, AsyncClient
 
 from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
 from src.auth.constants import ErrorDetails
@@ -9,7 +9,7 @@ from tests.utils import get_error_message_from_response
 
 
 @pytest.mark.anyio
-async def test_login_success(async_client, create_test_user_if_not_exists) -> None:
+async def test_login_success(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json=TestUserConfig().to_dict(to_lower=True)
@@ -20,7 +20,11 @@ async def test_login_success(async_client, create_test_user_if_not_exists) -> No
 
 
 @pytest.mark.anyio
-async def test_login_fail_incorrect_email_pattern(async_client, create_test_user_if_not_exists) -> None:
+async def test_login_fail_incorrect_email_pattern(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json={
@@ -36,7 +40,7 @@ async def test_login_fail_incorrect_email_pattern(async_client, create_test_user
 
 
 @pytest.mark.anyio
-async def test_login_fail_incorrect_email(async_client, create_test_user_if_not_exists) -> None:
+async def test_login_fail_incorrect_email(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json={
@@ -50,7 +54,7 @@ async def test_login_fail_incorrect_email(async_client, create_test_user_if_not_
 
 
 @pytest.mark.anyio
-async def test_login_fail_incorrect_password(async_client, create_test_user_if_not_exists) -> None:
+async def test_login_fail_incorrect_password(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json={

@@ -49,7 +49,12 @@ exclude =
     # mypy cache
     .mypy_cache,
     # venv
-    .venv, venv
+    .venv, venv,
+    # Docker volumes
+    database_data, database_backups,
+    # Alembic
+    alembic/
+
 
 # Provide a comma-separate list of glob patterns to include for checks.
 filename =

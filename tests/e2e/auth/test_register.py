@@ -1,6 +1,6 @@
 import pytest
 from fastapi import status
-from httpx import Response
+from httpx import Response, AsyncClient
 
 from src.auth.config import RouterConfig, URLPathsConfig, UserValidationConfig
 from src.auth.constants import ErrorDetails
@@ -8,7 +8,11 @@ from tests.utils import get_error_message_from_response, generate_random_string
 
 
 @pytest.mark.anyio
-async def test_register_fail_incorrect_email_pattern(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_fail_incorrect_email_pattern(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={
@@ -26,7 +30,11 @@ async def test_register_fail_incorrect_email_pattern(async_client, create_test_u
 
 
 @pytest.mark.anyio
-async def test_register_fail_too_short_username(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_fail_too_short_username(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={
@@ -41,7 +49,11 @@ async def test_register_fail_too_short_username(async_client, create_test_user_i
 
 
 @pytest.mark.anyio
-async def test_register_fail_too_long_username(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_fail_too_long_username(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={
@@ -56,7 +68,11 @@ async def test_register_fail_too_long_username(async_client, create_test_user_if
 
 
 @pytest.mark.anyio
-async def test_register_fail_too_short_password(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_fail_too_short_password(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={
@@ -71,7 +87,11 @@ async def test_register_fail_too_short_password(async_client, create_test_user_i
 
 
 @pytest.mark.anyio
-async def test_register_fail_too_long_password(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_fail_too_long_password(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={
@@ -86,7 +106,11 @@ async def test_register_fail_too_long_password(async_client, create_test_user_if
 
 
 @pytest.mark.anyio
-async def test_register_success(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_success(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={
@@ -100,7 +124,11 @@ async def test_register_success(async_client, create_test_user_if_not_exists) ->
 
 
 @pytest.mark.anyio
-async def test_register_fail_email_already_taken(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_fail_email_already_taken(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={
@@ -115,7 +143,11 @@ async def test_register_fail_email_already_taken(async_client, create_test_user_
 
 
 @pytest.mark.anyio
-async def test_register_fail_username_already_taken(async_client, create_test_user_if_not_exists) -> None:
+async def test_register_fail_username_already_taken(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
         json={

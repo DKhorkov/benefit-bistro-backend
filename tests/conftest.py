@@ -2,8 +2,9 @@ import pytest
 import os
 from httpx import AsyncClient, Cookies, Response
 from sqlalchemy import insert
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, AsyncConnection
 from sqlalchemy.exc import ArgumentError, IntegrityError
+from typing import AsyncGenerator
 
 from src.app import app
 from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
@@ -15,7 +16,7 @@ from tests.config import TestUserConfig
 from tests.utils import get_base_url, drop_test_db
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def anyio_backend() -> str:
     """
     Launch tests only on "asyncio" backend, without "trio" backend.
@@ -25,10 +26,15 @@ def anyio_backend() -> str:
 
 
 @pytest.fixture(scope='session')
-async def create_test_db() -> None:
+async def async_connection() -> AsyncGenerator[AsyncConnection, None]:
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
     async with engine.begin() as conn:
-        await conn.run_sync(metadata.create_all)
+        yield conn
+
+
+@pytest.fixture(scope='session')
+async def create_test_db(async_connection: AsyncConnection) -> None:
+    await async_connection.run_sync(metadata.create_all)
 
 
 @pytest.fixture(scope='session')
@@ -43,8 +49,8 @@ async def map_models_to_orm(create_test_db) -> None:
         pass
 
 
-@pytest.fixture(scope="session")
-async def async_client(map_models_to_orm) -> AsyncClient:
+@pytest.fixture(scope='session')
+async def async_client(map_models_to_orm) -> AsyncGenerator[AsyncClient, None]:
     """
     Creates test app client for end-to-end tests to make requests to endpoints with.
     """
@@ -95,5 +101,6 @@ async def cookies(access_token) -> Cookies:
     """
 
     cookies: Cookies = Cookies()
-    cookies.set(name=cookies_config.COOKIES_KEY, value=access_token, domain=os.environ.get("HOST"))
+    domain: str = os.environ.get('HOST', '0.0.0.0')
+    cookies.set(name=cookies_config.COOKIES_KEY, value=access_token, domain=domain)
     return cookies

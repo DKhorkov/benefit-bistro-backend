@@ -50,13 +50,13 @@ provide path to .env.local file as the environments file.
 ## Linters
 
 ```bash
-flake8 ./src -v
+flake8 ./ -v
 ```
 
 ## Type Checkers
 
 ```bash
-mypy ./src
+mypy ./
 ```
 
 

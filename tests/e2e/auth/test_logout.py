@@ -1,12 +1,12 @@
 import pytest
 from fastapi import status
-from httpx import Response
+from httpx import Response, AsyncClient, Cookies
 
 from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
 
 
 @pytest.mark.anyio
-async def test_logout(async_client, cookies) -> None:
+async def test_logout(async_client: AsyncClient, cookies: Cookies) -> None:
     response: Response = await async_client.get(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGOUT,
         cookies=cookies
