@@ -8,6 +8,7 @@ from src.auth.schemas import LoginUserScheme, RegisterUserScheme
 from src.auth.utils import oauth2_scheme, create_access_token, verify_password
 from src.auth.config import jwt_config
 from src.auth.service import AuthService
+from src.auth.units_of_work import SQLAlchemyUsersUnitOfWork
 
 
 async def register_user(user_data: RegisterUserScheme) -> None:
@@ -15,11 +16,11 @@ async def register_user(user_data: RegisterUserScheme) -> None:
     Registers a new user, if user with provided credentials doesn't exist.
     """
 
-    if (await AuthService.check_user_existence(email=user_data.email)
-            or await AuthService.check_user_existence(username=user_data.username)):
+    auth_service: AuthService = AuthService(uow=SQLAlchemyUsersUnitOfWork())
+    if await auth_service.check_user_existence(email=user_data.email, username=user_data.username):
         raise UserAlreadyExistError
 
-    await AuthService.register_user(user_data=user_data)
+    await auth_service.register_user(user_data=user_data)
 
 
 async def login_user(user_data: LoginUserScheme) -> str:
@@ -27,7 +28,8 @@ async def login_user(user_data: LoginUserScheme) -> str:
     Logs in a user with provided credentials, if credentials are valid.
     """
 
-    user: UserModel = await AuthService.get_user_by_email(email=user_data.email)
+    auth_service: AuthService = AuthService(uow=SQLAlchemyUsersUnitOfWork())
+    user: UserModel = await auth_service.get_user_by_email(email=user_data.email)
     if not await verify_password(user_data.password, user.password):
         raise InvalidPasswordError
 
@@ -50,4 +52,5 @@ async def authenticate_user(token: str = Depends(oauth2_scheme)) -> UserModel:
     if jwt_data.exp < datetime.now(tz=timezone.utc):
         raise InvalidTokenError
 
-    return await AuthService.authenticate_user(jwt_data=jwt_data)
+    auth_service: AuthService = AuthService(uow=SQLAlchemyUsersUnitOfWork())
+    return await auth_service.authenticate_user(jwt_data=jwt_data)

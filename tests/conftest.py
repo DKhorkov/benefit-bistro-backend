@@ -25,19 +25,21 @@ def anyio_backend() -> str:
     return 'asyncio'
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 async def async_connection() -> AsyncGenerator[AsyncConnection, None]:
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
     async with engine.begin() as conn:
         yield conn
 
 
-@pytest.fixture(scope='session')
-async def create_test_db(async_connection: AsyncConnection) -> None:
+@pytest.fixture
+async def create_test_db(async_connection: AsyncConnection) -> AsyncGenerator[None, None]:
     await async_connection.run_sync(metadata.create_all)
+    yield
+    drop_test_db()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 async def map_models_to_orm(create_test_db) -> None:
     """
     Create mappings from models to ORM according to DDD.
@@ -49,7 +51,7 @@ async def map_models_to_orm(create_test_db) -> None:
         pass
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 async def async_client(map_models_to_orm) -> AsyncGenerator[AsyncClient, None]:
     """
     Creates test app client for end-to-end tests to make requests to endpoints with.
@@ -57,8 +59,6 @@ async def async_client(map_models_to_orm) -> AsyncGenerator[AsyncClient, None]:
 
     async with AsyncClient(app=app, base_url=get_base_url()) as async_client:
         yield async_client
-
-    drop_test_db()
 
 
 @pytest.fixture

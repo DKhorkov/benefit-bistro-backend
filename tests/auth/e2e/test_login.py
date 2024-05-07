@@ -1,6 +1,7 @@
 import pytest
 from fastapi import status
 from httpx import Response, AsyncClient
+from typing import Dict, Any
 
 from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
 from src.auth.constants import ErrorDetails
@@ -25,12 +26,11 @@ async def test_login_fail_incorrect_email_pattern(
         create_test_user_if_not_exists: None
 ) -> None:
 
+    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
+    test_user_config['email'] = 'incorrectEmail'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json={
-            'email': 'some_incorrect_email',
-            'password': TestUserConfig.PASSWORD
-        }
+        json=test_user_config
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -41,12 +41,11 @@ async def test_login_fail_incorrect_email_pattern(
 
 @pytest.mark.anyio
 async def test_login_fail_incorrect_email(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
+    test_user_config['email'] = 'someEmail@gmail.com'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json={
-            'email': 'prefix' + TestUserConfig.EMAIL,
-            'password': TestUserConfig.PASSWORD
-        }
+        json=test_user_config
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -55,12 +54,11 @@ async def test_login_fail_incorrect_email(async_client: AsyncClient, create_test
 
 @pytest.mark.anyio
 async def test_login_fail_incorrect_password(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
+    test_user_config['password'] = 'incorrectPassword'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json={
-            'email': TestUserConfig.EMAIL,
-            'password': 'prefix' + TestUserConfig.PASSWORD
-        }
+        json=test_user_config
     )
 
     assert response.status_code == status.HTTP_412_PRECONDITION_FAILED
