@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import clear_mappers
 
 from src.config import PathsConfig, cors_config, PageNamesConfig, URLPathsConfig, URLNamesConfig
 from src.auth.router import router as auth_router
@@ -24,6 +25,7 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator:
     yield
 
     # Shutdown events:
+    clear_mappers()
 
 app = FastAPI(lifespan=lifespan)
 

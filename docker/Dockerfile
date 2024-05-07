@@ -1,5 +1,5 @@
 FROM python:3
-LABEL authors="dkhorkov"
+LABEL authors='dkhorkov'
 
 WORKDIR /app
 

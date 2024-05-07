@@ -49,7 +49,12 @@ exclude =
     # mypy cache
     .mypy_cache,
     # venv
-    .venv, venv
+    .venv, venv,
+    # Docker volumes
+    database_data, database_backups,
+    # Alembic
+    alembic/
+
 
 # Provide a comma-separate list of glob patterns to include for checks.
 filename =
@@ -98,8 +103,12 @@ ignore =
     E133,
     E203,
     W503
+
 # Specify the list of error codes you wish Flake8 to report.
+# flake8-quotes package adds flake8 warnings with the prefix Q0.
 select =
+    Q0,
+    C90,
     E,
     W,
     F,
@@ -122,3 +131,6 @@ doctests = True
 include-in-doctest =
 # Specify which files are not to be checked by PyFlakes for doctest syntax.
 exclude-in-doctest =
+
+# Specify which type of quotes to use:
+inline-quotes = single
