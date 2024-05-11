@@ -1,5 +1,6 @@
 import pytest
 import os
+from celery import Celery
 from httpx import AsyncClient, Cookies, Response
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, AsyncConnection
@@ -12,6 +13,7 @@ from src.auth.models import UserModel
 from src.core.database.connection import DATABASE_URL
 from src.core.database.orm import start_mappers, metadata
 from src.auth.utils import hash_password
+from src.celery.celery_app import celery
 from tests.config import TestUserConfig
 from tests.utils import get_base_url, drop_test_db
 
@@ -104,3 +106,9 @@ async def cookies(access_token) -> Cookies:
     domain: str = os.environ.get('HOST', '0.0.0.0')
     cookies.set(name=cookies_config.COOKIES_KEY, value=access_token, domain=domain)
     return cookies
+
+
+@pytest.fixture
+def celery_app() -> Celery:
+    celery.conf.update(CELERY_ALWAYS_EAGER=True)
+    return celery

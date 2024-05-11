@@ -3,11 +3,18 @@ from fastapi import APIRouter, Request, Depends, status
 from fastapi.responses import HTMLResponse, Response, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
-from src.auth.dependencies import login_user, register_user, authenticate_user
 from src.auth.models import UserModel
-from src.auth.schemas import RegisterUserScheme
 from src.auth.config import RouterConfig, URLPathsConfig, PageNamesConfig, URLNamesConfig, PathsConfig, cookies_config
+from src.celery.tasks.auth_tasks import send_verify_email_message
 from src.core.utils import generate_html_context
+from src.security.models import JWTDataModel
+from src.security.utils import create_jwt_token
+from src.auth.dependencies import (
+    login_user,
+    register_user,
+    authenticate_user,
+    verify_user_email
+)
 
 
 router = APIRouter(
@@ -42,16 +49,38 @@ async def login_page(request: Request):
 
 
 @router.post(path=URLPathsConfig.REGISTER, response_class=RedirectResponse, name=URLNamesConfig.REGISTER)
-async def register(user_data: RegisterUserScheme):
-    await register_user(user_data=user_data)
+async def register(user: UserModel = Depends(register_user)):
+    send_verify_email_message.delay(user_data=await user.to_dict())
     return RedirectResponse(
         url=router.prefix + URLPathsConfig.LOGIN_PAGE,
         status_code=status.HTTP_303_SEE_OTHER
     )
 
 
+@router.get(path=URLPathsConfig.VERIFY_EMAIL, response_class=RedirectResponse, name=URLNamesConfig.VERIFY_EMAIL)
+async def verify_email(token: str):
+    await verify_user_email(token=token)
+    return RedirectResponse(
+        url=router.prefix + URLPathsConfig.EMAIL_VERIFIED,
+        status_code=status.HTTP_303_SEE_OTHER
+    )
+
+
+@router.get(path=URLPathsConfig.EMAIL_VERIFIED, response_class=HTMLResponse, name=URLNamesConfig.EMAIL_VERIFIED)
+async def email_verified_page(request: Request):
+    return templates.TemplateResponse(
+        name=PathsConfig.EMAIL_VERIFIED.__str__(),
+        request=request,
+        context=generate_html_context(
+            title=PageNamesConfig.EMAIL_VERIFIED
+        )
+    )
+
+
 @router.post(path=URLPathsConfig.LOGIN, response_class=Response, name=URLNamesConfig.LOGIN)
-async def login(token: str = Depends(login_user)):
+async def login(user: UserModel = Depends(login_user)):
+    jwt_data: JWTDataModel = JWTDataModel(user_id=user.id)
+    token: str = await create_jwt_token(jwt_data=jwt_data)
     response: Response = Response()
     response.set_cookie(
         key=cookies_config.COOKIES_KEY,

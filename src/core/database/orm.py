@@ -13,7 +13,7 @@ users_table = Table(
     Column('email', String(50), nullable=False, unique=True),
     Column('password', String(100), nullable=False),
     Column('username', String(20), nullable=False, unique=True),
-    Column('email_confirmed', Boolean(), nullable=False, default=False),
+    Column('email_verified', Boolean(), nullable=False, default=False),
     Column('created_at', DateTime(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc)),
     Column('updated_at',
            DateTime(timezone=True),

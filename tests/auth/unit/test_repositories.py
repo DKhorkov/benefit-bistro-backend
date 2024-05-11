@@ -1,7 +1,7 @@
 import pytest
 from typing import Optional, List, Sequence
 from sqlalchemy import select, CursorResult, Row
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession, async_sessionmaker
 
 from src.auth.models import UserModel
@@ -311,4 +311,5 @@ async def test_sqlalchemy_user_repository_update_non_existing_user(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True))
-    await SQLAlchemyUsersRepository(session=session).update(id=1, model=user)
+    with pytest.raises(NoResultFound):
+        await SQLAlchemyUsersRepository(session=session).update(id=1, model=user)

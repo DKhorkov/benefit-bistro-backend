@@ -13,7 +13,7 @@ class AbstractRepository(ABC):
     """
 
     @abstractmethod
-    async def add(self, model: BaseModel):
+    async def add(self, model: BaseModel) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
@@ -21,7 +21,7 @@ class AbstractRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def update(self, id: int, model: BaseModel) -> None:
+    async def update(self, id: int, model: BaseModel) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod

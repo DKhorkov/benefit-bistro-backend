@@ -30,13 +30,16 @@ class FakeUsersRepository(UsersRepository):
 
         return None
 
-    async def add(self, model: BaseModel) -> None:
+    async def add(self, model: BaseModel) -> BaseModel:
         user: UserModel = UserModel(**await model.to_dict())
         self.users[user.id] = model
+        return user
 
-    async def update(self, id: int, model: BaseModel) -> None:
+    async def update(self, id: int, model: BaseModel) -> BaseModel:
         if id in self.users:
             self.users[id] = model
+
+        return model
 
     async def delete(self, id: int) -> None:
         if id in self.users:

@@ -82,7 +82,7 @@ make -C docker downgrade to=<Number of migrations>  # -1, -2 or base to downgrad
 
 ### Run using source files:
 
-To run alembic migrations for local database, user next command first:
+To run alembic migrations for local database, use next command first:
 
 ```bash
 export LOCAL_LAUNCH=true
@@ -110,9 +110,17 @@ To run tests use next command in project's root directory:
 pytest -v
 ```
 
-To check tests coverage user next commands in project's root directory and 
+To check tests coverage use next commands in project's root directory and 
 open ```htmlcov/index.html``` file in browser:
 ```bash
 coverage run -m pytest -v
 coverage html
+```
+
+
+## Redis:
+
+To stop already running redis-server use next command:
+```bash
+sudo service redis-server stop
 ```

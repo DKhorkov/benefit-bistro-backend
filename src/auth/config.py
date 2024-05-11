@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Tuple, List, Literal
 from enum import Enum
 from pydantic_settings import BaseSettings
@@ -14,12 +13,14 @@ from src.config import (
 class PageNamesConfig(BasePageNamesConfig):
     REGISTER_PAGE: str = BasePageNamesConfig.HOMEPAGE
     LOGIN_PAGE: str = BasePageNamesConfig.HOMEPAGE
+    EMAIL_VERIFIED: str = BasePageNamesConfig.HOMEPAGE
 
 
 @dataclass(frozen=True)
 class PathsConfig(BasePathsConfig):
-    REGISTER_PAGE = Path('register.html')
-    LOGIN_PAGE = Path('login.html')
+    REGISTER_PAGE: str = 'register.html'
+    LOGIN_PAGE: str = 'login.html'
+    EMAIL_VERIFIED: str = 'email_verified.html'
 
 
 @dataclass(frozen=True)
@@ -30,6 +31,8 @@ class URLPathsConfig:
     LOGIN: str = '/login'
     LOGOUT: str = '/logout'
     ME: str = '/me'
+    VERIFY_EMAIL: str = '/verify_email/{token}'
+    EMAIL_VERIFIED: str = '/email_verified'
 
 
 @dataclass(frozen=True)
@@ -40,6 +43,8 @@ class URLNamesConfig:
     LOGIN: str = 'login'
     LOGOUT: str = 'logout'
     ME: str = 'me'
+    VERIFY_EMAIL: str = 'verify_email'
+    EMAIL_VERIFIED: str = 'email_verified'
 
 
 @dataclass(frozen=True)
@@ -60,12 +65,6 @@ class RouterConfig:
         return [tag for tag in cls.TAGS]
 
 
-class JWTConfig(BaseSettings):
-    ACCESS_TOKEN_SECRET_KEY: str
-    ACCESS_TOKEN_ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
-
-
 class CookiesConfig(BaseSettings):
     COOKIES_KEY: str
     COOKIES_LIFESPAN_DAYS: int
@@ -79,6 +78,5 @@ class PasslibConfig(BaseSettings):
     PASSLIB_DEPRECATED: str
 
 
-jwt_config: JWTConfig = JWTConfig()
 cookies_config: CookiesConfig = CookiesConfig()
 passlib_config: PasslibConfig = PasslibConfig()
