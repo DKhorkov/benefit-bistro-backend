@@ -1,4 +1,3 @@
-from pathlib import Path
 from dataclasses import dataclass
 from pydantic_settings import BaseSettings
 from typing import List
@@ -6,9 +5,9 @@ from typing import List
 
 @dataclass(frozen=True)
 class PathsConfig:
-    TEMPLATES: Path = Path('./templates')
-    STATIC: Path = Path('./static')
-    HOMEPAGE: Path = Path('homepage.html')
+    TEMPLATES: str = 'templates/'
+    STATIC: str = 'static/'
+    HOMEPAGE: str = 'homepage.html'
 
 
 @dataclass(frozen=True)
@@ -42,5 +41,11 @@ class UvicornConfig(BaseSettings):
     RELOAD: bool = True
 
 
+class LinksConfig(BaseSettings):
+    HTTP_PROTOCOL: str
+    DOMAIN: str
+
+
 cors_config: CORSConfig = CORSConfig()
 uvicorn_config: UvicornConfig = UvicornConfig()
+links_config: LinksConfig = LinksConfig()

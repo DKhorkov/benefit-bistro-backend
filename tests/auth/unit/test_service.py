@@ -1,9 +1,11 @@
 import pytest
 
+from src.auth.constants import ErrorDetails
 from src.auth.exceptions import UserNotFoundError
 from src.auth.interfaces.repositories import UsersRepository
 from src.auth.interfaces.units_of_work import UsersUnitOfWork
-from src.auth.models import UserModel, JWTDataModel
+from src.auth.models import UserModel
+from src.security.models import JWTDataModel
 from src.auth.schemas import RegisterUserScheme
 from src.auth.service import AuthService
 from src.core.interfaces import BaseModel
@@ -116,10 +118,45 @@ async def test_auth_service_check_user_existence_success_by_username(map_models_
 
 
 @pytest.mark.anyio
-async def test_auth_service_check_user_existence_fail(map_models_to_orm: None) -> None:
+async def test_auth_service_check_user_existence_fail_user_does_not_exist(map_models_to_orm: None) -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
 
     assert len(await users_repository.list()) == 0
     assert not await auth_service.check_user_existence(username=TestUserConfig.USERNAME)
+
+
+@pytest.mark.anyio
+async def test_auth_service_check_user_existence_fail_no_attributes_provided(
+        create_test_user_if_not_exists: None
+) -> None:
+
+    users_repository: UsersRepository = create_fake_users_repository_instance()
+    users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
+    auth_service: AuthService = AuthService(uow=users_unit_of_work)
+    with pytest.raises(ValueError) as exc_info:
+        await auth_service.check_user_existence()
+
+    assert str(exc_info.value) == ErrorDetails.USER_ATTRIBUTE_REQUIRED
+
+
+@pytest.mark.anyio
+async def test_verify_user_email_success(create_test_user_if_not_exists: None) -> None:
+    users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
+    users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
+    auth_service: AuthService = AuthService(uow=users_unit_of_work)
+    jwt_data: JWTDataModel = JWTDataModel(user_id=1)
+    user: UserModel = await auth_service.verify_user_email(jwt_data=jwt_data)
+
+    assert user.email_verified
+
+
+@pytest.mark.anyio
+async def test_verify_user_email_fail(map_models_to_orm: None) -> None:
+    users_repository: UsersRepository = create_fake_users_repository_instance()
+    users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
+    auth_service: AuthService = AuthService(uow=users_unit_of_work)
+    jwt_data: JWTDataModel = JWTDataModel(user_id=1)
+    with pytest.raises(UserNotFoundError):
+        await auth_service.verify_user_email(jwt_data=jwt_data)

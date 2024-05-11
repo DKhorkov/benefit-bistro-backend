@@ -15,7 +15,7 @@ class SQLAlchemyRepository(AbstractRepository):
         self._session: AsyncSession = session
 
     @abstractmethod
-    async def add(self, model: BaseModel) -> None:
+    async def add(self, model: BaseModel) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod
@@ -23,7 +23,7 @@ class SQLAlchemyRepository(AbstractRepository):
         raise NotImplementedError
 
     @abstractmethod
-    async def update(self, id: int, model: BaseModel) -> None:
+    async def update(self, id: int, model: BaseModel) -> BaseModel:
         raise NotImplementedError
 
     @abstractmethod

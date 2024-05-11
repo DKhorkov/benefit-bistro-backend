@@ -21,11 +21,19 @@ class SQLAlchemyUsersRepository(SQLAlchemyRepository, UsersRepository):
         result: Result = await self._session.execute(select(UserModel).filter_by(username=username))
         return result.scalar_one_or_none()
 
-    async def add(self, model: BaseModel) -> None:
-        await self._session.execute(insert(UserModel).values(**await model.to_dict(exclude={'id'})))
+    async def add(self, model: BaseModel) -> BaseModel:
+        result: Result = await self._session.execute(
+            insert(UserModel).values(**await model.to_dict(exclude={'id'})).returning(UserModel)
+        )
 
-    async def update(self, id: int, model: BaseModel) -> None:
-        await self._session.execute(update(UserModel).filter_by(id=id).values(**await model.to_dict(exclude={'id'})))
+        return result.scalar_one()
+
+    async def update(self, id: int, model: BaseModel) -> BaseModel:
+        result: Result = await self._session.execute(
+            update(UserModel).filter_by(id=id).values(**await model.to_dict(exclude={'id'})).returning(UserModel)
+        )
+
+        return result.scalar_one()
 
     async def delete(self, id: int) -> None:
         await self._session.execute(delete(UserModel).filter_by(id=id))

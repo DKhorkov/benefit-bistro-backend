@@ -1,12 +1,10 @@
 from fastapi import Request
 from fastapi.security import OAuth2
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
-from jose import jwt
 from passlib.context import CryptContext
 from typing import Optional, Dict
 
-from src.auth.config import URLPathsConfig, jwt_config, cookies_config, passlib_config
-from src.auth.models import JWTDataModel
+from src.auth.config import URLPathsConfig, cookies_config, passlib_config
 from src.auth.exceptions import NotAuthenticatedError
 
 
@@ -61,12 +59,3 @@ async def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 async def hash_password(password: str) -> str:
     return pwd_context.hash(secret=password)
-
-
-async def create_access_token(jwt_data: JWTDataModel) -> str:
-    jwt_token: str = jwt.encode(
-        claims=await jwt_data.to_dict(),
-        key=jwt_config.ACCESS_TOKEN_SECRET_KEY,
-        algorithm=jwt_config.ACCESS_TOKEN_ALGORITHM
-    )
-    return jwt_token

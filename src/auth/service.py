@@ -1,8 +1,9 @@
 from typing import Optional
 
+from src.auth.constants import ErrorDetails
 from src.auth.exceptions import UserNotFoundError
 from src.auth.models import UserModel
-from src.auth.models import JWTDataModel
+from src.security.models import JWTDataModel
 from src.auth.schemas import RegisterUserScheme
 from src.auth.interfaces.units_of_work import UsersUnitOfWork
 from src.auth.utils import hash_password
@@ -17,12 +18,14 @@ class AuthService:
     def __init__(self, uow: UsersUnitOfWork) -> None:
         self._uow: UsersUnitOfWork = uow
 
-    async def register_user(self, user_data: RegisterUserScheme) -> None:
+    async def register_user(self, user_data: RegisterUserScheme) -> UserModel:
         user_data.password = await hash_password(user_data.password)
         user: UserModel = UserModel(**user_data.model_dump())
         async with self._uow as uow:
-            await uow.users.add(user)
+            result: BaseModel = await uow.users.add(user)
+            user = UserModel(**await result.to_dict())
             await uow.commit()
+            return user
 
     async def check_user_existence(
             self,
@@ -32,7 +35,7 @@ class AuthService:
     ) -> bool:
 
         if not (id or email or username):
-            raise ValueError('user id, email or username is required')
+            raise ValueError(ErrorDetails.USER_ATTRIBUTE_REQUIRED)
 
         async with self._uow as uow:
             result: Optional[BaseModel]  # declaring here for mypy passing
@@ -56,7 +59,6 @@ class AuthService:
     async def get_user_by_email(self, email: str) -> UserModel:
         async with self._uow as uow:
             result: Optional[BaseModel] = await uow.users.get_by_email(email)
-
             if not result:
                 raise UserNotFoundError
 
@@ -65,8 +67,19 @@ class AuthService:
     async def authenticate_user(self, jwt_data: JWTDataModel) -> UserModel:
         async with self._uow as uow:
             result: Optional[BaseModel] = await uow.users.get(id=jwt_data.user_id)
-
             if not result:
                 raise UserNotFoundError
 
             return UserModel(**await result.to_dict())
+
+    async def verify_user_email(self, jwt_data: JWTDataModel) -> UserModel:
+        async with self._uow as uow:
+            result: Optional[BaseModel] = await uow.users.get(id=jwt_data.user_id)
+            if not result:
+                raise UserNotFoundError
+
+            user = UserModel(**await result.to_dict())
+            user.email_verified = True
+            await uow.users.update(id=jwt_data.user_id, model=user)
+            await uow.commit()
+            return user

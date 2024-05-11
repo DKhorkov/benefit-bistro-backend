@@ -12,8 +12,8 @@ class ErrorDetails(BaseErrorDetails):
                                       f'{UserValidationConfig.PASSWORD_MAX_LENGTH} characters inclusive')
     USERNAME_VALIDATION_ERROR: str = (f'Username must be between {UserValidationConfig.USERNAME_MIN_LENGTH} and '
                                       f'{UserValidationConfig.USERNAME_MAX_LENGTH} characters inclusive')
-    INVALID_TOKEN: str = 'Token has expired or is invalid'
     INVALID_PASSWORD: str = 'Provided password is invalid'
     INVALID_USER: str = 'Current user is invalid'
     USER_ALREADY_EXISTS: str = 'User with provided credentials already exists'
     USER_NOT_FOUND: str = 'User with provided credentials not found'
+    USER_ATTRIBUTE_REQUIRED: str = 'user id, email or username is required'

@@ -15,10 +15,6 @@ class NotAuthenticatedError(DetailedHTTPException):
     DETAIL = ErrorDetails.USER_NOT_AUTHENTICATED
 
 
-class InvalidTokenError(PreconditionFailedError):
-    DETAIL = ErrorDetails.INVALID_TOKEN
-
-
 class InvalidPasswordError(PreconditionFailedError):
     DETAIL = ErrorDetails.INVALID_PASSWORD
 
