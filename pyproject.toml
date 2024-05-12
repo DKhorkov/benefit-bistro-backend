@@ -15,6 +15,15 @@ exclude = ['database_data/', 'database_backups/', 'alembic/']
 module = "celery.*"
 ignore_missing_imports = true
 
+# Avoiding incorrect 'override' error for abstract repositories in list() method:
+[[tool.mypy.overrides]]
+module = [
+    "src.auth.interfaces.repositories",
+    "src.auth.repositories",
+    "tests.auth.fake_objects",
+]
+disable_error_code = ["override"]
+
 [tool.pytest.ini_options]
 testpaths = [
     'tests',

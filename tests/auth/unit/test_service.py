@@ -8,7 +8,6 @@ from src.auth.models import UserModel
 from src.security.models import JWTDataModel
 from src.auth.schemas import RegisterUserScheme
 from src.auth.service import AuthService
-from src.core.interfaces import BaseModel
 from tests.auth.fake_objects import FakeUsersUnitOfWork, FakeUsersRepository
 from tests.config import TestUserConfig
 
@@ -17,7 +16,7 @@ def create_fake_users_repository_instance(with_user: bool = False) -> UsersRepos
     users_repository: UsersRepository
     if with_user:
         user_id: int = 1
-        user: BaseModel = UserModel(**TestUserConfig().to_dict(to_lower=True), id=user_id)
+        user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True), id=user_id)
         users_repository = FakeUsersRepository(users={user_id: user})
     else:
         users_repository = FakeUsersRepository()
