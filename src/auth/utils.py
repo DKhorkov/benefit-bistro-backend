@@ -1,5 +1,5 @@
 from fastapi import Request
-from fastapi.security import OAuth2, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from passlib.context import CryptContext
 from typing import Optional, Dict
