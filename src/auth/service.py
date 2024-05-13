@@ -7,7 +7,6 @@ from src.security.models import JWTDataModel
 from src.auth.schemas import RegisterUserScheme
 from src.auth.interfaces.units_of_work import UsersUnitOfWork
 from src.auth.utils import hash_password
-from src.core.interfaces import BaseModel
 
 
 class AuthService:
@@ -22,8 +21,7 @@ class AuthService:
         user_data.password = await hash_password(user_data.password)
         user: UserModel = UserModel(**user_data.model_dump())
         async with self._uow as uow:
-            result: BaseModel = await uow.users.add(user)
-            user = UserModel(**await result.to_dict())
+            user: UserModel = await uow.users.add(user)
             await uow.commit()
             return user
 
