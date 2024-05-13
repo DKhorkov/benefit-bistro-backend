@@ -19,9 +19,8 @@ class AuthService:
 
     async def register_user(self, user_data: RegisterUserScheme) -> UserModel:
         user_data.password = await hash_password(user_data.password)
-        user: UserModel = UserModel(**user_data.model_dump())
         async with self._uow as uow:
-            user: UserModel = await uow.users.add(user)
+            user: UserModel = await uow.users.add(UserModel(**user_data.model_dump()))
             await uow.commit()
             return user
 
