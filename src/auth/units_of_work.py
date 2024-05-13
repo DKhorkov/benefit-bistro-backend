@@ -3,10 +3,10 @@ from typing import Self
 from src.auth.interfaces.repositories import UsersRepository
 from src.auth.interfaces.units_of_work import UsersUnitOfWork
 from src.auth.repositories import SQLAlchemyUsersRepository
-from src.core.database.units_of_work import SQLAlchemyUnitOfWork
+from src.core.database.interfaces.units_of_work import SQLAlchemyAbstractUnitOfWork
 
 
-class SQLAlchemyUsersUnitOfWork(SQLAlchemyUnitOfWork, UsersUnitOfWork):
+class SQLAlchemyUsersUnitOfWork(SQLAlchemyAbstractUnitOfWork, UsersUnitOfWork):
 
     async def __aenter__(self) -> Self:
         uow = await super().__aenter__()

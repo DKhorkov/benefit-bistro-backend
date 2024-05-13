@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from src.core.interfaces import BaseModel
+from src.core.interfaces import AbstractModel
 
 
 @dataclass
-class UserModel(BaseModel):
+class UserModel(AbstractModel):
     email: str
     password: str
     username: str

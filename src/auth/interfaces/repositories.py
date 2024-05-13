@@ -1,7 +1,7 @@
 from typing import Optional, List
 from abc import ABC, abstractmethod
 
-from src.core.interfaces import AbstractRepository, BaseModel
+from src.core.interfaces import AbstractRepository, AbstractModel
 from src.auth.models import UserModel
 
 
@@ -21,7 +21,7 @@ class UsersRepository(AbstractRepository, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def add(self, model: BaseModel) -> UserModel:
+    async def add(self, model: AbstractModel) -> UserModel:
         raise NotImplementedError
 
     @abstractmethod
@@ -29,7 +29,7 @@ class UsersRepository(AbstractRepository, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def update(self, id: int, model: BaseModel) -> UserModel:
+    async def update(self, id: int, model: AbstractModel) -> UserModel:
         raise NotImplementedError
 
     @abstractmethod

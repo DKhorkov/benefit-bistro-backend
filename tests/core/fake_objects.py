@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from src.core.interfaces import BaseModel
+from src.core.interfaces import AbstractModel
 
 
 @dataclass
-class TestModel(BaseModel):
+class TestModel(AbstractModel):
     """
     Inherited model from base just to test BaseModel's methods.
     """
