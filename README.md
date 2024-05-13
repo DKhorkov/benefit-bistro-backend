@@ -1,29 +1,30 @@
 # Benefit Bistro
 
+All commands should be executed in project's root directory:
+
 ## Getting started
-
-### Run via docker:
-
-To run application via docker, use next command line in 
-project's root directory:
 
 Only at first launch:
 ```bash
 make -C docker network
 ```
 
-```bash
-make -C docker local
-```
-or
+### Run via docker:
+
+To run app and it's dependencies in docker, use next command:
 ```bash
 make -C docker prod
 ```
 
-### Run using source files:
 
-To run application using source files, use next commands 
-in project's root directory:
+### Run via source files:
+
+To run app via source files, first of all, use next command to launch app's dependencies:
+```bash
+make -C docker local
+```
+
+To run application via source files, use next commands:
 
 ```bash
 python -m venv venv
@@ -36,6 +37,11 @@ uvicorn src.app:app --env-file .env --host <Ypur host here> --port <Your por her
 ```
 
 ### Run via IDE:
+
+To run app via IDE, first of all, use next command to launch app's dependencies:
+```bash
+make -C docker local
+```
 
 Only for local development set the permissions to launch debugger:
 
@@ -59,22 +65,21 @@ flake8 ./ -v
 mypy ./
 ```
 
-
 ## Alembic
 
 ### Run via docker, when app is launched in docker:
 
-To create new migration run next command:
+To create new migration use next command:
 ```bash
 make -C docker makemigrations name=<your migration description here>
 ```
 
-To migrate run next command:
+To migrate use next command:
 ```bash
 make -C docker migrate
 ```
 
-To downgrade database run next command:
+To downgrade database use next command:
 ```bash
 make -C docker downgrade to=<Number of migrations>  # -1, -2 or base to downgrade to start point
 ```
@@ -88,17 +93,17 @@ To run alembic migrations for local database, use next command first:
 export LOCAL_LAUNCH=true
 ```
 
-To create new migration run next command:
+To create new migration use next command:
 ```bash
 alembic revision -m "<your migration description here>" --autogenerate
 ```
 
-To migrate run next command:
+To migrate use next command:
 ```bash
 alembic upgrade head
 ```
 
-To downgrade database run next command:
+To downgrade database use next command:
 ```bash
 alembic downgrade <Number of migrations>  # -1, -2 or base to downgrade to start point
 ```
