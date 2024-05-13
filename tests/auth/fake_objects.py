@@ -3,7 +3,7 @@ from typing import Dict, Optional, List
 from src.auth.interfaces.units_of_work import UsersUnitOfWork
 from src.auth.interfaces.repositories import UsersRepository
 from src.auth.models import UserModel
-from src.core.interfaces import BaseModel
+from src.core.interfaces import AbstractModel
 
 
 class FakeUsersRepository(UsersRepository):
@@ -30,12 +30,12 @@ class FakeUsersRepository(UsersRepository):
 
         return None
 
-    async def add(self, model: BaseModel) -> UserModel:
+    async def add(self, model: AbstractModel) -> UserModel:
         user: UserModel = UserModel(**await model.to_dict())
         self.users[user.id] = user
         return user
 
-    async def update(self, id: int, model: BaseModel) -> UserModel:
+    async def update(self, id: int, model: AbstractModel) -> UserModel:
         user: UserModel = UserModel(**await model.to_dict())
         if id in self.users:
             self.users[id] = user

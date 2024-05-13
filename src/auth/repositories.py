@@ -3,11 +3,11 @@ from sqlalchemy import insert, select, delete, update, Result
 
 from src.auth.interfaces.repositories import UsersRepository
 from src.auth.models import UserModel
-from src.core.database.repositories import SQLAlchemyRepository
-from src.core.interfaces import BaseModel
+from src.core.database.interfaces.repositories import SQLAlchemyAbstractRepository
+from src.core.interfaces import AbstractModel
 
 
-class SQLAlchemyUsersRepository(SQLAlchemyRepository, UsersRepository):
+class SQLAlchemyUsersRepository(SQLAlchemyAbstractRepository, UsersRepository):
 
     async def get(self, id: int) -> Optional[UserModel]:
         result: Result = await self._session.execute(select(UserModel).filter_by(id=id))
@@ -21,14 +21,14 @@ class SQLAlchemyUsersRepository(SQLAlchemyRepository, UsersRepository):
         result: Result = await self._session.execute(select(UserModel).filter_by(username=username))
         return result.scalar_one_or_none()
 
-    async def add(self, model: BaseModel) -> UserModel:
+    async def add(self, model: AbstractModel) -> UserModel:
         result: Result = await self._session.execute(
             insert(UserModel).values(**await model.to_dict(exclude={'id'})).returning(UserModel)
         )
 
         return result.scalar_one()
 
-    async def update(self, id: int, model: BaseModel) -> UserModel:
+    async def update(self, id: int, model: AbstractModel) -> UserModel:
         result: Result = await self._session.execute(
             update(UserModel).filter_by(id=id).values(**await model.to_dict(exclude={'id'})).returning(UserModel)
         )

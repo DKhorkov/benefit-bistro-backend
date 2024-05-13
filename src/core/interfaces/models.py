@@ -1,9 +1,10 @@
 from dataclasses import dataclass, asdict
+from abc import ABC
 from typing import Optional, Any, Dict, Set
 
 
 @dataclass
-class BaseModel:
+class AbstractModel(ABC):
     """
     Base model, from which any domain model should be inherited.
     """

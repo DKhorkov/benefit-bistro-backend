@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from src.core.interfaces.base_model import BaseModel
+from src.core.interfaces.models import AbstractModel
 
 
 class AbstractRepository(ABC):
@@ -13,15 +13,15 @@ class AbstractRepository(ABC):
     """
 
     @abstractmethod
-    async def add(self, model: BaseModel) -> BaseModel:
+    async def add(self, model: AbstractModel) -> AbstractModel:
         raise NotImplementedError
 
     @abstractmethod
-    async def get(self, id: int) -> Optional[BaseModel]:
+    async def get(self, id: int) -> Optional[AbstractModel]:
         raise NotImplementedError
 
     @abstractmethod
-    async def update(self, id: int, model: BaseModel) -> BaseModel:
+    async def update(self, id: int, model: AbstractModel) -> AbstractModel:
         raise NotImplementedError
 
     @abstractmethod
@@ -29,5 +29,5 @@ class AbstractRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def list(self) -> List[BaseModel]:
+    async def list(self) -> List[AbstractModel]:
         raise NotImplementedError

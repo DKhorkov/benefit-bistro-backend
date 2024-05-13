@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.interfaces import AbstractRepository
 
 
-class SQLAlchemyRepository(AbstractRepository, ABC):
+class SQLAlchemyAbstractRepository(AbstractRepository, ABC):
     """
     Repository interface for SQLAlchemy, from which should be inherited all other repositories,
     which would be based on SQLAlchemy logics.
