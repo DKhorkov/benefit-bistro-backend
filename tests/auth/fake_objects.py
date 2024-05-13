@@ -8,13 +8,13 @@ from src.core.interfaces import BaseModel
 
 class FakeUsersRepository(UsersRepository):
 
-    def __init__(self, users: Optional[Dict[int, BaseModel]] = None) -> None:
-        self.users: Dict[int, BaseModel] = users if users else {}
+    def __init__(self, users: Optional[Dict[int, UserModel]] = None) -> None:
+        self.users: Dict[int, UserModel] = users if users else {}
 
-    async def get(self, id: int) -> Optional[BaseModel]:
+    async def get(self, id: int) -> Optional[UserModel]:
         return self.users.get(id)
 
-    async def get_by_email(self, email: str) -> Optional[BaseModel]:
+    async def get_by_email(self, email: str) -> Optional[UserModel]:
         for user in self.users.values():
             current_user: UserModel = UserModel(**await user.to_dict())
             if current_user.email == email:
@@ -22,7 +22,7 @@ class FakeUsersRepository(UsersRepository):
 
         return None
 
-    async def get_by_username(self, username: str) -> Optional[BaseModel]:
+    async def get_by_username(self, username: str) -> Optional[UserModel]:
         for user in self.users.values():
             current_user: UserModel = UserModel(**await user.to_dict())
             if current_user.username == username:
@@ -30,22 +30,23 @@ class FakeUsersRepository(UsersRepository):
 
         return None
 
-    async def add(self, model: BaseModel) -> BaseModel:
+    async def add(self, model: BaseModel) -> UserModel:
         user: UserModel = UserModel(**await model.to_dict())
-        self.users[user.id] = model
+        self.users[user.id] = user
         return user
 
-    async def update(self, id: int, model: BaseModel) -> BaseModel:
+    async def update(self, id: int, model: BaseModel) -> UserModel:
+        user: UserModel = UserModel(**await model.to_dict())
         if id in self.users:
-            self.users[id] = model
+            self.users[id] = user
 
-        return model
+        return user
 
     async def delete(self, id: int) -> None:
         if id in self.users:
             del self.users[id]
 
-    async def list(self) -> List[BaseModel]:
+    async def list(self) -> List[UserModel]:
         return list(self.users.values())
 
 

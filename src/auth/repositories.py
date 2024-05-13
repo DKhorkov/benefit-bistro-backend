@@ -9,26 +9,26 @@ from src.core.interfaces import BaseModel
 
 class SQLAlchemyUsersRepository(SQLAlchemyRepository, UsersRepository):
 
-    async def get(self, id: int) -> Optional[BaseModel]:
+    async def get(self, id: int) -> Optional[UserModel]:
         result: Result = await self._session.execute(select(UserModel).filter_by(id=id))
         return result.scalar_one_or_none()
 
-    async def get_by_email(self, email: str) -> Optional[BaseModel]:
+    async def get_by_email(self, email: str) -> Optional[UserModel]:
         result: Result = await self._session.execute(select(UserModel).filter_by(email=email))
         return result.scalar_one_or_none()
 
-    async def get_by_username(self, username: str) -> Optional[BaseModel]:
+    async def get_by_username(self, username: str) -> Optional[UserModel]:
         result: Result = await self._session.execute(select(UserModel).filter_by(username=username))
         return result.scalar_one_or_none()
 
-    async def add(self, model: BaseModel) -> BaseModel:
+    async def add(self, model: BaseModel) -> UserModel:
         result: Result = await self._session.execute(
             insert(UserModel).values(**await model.to_dict(exclude={'id'})).returning(UserModel)
         )
 
         return result.scalar_one()
 
-    async def update(self, id: int, model: BaseModel) -> BaseModel:
+    async def update(self, id: int, model: BaseModel) -> UserModel:
         result: Result = await self._session.execute(
             update(UserModel).filter_by(id=id).values(**await model.to_dict(exclude={'id'})).returning(UserModel)
         )
@@ -38,7 +38,7 @@ class SQLAlchemyUsersRepository(SQLAlchemyRepository, UsersRepository):
     async def delete(self, id: int) -> None:
         await self._session.execute(delete(UserModel).filter_by(id=id))
 
-    async def list(self) -> List[BaseModel]:
+    async def list(self) -> List[UserModel]:
         result: Result = await self._session.execute(select(UserModel))
 
         # Using this type casting for purpose of passing mypy checks:

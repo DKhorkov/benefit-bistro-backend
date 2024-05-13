@@ -26,4 +26,16 @@ class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
         await self._session.commit()
 
     async def rollback(self) -> None:
+        """
+        Rollbacks all uncommited changes.
+
+        Uses self._session.expunge_all() to avoid sqlalchemy.orm.exc.DetachedInstanceError after session rollback,
+        due to the fact that selected object is cached by Session. And self._session.rollback() deletes all Session
+        cache, which causes error on Domain model, which is not bound now to the session and can not retrieve
+        attributes.
+
+        https://pythonhint.com/post/1123713161982291/how-does-a-sqlalchemy-object-get-detached
+        """
+
+        self._session.expunge_all()
         await self._session.rollback()

@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession, async_sessionm
 
 from src.auth.models import UserModel
 from src.auth.repositories import SQLAlchemyUsersRepository
-from src.core.interfaces import BaseModel
 from tests.config import TestUserConfig
 
 
@@ -19,10 +18,9 @@ async def test_sqlalchemy_user_repository_get_success(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user_data: Optional[BaseModel] = await SQLAlchemyUsersRepository(session=session).get(id=1)
+    user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get(id=1)
 
-    assert user_data is not None
-    user: UserModel = UserModel(**await user_data.to_dict())
+    assert user is not None
     assert user.id == 1
     assert user.email == TestUserConfig.EMAIL
     assert user.username == TestUserConfig.USERNAME
@@ -37,8 +35,8 @@ async def test_sqlalchemy_user_repository_get_fail(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user_data: Optional[BaseModel] = await SQLAlchemyUsersRepository(session=session).get(id=2)
-    assert user_data is None
+    user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get(id=2)
+    assert user is None
 
 
 @pytest.mark.anyio
@@ -50,12 +48,11 @@ async def test_sqlalchemy_user_repository_get_by_email_success(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user_data: Optional[BaseModel] = await SQLAlchemyUsersRepository(session=session).get_by_email(
+    user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get_by_email(
         email=TestUserConfig.EMAIL
     )
 
-    assert user_data is not None
-    user: UserModel = UserModel(**await user_data.to_dict())
+    assert user is not None
     assert user.id == 1
     assert user.email == TestUserConfig.EMAIL
     assert user.username == TestUserConfig.USERNAME
@@ -70,11 +67,11 @@ async def test_sqlalchemy_user_repository_get_by_email_fail(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user_data: Optional[BaseModel] = await SQLAlchemyUsersRepository(session=session).get_by_email(
+    user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get_by_email(
         email='non-existing-email@gmail.com'
     )
 
-    assert user_data is None
+    assert user is None
 
 
 @pytest.mark.anyio
@@ -86,12 +83,11 @@ async def test_sqlalchemy_user_repository_get_by_username_success(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user_data: Optional[BaseModel] = await SQLAlchemyUsersRepository(session=session).get_by_username(
+    user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get_by_username(
         username=TestUserConfig.USERNAME
     )
 
-    assert user_data is not None
-    user: UserModel = UserModel(**await user_data.to_dict())
+    assert user is not None
     assert user.id == 1
     assert user.email == TestUserConfig.EMAIL
     assert user.username == TestUserConfig.USERNAME
@@ -106,11 +102,11 @@ async def test_sqlalchemy_user_repository_get_by_username_fail(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user_data: Optional[BaseModel] = await SQLAlchemyUsersRepository(session=session).get_by_username(
+    user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get_by_username(
         username='non-existing-username'
     )
 
-    assert user_data is None
+    assert user is None
 
 
 @pytest.mark.anyio
@@ -122,9 +118,9 @@ async def test_sqlalchemy_user_repository_list(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    users_list: List[BaseModel] = await SQLAlchemyUsersRepository(session=session).list()
+    users_list: List[UserModel] = await SQLAlchemyUsersRepository(session=session).list()
     assert len(users_list) == 1
-    user: UserModel = UserModel(**await users_list[0].to_dict())
+    user: UserModel = users_list[0]
     assert user.id == 1
     assert user.email == TestUserConfig.EMAIL
     assert user.username == TestUserConfig.USERNAME
@@ -138,7 +134,7 @@ async def test_sqlalchemy_user_repository_empty_list(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    users_list: List[BaseModel] = await SQLAlchemyUsersRepository(session=session).list()
+    users_list: List[UserModel] = await SQLAlchemyUsersRepository(session=session).list()
     assert len(users_list) == 0
 
 

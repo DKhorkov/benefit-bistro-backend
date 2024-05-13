@@ -13,6 +13,7 @@ class DatabaseConfig(BaseSettings):
     DATABASE_POOL_RECYCLE: int
     DATABASE_POOL_PRE_PING: bool
     DATABASE_AUTO_FLUSH: bool
+    DATABASE_EXPIRE_ON_COMMIT: bool
 
 
 database_config: DatabaseConfig = DatabaseConfig()
