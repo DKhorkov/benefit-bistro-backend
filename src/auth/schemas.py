@@ -5,8 +5,16 @@ from src.auth.exceptions import PasswordValidationError, UsernameValidationError
 
 
 class LoginUserScheme(BaseModel):
-    email: EmailStr
+    username: str
     password: str
+
+    @field_validator('username', mode='before')
+    @classmethod
+    def validate_username(cls, value: str) -> str:
+        if not UserValidationConfig.USERNAME_MIN_LENGTH <= len(value) <= UserValidationConfig.USERNAME_MAX_LENGTH:
+            raise UsernameValidationError
+
+        return value
 
     @field_validator('password', mode='before')
     @classmethod
@@ -18,12 +26,4 @@ class LoginUserScheme(BaseModel):
 
 
 class RegisterUserScheme(LoginUserScheme):
-    username: str
-
-    @field_validator('username', mode='before')
-    @classmethod
-    def validate_username(cls, value: str) -> str:
-        if not UserValidationConfig.USERNAME_MIN_LENGTH <= len(value) <= UserValidationConfig.USERNAME_MAX_LENGTH:
-            raise UsernameValidationError
-
-        return value
+    email: EmailStr

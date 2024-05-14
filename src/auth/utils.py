@@ -4,7 +4,7 @@ from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from passlib.context import CryptContext
 from typing import Optional, Dict
 
-from src.auth.config import URLPathsConfig, cookies_config, passlib_config
+from src.auth.config import URLPathsConfig, cookies_config, passlib_config, RouterConfig
 from src.auth.exceptions import NotAuthenticatedError
 
 
@@ -50,7 +50,7 @@ pwd_context: CryptContext = CryptContext(
     deprecated=passlib_config.PASSLIB_DEPRECATED
 )
 
-oauth2_scheme: OAuth2Cookie = OAuth2Cookie(token_url=URLPathsConfig.LOGIN)
+oauth2_scheme: OAuth2Cookie = OAuth2Cookie(token_url=RouterConfig.PREFIX + URLPathsConfig.LOGIN)
 
 
 async def verify_password(plain_password: str, hashed_password: str) -> bool:
