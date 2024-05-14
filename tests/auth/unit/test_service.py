@@ -25,7 +25,7 @@ def create_fake_users_repository_instance(with_user: bool = False) -> UsersRepos
 
 
 @pytest.mark.anyio
-async def test_auth_service_register_user(map_models_to_orm: None) -> None:
+async def test_auth_service_register_user() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -37,7 +37,7 @@ async def test_auth_service_register_user(map_models_to_orm: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_auth_service_authenticate_user_success(map_models_to_orm: None) -> None:
+async def test_auth_service_authenticate_user_success() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -51,7 +51,7 @@ async def test_auth_service_authenticate_user_success(map_models_to_orm: None) -
 
 
 @pytest.mark.anyio
-async def test_auth_service_authenticate_user_fail(map_models_to_orm: None) -> None:
+async def test_auth_service_authenticate_user_fail() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -63,7 +63,7 @@ async def test_auth_service_authenticate_user_fail(map_models_to_orm: None) -> N
 
 
 @pytest.mark.anyio
-async def test_auth_service_get_user_by_email_success(map_models_to_orm: None) -> None:
+async def test_auth_service_get_user_by_email_success() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -76,7 +76,7 @@ async def test_auth_service_get_user_by_email_success(map_models_to_orm: None) -
 
 
 @pytest.mark.anyio
-async def test_auth_service_get_user_by_email_fail(map_models_to_orm: None) -> None:
+async def test_auth_service_get_user_by_email_fail() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -87,7 +87,7 @@ async def test_auth_service_get_user_by_email_fail(map_models_to_orm: None) -> N
 
 
 @pytest.mark.anyio
-async def test_auth_service_check_user_existence_success_by_id(map_models_to_orm: None) -> None:
+async def test_auth_service_check_user_existence_success_by_id() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -97,7 +97,7 @@ async def test_auth_service_check_user_existence_success_by_id(map_models_to_orm
 
 
 @pytest.mark.anyio
-async def test_auth_service_check_user_existence_success_by_email(map_models_to_orm: None) -> None:
+async def test_auth_service_check_user_existence_success_by_email() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -107,7 +107,7 @@ async def test_auth_service_check_user_existence_success_by_email(map_models_to_
 
 
 @pytest.mark.anyio
-async def test_auth_service_check_user_existence_success_by_username(map_models_to_orm: None) -> None:
+async def test_auth_service_check_user_existence_success_by_username() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -117,7 +117,7 @@ async def test_auth_service_check_user_existence_success_by_username(map_models_
 
 
 @pytest.mark.anyio
-async def test_auth_service_check_user_existence_fail_user_does_not_exist(map_models_to_orm: None) -> None:
+async def test_auth_service_check_user_existence_fail_user_does_not_exist() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -127,10 +127,7 @@ async def test_auth_service_check_user_existence_fail_user_does_not_exist(map_mo
 
 
 @pytest.mark.anyio
-async def test_auth_service_check_user_existence_fail_no_attributes_provided(
-        create_test_user_if_not_exists: None
-) -> None:
-
+async def test_auth_service_check_user_existence_fail_no_attributes_provided() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -141,7 +138,7 @@ async def test_auth_service_check_user_existence_fail_no_attributes_provided(
 
 
 @pytest.mark.anyio
-async def test_verify_user_email_success(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_email_success() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
@@ -152,10 +149,34 @@ async def test_verify_user_email_success(create_test_user_if_not_exists: None) -
 
 
 @pytest.mark.anyio
-async def test_verify_user_email_fail(map_models_to_orm: None) -> None:
+async def test_verify_user_email_fail() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)
     jwt_data: JWTDataModel = JWTDataModel(user_id=1)
     with pytest.raises(UserNotFoundError):
         await auth_service.verify_user_email(jwt_data=jwt_data)
+
+
+@pytest.mark.anyio
+async def test_auth_service_get_user_by_username_success() -> None:
+    users_repository: UsersRepository = create_fake_users_repository_instance(with_user=True)
+    users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
+    auth_service: AuthService = AuthService(uow=users_unit_of_work)
+
+    assert len(await users_repository.list()) == 1
+    found_user: UserModel = await auth_service.get_user_by_username(username=TestUserConfig.USERNAME)
+    assert found_user.email == TestUserConfig.EMAIL
+    assert found_user.username == TestUserConfig.USERNAME
+    assert found_user.id == 1
+
+
+@pytest.mark.anyio
+async def test_auth_service_get_user_by_username_fail() -> None:
+    users_repository: UsersRepository = create_fake_users_repository_instance()
+    users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
+    auth_service: AuthService = AuthService(uow=users_unit_of_work)
+
+    assert len(await users_repository.list()) == 0
+    with pytest.raises(UserNotFoundError):
+        await auth_service.get_user_by_username(username=TestUserConfig.USERNAME)

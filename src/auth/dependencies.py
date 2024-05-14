@@ -28,7 +28,13 @@ async def login_user(user_data: LoginUserScheme) -> UserModel:
     """
 
     auth_service: AuthService = AuthService(uow=SQLAlchemyUsersUnitOfWork())
-    user: UserModel = await auth_service.get_user_by_email(email=user_data.email)
+
+    user: UserModel
+    if await auth_service.check_user_existence(email=user_data.username):
+        user = await auth_service.get_user_by_email(email=user_data.username)
+    else:
+        user = await auth_service.get_user_by_username(username=user_data.username)
+
     if not await verify_password(user_data.password, user.password):
         raise InvalidPasswordError
 

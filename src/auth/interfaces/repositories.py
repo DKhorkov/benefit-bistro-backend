@@ -33,9 +33,5 @@ class UsersRepository(AbstractRepository, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def delete(self, id: int) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
     async def list(self) -> List[UserModel]:
         raise NotImplementedError

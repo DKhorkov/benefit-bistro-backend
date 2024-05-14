@@ -61,6 +61,14 @@ class AuthService:
 
             return user
 
+    async def get_user_by_username(self, username: str) -> UserModel:
+        async with self._uow as uow:
+            user: Optional[UserModel] = await uow.users.get_by_username(username)
+            if not user:
+                raise UserNotFoundError
+
+            return user
+
     async def authenticate_user(self, jwt_data: JWTDataModel) -> UserModel:
         async with self._uow as uow:
             user: Optional[UserModel] = await uow.users.get(id=jwt_data.user_id)

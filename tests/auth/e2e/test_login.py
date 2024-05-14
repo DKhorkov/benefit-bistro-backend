@@ -10,10 +10,13 @@ from tests.utils import get_error_message_from_response
 
 
 @pytest.mark.anyio
-async def test_login_success(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+async def test_login_by_email_success(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json=TestUserConfig().to_dict(to_lower=True)
+        json={
+            'username': TestUserConfig.EMAIL,
+            'password': TestUserConfig.PASSWORD
+        }
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -21,31 +24,24 @@ async def test_login_success(async_client: AsyncClient, create_test_user_if_not_
 
 
 @pytest.mark.anyio
-async def test_login_fail_incorrect_email_pattern(
-        async_client: AsyncClient,
-        create_test_user_if_not_exists: None
-) -> None:
-
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['email'] = 'incorrectEmail'
+async def test_login_by_username_success(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json=test_user_config
+        json={
+            'username': TestUserConfig.USERNAME,
+            'password': TestUserConfig.PASSWORD
+        }
     )
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-    expected_error_message: str = ('value is not a valid email address: '
-                                   'The email address is not valid. It must have exactly one @-sign.')
-    assert get_error_message_from_response(response=response) == expected_error_message
+    assert response.status_code == status.HTTP_200_OK
+    assert response.cookies.get(cookies_config.COOKIES_KEY)
 
 
 @pytest.mark.anyio
-async def test_login_fail_incorrect_email(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['email'] = 'someEmail@gmail.com'
+async def test_login_fail_user_not_found(async_client: AsyncClient, map_models_to_orm: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json=test_user_config
+        json=TestUserConfig().to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND

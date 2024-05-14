@@ -27,15 +27,25 @@ async def test_register_user_success(map_models_to_orm: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_register_user_fail(map_models_to_orm: None, create_test_user_if_not_exists: None) -> None:
+async def test_register_user_fail(create_test_user_if_not_exists: None) -> None:
     user_data: RegisterUserScheme = RegisterUserScheme(**TestUserConfig().to_dict(to_lower=True))
     with pytest.raises(UserAlreadyExistError):
         await register_user(user_data=user_data)
 
 
 @pytest.mark.anyio
-async def test_login_user_success(map_models_to_orm: None, create_test_user_if_not_exists: None) -> None:
-    user_data: LoginUserScheme = LoginUserScheme(**TestUserConfig().to_dict(to_lower=True))
+async def test_login_user_by_username_success(create_test_user_if_not_exists: None) -> None:
+    user_data: LoginUserScheme = LoginUserScheme(username=TestUserConfig.USERNAME, password=TestUserConfig.PASSWORD)
+    user: UserModel = await login_user(user_data=user_data)
+
+    assert user.id == 1
+    assert user.username == TestUserConfig.USERNAME
+    assert user.email == TestUserConfig.EMAIL
+
+
+@pytest.mark.anyio
+async def test_login_user_by_email_success(create_test_user_if_not_exists: None) -> None:
+    user_data: LoginUserScheme = LoginUserScheme(username=TestUserConfig.EMAIL, password=TestUserConfig.PASSWORD)
     user: UserModel = await login_user(user_data=user_data)
 
     assert user.id == 1
@@ -51,11 +61,7 @@ async def test_login_user_fail_user_does_not_exist(map_models_to_orm: None) -> N
 
 
 @pytest.mark.anyio
-async def test_login_user_fail_incorrect_password(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists: None
-) -> None:
-
+async def test_login_user_fail_incorrect_password(create_test_user_if_not_exists: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(**TestUserConfig().to_dict(to_lower=True))
     user_data.password = 'some_incorrect_password'
     with pytest.raises(InvalidPasswordError):
