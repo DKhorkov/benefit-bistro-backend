@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from src.auth.exceptions import InvalidPasswordError, UserAlreadyExistError
+from src.auth.exceptions import InvalidPasswordError, UserAlreadyExistsError
 from src.auth.models import UserModel
 from src.security.models import JWTDataModel
 from src.auth.schemas import LoginUserScheme, RegisterUserScheme
@@ -17,7 +17,7 @@ async def register_user(user_data: RegisterUserScheme) -> UserModel:
 
     auth_service: AuthService = AuthService(uow=SQLAlchemyUsersUnitOfWork())
     if await auth_service.check_user_existence(email=user_data.email, username=user_data.username):
-        raise UserAlreadyExistError
+        raise UserAlreadyExistsError
 
     return await auth_service.register_user(user_data=user_data)
 

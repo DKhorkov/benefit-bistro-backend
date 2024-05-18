@@ -1,30 +1,37 @@
 from dataclasses import dataclass
+from enum import Enum
+
 from pydantic_settings import BaseSettings
-from typing import List
+from typing import List, Tuple
 
 
 @dataclass(frozen=True)
 class PathsConfig:
     TEMPLATES: str = 'templates/'
     STATIC: str = 'static/'
-    HOMEPAGE: str = 'homepage.html'
-
-
-@dataclass(frozen=True)
-class PageNamesConfig:
-    HOMEPAGE: str = 'Benefit Bistro'
 
 
 @dataclass(frozen=True)
 class URLPathsConfig:
     HOMEPAGE: str = '/'
     STATIC: str = '/static'
+    DOCS: str = '/docs'
 
 
 @dataclass(frozen=True)
 class URLNamesConfig:
     HOMEPAGE: str = 'homepage'
     STATIC: str = 'static'
+
+
+@dataclass(frozen=True)
+class RouterConfig:
+    PREFIX: str
+    TAGS: Tuple[str]
+
+    @classmethod
+    def tags_list(cls) -> List[str | Enum]:
+        return [tag for tag in cls.TAGS]
 
 
 class CORSConfig(BaseSettings):

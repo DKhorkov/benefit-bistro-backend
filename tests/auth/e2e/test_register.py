@@ -5,6 +5,7 @@ from typing import Dict, Any
 
 from src.auth.config import RouterConfig, URLPathsConfig, UserValidationConfig
 from src.auth.constants import ErrorDetails
+from src.auth.models import UserModel
 from tests.utils import get_error_message_from_response, generate_random_string
 from tests.config import TestUserConfig
 
@@ -88,8 +89,11 @@ async def test_register_success(async_client: AsyncClient) -> None:
         json=TestUserConfig().to_dict(to_lower=True)
     )
 
-    assert response.status_code == status.HTTP_303_SEE_OTHER
-    assert response.has_redirect_location
+    assert response.status_code == status.HTTP_201_CREATED
+    user: UserModel = UserModel(**response.json())
+    assert user.email == TestUserConfig.EMAIL
+    assert user.username == TestUserConfig.USERNAME
+    assert user.email_verified == False
 
 
 @pytest.mark.anyio

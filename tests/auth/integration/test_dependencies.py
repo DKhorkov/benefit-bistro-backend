@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime, timezone
 
-from src.auth.exceptions import UserAlreadyExistError, InvalidPasswordError, UserNotFoundError
+from src.auth.exceptions import UserAlreadyExistsError, InvalidPasswordError, UserNotFoundError
 from src.security.exceptions import InvalidTokenError
 from src.auth.models import UserModel
 from src.security.models import JWTDataModel
@@ -29,7 +29,7 @@ async def test_register_user_success(map_models_to_orm: None) -> None:
 @pytest.mark.anyio
 async def test_register_user_fail(create_test_user_if_not_exists: None) -> None:
     user_data: RegisterUserScheme = RegisterUserScheme(**TestUserConfig().to_dict(to_lower=True))
-    with pytest.raises(UserAlreadyExistError):
+    with pytest.raises(UserAlreadyExistsError):
         await register_user(user_data=user_data)
 
 
