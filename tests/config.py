@@ -18,3 +18,9 @@ class TestUserConfig(BaseTestConfig):
     EMAIL: str = 'test@yandex.ru'
     PASSWORD: str = 'test_password'
     USERNAME: str = 'test_username'
+
+
+@dataclass
+class TestGroupConfig(BaseTestConfig):
+    NAME: str = 'test_group_name'
+    OWNER_ID: int = 1

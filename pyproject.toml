@@ -23,6 +23,7 @@ module = [
     "src.groups.interfaces.repositories",
     "src.groups.repositories",
     "tests.auth.fake_objects",
+    "tests.groups.fake_objects",
 ]
 disable_error_code = ["override"]
 

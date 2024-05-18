@@ -16,16 +16,14 @@ class FakeUsersRepository(UsersRepository):
 
     async def get_by_email(self, email: str) -> Optional[UserModel]:
         for user in self.users.values():
-            current_user: UserModel = UserModel(**await user.to_dict())
-            if current_user.email == email:
+            if user.email == email:
                 return user
 
         return None
 
     async def get_by_username(self, username: str) -> Optional[UserModel]:
         for user in self.users.values():
-            current_user: UserModel = UserModel(**await user.to_dict())
-            if current_user.username == username:
+            if user.username == username:
                 return user
 
         return None

@@ -1,7 +1,6 @@
 import pytest
 from fastapi import status
 from httpx import Response, AsyncClient
-from typing import Dict, Any
 
 from src.auth.config import RouterConfig, URLPathsConfig, UserValidationConfig
 from src.auth.constants import ErrorDetails
@@ -12,11 +11,11 @@ from tests.config import TestUserConfig
 
 @pytest.mark.anyio
 async def test_register_fail_incorrect_email_pattern(async_client: AsyncClient) -> None:
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['email'] = '<EMAIL>'
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.EMAIL = '<EMAIL>'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
-        json=test_user_config
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -28,11 +27,11 @@ async def test_register_fail_incorrect_email_pattern(async_client: AsyncClient) 
 
 @pytest.mark.anyio
 async def test_register_fail_too_short_username(async_client: AsyncClient) -> None:
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['username'] = generate_random_string(length=UserValidationConfig.USERNAME_MIN_LENGTH - 1)
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.USERNAME = generate_random_string(length=UserValidationConfig.USERNAME_MIN_LENGTH - 1)
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
-        json=test_user_config
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -41,11 +40,11 @@ async def test_register_fail_too_short_username(async_client: AsyncClient) -> No
 
 @pytest.mark.anyio
 async def test_register_fail_too_long_username(async_client: AsyncClient) -> None:
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['username'] = generate_random_string(length=UserValidationConfig.USERNAME_MAX_LENGTH + 1)
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.USERNAME = generate_random_string(length=UserValidationConfig.USERNAME_MAX_LENGTH + 1)
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
-        json=test_user_config
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -54,15 +53,11 @@ async def test_register_fail_too_long_username(async_client: AsyncClient) -> Non
 
 @pytest.mark.anyio
 async def test_register_fail_too_short_password(async_client: AsyncClient) -> None:
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['password'] = generate_random_string(length=UserValidationConfig.PASSWORD_MIN_LENGTH - 1),
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.PASSWORD = generate_random_string(length=UserValidationConfig.PASSWORD_MIN_LENGTH - 1)
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
-        json={
-            'email': 'some_email@mail.ru',
-            'password': generate_random_string(length=UserValidationConfig.PASSWORD_MIN_LENGTH - 1),
-            'username': 'some_username'
-        }
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -71,11 +66,11 @@ async def test_register_fail_too_short_password(async_client: AsyncClient) -> No
 
 @pytest.mark.anyio
 async def test_register_fail_too_long_password(async_client: AsyncClient) -> None:
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['password'] = generate_random_string(length=UserValidationConfig.PASSWORD_MIN_LENGTH + 1),
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.PASSWORD = generate_random_string(length=UserValidationConfig.PASSWORD_MAX_LENGTH + 1)
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
-        json=test_user_config
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -102,11 +97,11 @@ async def test_register_fail_email_already_taken(
         create_test_user_if_not_exists: None
 ) -> None:
 
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['username'] = 'some_new_username'
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.USERNAME = 'some_new_username'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
-        json=test_user_config
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_409_CONFLICT
@@ -119,11 +114,11 @@ async def test_register_fail_username_already_taken(
         create_test_user_if_not_exists: None
 ) -> None:
 
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['email'] = 'some_new_email@mail.ru'
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.EMAIL = 'some_new_email@mail.ru'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.REGISTER,
-        json=test_user_config
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_409_CONFLICT

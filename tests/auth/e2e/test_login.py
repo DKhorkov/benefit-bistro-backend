@@ -1,7 +1,6 @@
 import pytest
 from fastapi import status
 from httpx import Response, AsyncClient
-from typing import Dict, Any
 
 from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
 from src.auth.constants import ErrorDetails
@@ -50,11 +49,11 @@ async def test_login_fail_user_not_found(async_client: AsyncClient, map_models_t
 
 @pytest.mark.anyio
 async def test_login_fail_incorrect_password(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
-    test_user_config: Dict[str, Any] = TestUserConfig().to_dict(to_lower=True)
-    test_user_config['password'] = 'incorrectPassword'
+    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config.PASSWORD = 'incorrectPassword'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json=test_user_config
+        json=test_user_config.to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_412_PRECONDITION_FAILED
