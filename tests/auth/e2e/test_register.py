@@ -93,7 +93,7 @@ async def test_register_success(async_client: AsyncClient) -> None:
     user: UserModel = UserModel(**response.json())
     assert user.email == TestUserConfig.EMAIL
     assert user.username == TestUserConfig.USERNAME
-    assert user.email_verified == False
+    assert not user.email_verified
 
 
 @pytest.mark.anyio

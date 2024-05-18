@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, status
-from fastapi.responses import Response, RedirectResponse, JSONResponse
+from fastapi.responses import Response, JSONResponse
 
 from src.auth.models import UserModel
 from src.auth.config import RouterConfig, URLPathsConfig, URLNamesConfig, cookies_config
