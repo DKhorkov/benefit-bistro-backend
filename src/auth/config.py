@@ -1,50 +1,26 @@
 from dataclasses import dataclass
-from typing import Tuple, List, Literal
-from enum import Enum
+from typing import Tuple, Literal
 from pydantic_settings import BaseSettings
 
-from src.config import (
-    PageNamesConfig as BasePageNamesConfig,
-    PathsConfig as BasePathsConfig
-)
-
-
-@dataclass(frozen=True)
-class PageNamesConfig(BasePageNamesConfig):
-    REGISTER_PAGE: str = BasePageNamesConfig.HOMEPAGE
-    LOGIN_PAGE: str = BasePageNamesConfig.HOMEPAGE
-    EMAIL_VERIFIED: str = BasePageNamesConfig.HOMEPAGE
-
-
-@dataclass(frozen=True)
-class PathsConfig(BasePathsConfig):
-    REGISTER_PAGE: str = 'register.html'
-    LOGIN_PAGE: str = 'login.html'
-    EMAIL_VERIFIED: str = 'email_verified.html'
+from src.config import RouterConfig as BaseRouterConfig
 
 
 @dataclass(frozen=True)
 class URLPathsConfig:
-    REGISTER_PAGE: str = '/register_page'
-    LOGIN_PAGE: str = '/login_page'
     REGISTER: str = '/register'
     LOGIN: str = '/login'
     LOGOUT: str = '/logout'
     ME: str = '/me'
     VERIFY_EMAIL: str = '/verify_email/{token}'
-    EMAIL_VERIFIED: str = '/email_verified'
 
 
 @dataclass(frozen=True)
 class URLNamesConfig:
-    REGISTER_PAGE: str = 'register_page'
-    LOGIN_PAGE: str = 'login_page'
     REGISTER: str = 'register'
     LOGIN: str = 'login'
     LOGOUT: str = 'logout'
     ME: str = 'me'
     VERIFY_EMAIL: str = 'verify_email'
-    EMAIL_VERIFIED: str = 'email_verified'
 
 
 @dataclass(frozen=True)
@@ -56,13 +32,9 @@ class UserValidationConfig:
 
 
 @dataclass(frozen=True)
-class RouterConfig:
+class RouterConfig(BaseRouterConfig):
     PREFIX: str = '/auth'
     TAGS: Tuple[str] = ('Auth', )
-
-    @classmethod
-    def tags_list(cls) -> List[str | Enum]:
-        return [tag for tag in cls.TAGS]
 
 
 class CookiesConfig(BaseSettings):

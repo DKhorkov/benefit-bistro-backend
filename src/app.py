@@ -1,16 +1,17 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import clear_mappers
+from starlette import status
 
-from src.config import PathsConfig, cors_config, PageNamesConfig, URLPathsConfig, URLNamesConfig
+from src.config import PathsConfig, cors_config, URLPathsConfig, URLNamesConfig
 from src.auth.router import router as auth_router
+from src.groups.router import router as groups_router
 from src.core.database.orm import start_mappers
-from src.core.utils import generate_html_context
 
 
 @asynccontextmanager
@@ -40,18 +41,21 @@ app.add_middleware(
 
 # Routers:
 app.include_router(auth_router)
+app.include_router(groups_router)
 
 # Mounts:
 app.mount(path=URLPathsConfig.STATIC, app=StaticFiles(directory=PathsConfig.STATIC), name=URLNamesConfig.STATIC)
 templates = Jinja2Templates(directory=PathsConfig.TEMPLATES.__str__())
 
 
-@app.get(path=URLPathsConfig.HOMEPAGE, response_class=HTMLResponse, name=URLNamesConfig.HOMEPAGE)
-async def homepage(request: Request):
-    return templates.TemplateResponse(
-        name=PathsConfig.HOMEPAGE.__str__(),
-        request=request,
-        context=generate_html_context(
-            title=PageNamesConfig.HOMEPAGE
-        )
+@app.get(
+    path=URLPathsConfig.HOMEPAGE,
+    response_class=RedirectResponse,
+    name=URLNamesConfig.HOMEPAGE,
+    status_code=status.HTTP_303_SEE_OTHER
+)
+async def homepage():
+    return RedirectResponse(
+        status_code=status.HTTP_303_SEE_OTHER,
+        url=URLPathsConfig.DOCS
     )

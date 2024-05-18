@@ -22,7 +22,7 @@ async def test_verify_email_success(async_client: AsyncClient, access_token: str
         url=RouterConfig.PREFIX + verify_email_url_base + access_token
     )
 
-    assert response.status_code == status.HTTP_303_SEE_OTHER
+    assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
 @pytest.mark.anyio

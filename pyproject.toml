@@ -20,6 +20,8 @@ ignore_missing_imports = true
 module = [
     "src.auth.interfaces.repositories",
     "src.auth.repositories",
+    "src.groups.interfaces.repositories",
+    "src.groups.repositories",
     "tests.auth.fake_objects",
 ]
 disable_error_code = ["override"]

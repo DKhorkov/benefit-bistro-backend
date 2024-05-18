@@ -51,7 +51,7 @@ class AuthService:
                 if user:
                     return True
 
-            return False
+        return False
 
     async def get_user_by_email(self, email: str) -> UserModel:
         async with self._uow as uow:
