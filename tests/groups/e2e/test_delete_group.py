@@ -104,7 +104,7 @@ async def test_delete_group_fail_group_does_not_belong_to_current_user(
 
 
 @pytest.mark.anyio
-async def test_delete_group_fail_unauthorized(
+async def test_delete_group_fail_user_unauthorized(
         async_client: AsyncClient,
         create_test_group: None
 ) -> None:
