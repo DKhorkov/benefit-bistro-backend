@@ -25,7 +25,7 @@ def create_fake_users_repository_instance(with_user: bool = False) -> UsersRepos
 
 
 @pytest.mark.anyio
-async def test_auth_service_register_user() -> None:
+async def test_auth_service_register_user_success() -> None:
     users_repository: UsersRepository = create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     auth_service: AuthService = AuthService(uow=users_unit_of_work)

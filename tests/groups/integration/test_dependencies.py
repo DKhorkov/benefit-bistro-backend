@@ -25,6 +25,7 @@ async def test_create_group_success(create_test_user_if_not_exists: None) -> Non
 
     assert group.id == 1
     assert group.name == TestGroupConfig.NAME
+    assert group.owner_id == user.id
 
 
 @pytest.mark.anyio
@@ -95,4 +96,6 @@ async def test_get_current_user_groups_success_with_existing_groups(create_test_
     user_groups: List[GroupModel] = await get_current_user_groups(user=user)
 
     assert len(user_groups) == 1
-    assert user_groups[0].name == TestGroupConfig.NAME
+    group: GroupModel = user_groups[0]
+    assert group.name == TestGroupConfig.NAME
+    assert group.owner_id == user.id

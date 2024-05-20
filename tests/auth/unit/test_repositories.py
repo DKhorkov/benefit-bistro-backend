@@ -11,8 +11,7 @@ from tests.config import TestUserConfig
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_get_success(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -28,8 +27,7 @@ async def test_sqlalchemy_user_repository_get_success(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_get_fail(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -41,8 +39,7 @@ async def test_sqlalchemy_user_repository_get_fail(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_get_by_email_success(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -60,8 +57,7 @@ async def test_sqlalchemy_user_repository_get_by_email_success(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_get_by_email_fail(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -76,8 +72,7 @@ async def test_sqlalchemy_user_repository_get_by_email_fail(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_get_by_username_success(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -95,8 +90,7 @@ async def test_sqlalchemy_user_repository_get_by_username_success(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_get_by_username_fail(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -111,8 +105,7 @@ async def test_sqlalchemy_user_repository_get_by_username_fail(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_list(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -140,8 +133,7 @@ async def test_sqlalchemy_user_repository_empty_list(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_delete_existing_user(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -195,8 +187,7 @@ async def test_sqlalchemy_user_repository_add_user_success(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_add_user_success_with_provided_already_existing_id(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -223,8 +214,7 @@ async def test_sqlalchemy_user_repository_add_user_success_with_provided_already
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_add_user_fail_username_already_exists(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -246,8 +236,7 @@ async def test_sqlalchemy_user_repository_add_user_fail_username_already_exists(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_add_user_fail_email_already_exists(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -269,8 +258,7 @@ async def test_sqlalchemy_user_repository_add_user_fail_email_already_exists(
 
 @pytest.mark.anyio
 async def test_sqlalchemy_user_repository_update_existing_user(
-        map_models_to_orm: None,
-        create_test_user_if_not_exists,
+        create_test_user_if_not_exists: None,
         async_connection: AsyncConnection
 ) -> None:
 

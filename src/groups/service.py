@@ -30,7 +30,7 @@ class GroupsService:
 
     async def check_group_existence(self, owner_id: int, name: str) -> bool:
         async with self._uow as uow:
-            group: Optional[GroupModel] = await uow.groups.get_group_by_owner_and_name(name=name, owner_id=owner_id)
+            group: Optional[GroupModel] = await uow.groups.get_by_owner_and_name(name=name, owner_id=owner_id)
             if group:
                 return True
 

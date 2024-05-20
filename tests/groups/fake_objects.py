@@ -17,7 +17,7 @@ class FakeGroupsRepository(GroupsRepository):
     async def get_owner_groups(self, owner_id: int) -> List[GroupModel]:
         return [group for group in self.groups.values() if group.id == owner_id]
 
-    async def get_group_by_owner_and_name(self, name: str, owner_id: int) -> Optional[GroupModel]:
+    async def get_by_owner_and_name(self, name: str, owner_id: int) -> Optional[GroupModel]:
         for group in self.groups.values():
             if group.id == owner_id and group.name == name:
                 return group

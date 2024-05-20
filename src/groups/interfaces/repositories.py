@@ -13,7 +13,7 @@ class GroupsRepository(AbstractRepository, ABC):
     """
 
     @abstractmethod
-    async def get_group_by_owner_and_name(self, name: str, owner_id: int) -> Optional[GroupModel]:
+    async def get_by_owner_and_name(self, name: str, owner_id: int) -> Optional[GroupModel]:
         raise NotImplementedError
 
     @abstractmethod
