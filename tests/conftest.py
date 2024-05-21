@@ -14,7 +14,8 @@ from src.core.database.connection import DATABASE_URL
 from src.core.database.orm import start_mappers, metadata
 from src.auth.utils import hash_password
 from src.celery.celery_app import celery
-from tests.config import TestUserConfig
+from src.groups.models import GroupModel
+from tests.config import TestUserConfig, TestGroupConfig
 from tests.utils import get_base_url, drop_test_db
 
 
@@ -42,7 +43,7 @@ async def create_test_db(async_connection: AsyncConnection) -> AsyncGenerator[No
 
 
 @pytest.fixture
-async def map_models_to_orm(create_test_db) -> None:
+async def map_models_to_orm(create_test_db: None) -> None:
     """
     Create mappings from models to ORM according to DDD.
     """
@@ -54,7 +55,7 @@ async def map_models_to_orm(create_test_db) -> None:
 
 
 @pytest.fixture
-async def async_client(map_models_to_orm) -> AsyncGenerator[AsyncClient, None]:
+async def async_client(map_models_to_orm: None) -> AsyncGenerator[AsyncClient, None]:
     """
     Creates test app client for end-to-end tests to make requests to endpoints with.
     """
@@ -64,7 +65,7 @@ async def async_client(map_models_to_orm) -> AsyncGenerator[AsyncClient, None]:
 
 
 @pytest.fixture
-async def create_test_user_if_not_exists(map_models_to_orm) -> None:
+async def create_test_user_if_not_exists(map_models_to_orm: None) -> None:
     """
     Creates test user in test database, if user with provided credentials does not exist.
     """
@@ -81,7 +82,7 @@ async def create_test_user_if_not_exists(map_models_to_orm) -> None:
 
 
 @pytest.fixture
-async def access_token(async_client, create_test_user_if_not_exists) -> str:
+async def access_token(async_client: AsyncClient, create_test_user_if_not_exists: None) -> str:
     """
     Gets access token for test user, for usage during end-to-end tests to make request,
     which requires authenticated user.
@@ -91,12 +92,12 @@ async def access_token(async_client, create_test_user_if_not_exists) -> str:
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json=TestUserConfig().to_dict(to_lower=True)
     )
-    token: str = response.cookies[cookies_config.COOKIES_KEY]
-    return token
+    access_token: str = response.cookies[cookies_config.COOKIES_KEY]
+    return access_token
 
 
 @pytest.fixture
-async def cookies(access_token) -> Cookies:
+async def cookies(access_token: str) -> Cookies:
     """
     Creates cookies object for AsyncClient, for usage during end-to-end tests to make request,
     which requires authenticated user.
@@ -112,3 +113,18 @@ async def cookies(access_token) -> Cookies:
 def celery_app() -> Celery:
     celery.conf.update(CELERY_ALWAYS_EAGER=True)
     return celery
+
+
+@pytest.fixture
+async def create_test_group(create_test_user_if_not_exists: None) -> None:
+    """
+    Creates test group in test database, if user with provided credentials does not exist.
+    """
+
+    engine: AsyncEngine = create_async_engine(DATABASE_URL)
+    async with engine.begin() as conn:
+        try:
+            await conn.execute(insert(GroupModel).values(**TestGroupConfig().to_dict(to_lower=True)))
+            await conn.commit()
+        except IntegrityError:
+            await conn.rollback()

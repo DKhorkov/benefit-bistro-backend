@@ -13,7 +13,7 @@ class SQLAlchemyGroupsRepository(SQLAlchemyAbstractRepository, GroupsRepository)
         result: Result = await self._session.execute(select(GroupModel).filter_by(id=id))
         return result.scalar_one_or_none()
 
-    async def get_group_by_owner_and_name(self, name: str, owner_id: int) -> Optional[GroupModel]:
+    async def get_by_owner_and_name(self, name: str, owner_id: int) -> Optional[GroupModel]:
         result: Result = await self._session.execute(select(GroupModel).filter_by(name=name, owner_id=owner_id))
         return result.scalar_one_or_none()
 
