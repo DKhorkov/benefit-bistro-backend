@@ -12,3 +12,6 @@ class UserModel(AbstractModel):
     # Optional args:
     id: int = 0
     email_verified: bool = False
+
+    async def protect_password(self) -> None:
+        self.password = ''

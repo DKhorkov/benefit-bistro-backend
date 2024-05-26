@@ -4,8 +4,8 @@ from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from passlib.context import CryptContext
 from typing import Optional, Dict
 
-from src.auth.config import URLPathsConfig, cookies_config, passlib_config, RouterConfig
-from src.auth.exceptions import NotAuthenticatedError
+from src.users.config import URLPathsConfig, cookies_config, passlib_config, RouterConfig
+from src.users.exceptions import NotAuthenticatedError
 
 
 class OAuth2Cookie(OAuth2):

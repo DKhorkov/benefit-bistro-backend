@@ -2,7 +2,7 @@ import pytest
 from fastapi import status
 from httpx import Response, AsyncClient, Cookies
 
-from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
+from src.users.config import RouterConfig, URLPathsConfig, cookies_config
 
 
 @pytest.mark.anyio

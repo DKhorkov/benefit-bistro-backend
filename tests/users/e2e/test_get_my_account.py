@@ -3,8 +3,8 @@ from fastapi import status
 from httpx import Response, AsyncClient, Cookies
 from typing import Dict, Any
 
-from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
-from src.auth.constants import ErrorDetails
+from src.users.config import RouterConfig, URLPathsConfig, cookies_config
+from src.users.constants import ErrorDetails
 from tests.config import TestUserConfig
 from tests.utils import get_error_message_from_response
 

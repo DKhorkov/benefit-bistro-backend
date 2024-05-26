@@ -1,8 +1,8 @@
 from typing import List, Optional
 from sqlalchemy import insert, select, delete, update, Result
 
-from src.auth.interfaces.repositories import UsersRepository
-from src.auth.models import UserModel
+from src.users.interfaces.repositories import UsersRepository
+from src.users.models import UserModel
 from src.core.database.interfaces.repositories import SQLAlchemyAbstractRepository
 from src.core.interfaces import AbstractModel
 

@@ -8,11 +8,11 @@ from sqlalchemy.exc import ArgumentError, IntegrityError
 from typing import AsyncGenerator
 
 from src.app import app
-from src.auth.config import RouterConfig, URLPathsConfig, cookies_config
-from src.auth.models import UserModel
+from src.users.config import RouterConfig, URLPathsConfig, cookies_config
+from src.users.models import UserModel
 from src.core.database.connection import DATABASE_URL
 from src.core.database.orm import start_mappers, metadata
-from src.auth.utils import hash_password
+from src.users.utils import hash_password
 from src.celery.celery_app import celery
 from src.groups.models import GroupModel
 from tests.config import TestUserConfig, TestGroupConfig

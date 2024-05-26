@@ -3,11 +3,11 @@ from typing import Sequence, Optional, List
 from sqlalchemy import select, CursorResult, Row
 from sqlalchemy.ext.asyncio import AsyncConnection
 
-from src.auth.dependencies import register_user
-from src.auth.schemas import RegisterUserScheme
+from src.users.dependencies import register_user
+from src.users.schemas import RegisterUserScheme
 from src.groups.exceptions import GroupAlreadyExistsError, GroupNotFoundError, GroupOwnerError
 from src.groups.models import GroupModel
-from src.auth.models import UserModel
+from src.users.models import UserModel
 from src.groups.schemas import CreateGroupScheme
 from tests.config import TestUserConfig, TestGroupConfig
 from src.groups.dependencies import (

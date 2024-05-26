@@ -1,18 +1,20 @@
 import pytest
 from datetime import datetime, timezone
+from typing import List
 
-from src.auth.exceptions import UserAlreadyExistsError, InvalidPasswordError, UserNotFoundError
+from src.users.exceptions import UserAlreadyExistsError, InvalidPasswordError, UserNotFoundError
 from src.security.exceptions import InvalidTokenError
-from src.auth.models import UserModel
+from src.users.models import UserModel
 from src.security.models import JWTDataModel
-from src.auth.schemas import RegisterUserScheme, LoginUserScheme
+from src.users.schemas import RegisterUserScheme, LoginUserScheme
 from src.security.utils import create_jwt_token
 from tests.config import TestUserConfig
-from src.auth.dependencies import (
+from src.users.dependencies import (
     register_user,
     authenticate_user,
     login_user,
-    verify_user_email
+    verify_user_email,
+    get_all_users
 )
 
 
@@ -24,6 +26,7 @@ async def test_register_user_success(map_models_to_orm: None) -> None:
     assert user.id == 1
     assert user.username == TestUserConfig.USERNAME
     assert user.email == TestUserConfig.EMAIL
+    assert not user.password
 
 
 @pytest.mark.anyio
@@ -41,6 +44,7 @@ async def test_login_user_by_username_success(create_test_user_if_not_exists: No
     assert user.id == 1
     assert user.username == TestUserConfig.USERNAME
     assert user.email == TestUserConfig.EMAIL
+    assert not user.password
 
 
 @pytest.mark.anyio
@@ -51,6 +55,7 @@ async def test_login_user_by_email_success(create_test_user_if_not_exists: None)
     assert user.id == 1
     assert user.username == TestUserConfig.USERNAME
     assert user.email == TestUserConfig.EMAIL
+    assert not user.password
 
 
 @pytest.mark.anyio
@@ -73,6 +78,7 @@ async def test_authenticate_user_success(map_models_to_orm: None, access_token: 
     user: UserModel = await authenticate_user(token=access_token)
     assert user.email == TestUserConfig.EMAIL
     assert user.username == TestUserConfig.USERNAME
+    assert not user.password
 
 
 @pytest.mark.anyio
@@ -101,6 +107,7 @@ async def test_authenticate_user_fail_user_does_not_exist(map_models_to_orm: Non
 async def test_verify_user_email_success(access_token: str) -> None:
     user: UserModel = await verify_user_email(token=access_token)
     assert user.email_verified
+    assert not user.password
 
 
 @pytest.mark.anyio
@@ -109,3 +116,20 @@ async def test_verify_user_email_fail_user_does_not_exist(map_models_to_orm: Non
     token: str = await create_jwt_token(jwt_data=jwt_data)
     with pytest.raises(UserNotFoundError):
         await verify_user_email(token=token)
+
+
+@pytest.mark.anyio
+async def test_get_all_users_with_existing_user(create_test_user_if_not_exists: None) -> None:
+    users: List[UserModel] = await get_all_users()
+    assert len(users) == 1
+    user: UserModel = users[0]
+    assert user.id == 1
+    assert user.username == TestUserConfig.USERNAME
+    assert user.email == TestUserConfig.EMAIL
+    assert not user.password
+
+
+@pytest.mark.anyio
+async def test_get_all_users_with_no_existing_users(map_models_to_orm: None) -> None:
+    users: List[UserModel] = await get_all_users()
+    assert len(users) == 0

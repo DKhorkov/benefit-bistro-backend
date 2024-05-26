@@ -4,8 +4,8 @@ from sqlalchemy import select, CursorResult, Row
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession, async_sessionmaker
 
-from src.auth.models import UserModel
-from src.auth.repositories import SQLAlchemyUsersRepository
+from src.users.models import UserModel
+from src.users.repositories import SQLAlchemyUsersRepository
 from tests.config import TestUserConfig
 
 
