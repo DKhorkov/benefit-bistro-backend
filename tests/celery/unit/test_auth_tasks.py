@@ -2,7 +2,7 @@ import asyncio
 from celery import Celery
 from typing import Dict, Any
 
-from src.auth.models import UserModel
+from src.users.models import UserModel
 from src.celery.tasks.auth_tasks import send_verify_email_message
 from tests.config import TestUserConfig
 

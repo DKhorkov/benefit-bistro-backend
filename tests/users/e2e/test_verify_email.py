@@ -2,9 +2,9 @@ import pytest
 from fastapi import status
 from httpx import Response, AsyncClient
 
-from src.auth.config import RouterConfig, URLPathsConfig
+from src.users.config import RouterConfig, URLPathsConfig
 from src.security.constants import ErrorDetails as SecurityErrorDetails
-from src.auth.constants import ErrorDetails as AuthErrorDetails
+from src.users.constants import ErrorDetails as AuthErrorDetails
 from src.core.utils import get_symbols_before_selected_symbol
 from src.security.models import JWTDataModel
 from src.security.utils import create_jwt_token

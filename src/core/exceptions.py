@@ -1,7 +1,7 @@
 from typing import Any
 from fastapi import HTTPException, status
 
-from src.auth.constants import ErrorDetails
+from src.users.constants import ErrorDetails
 
 
 class DetailedHTTPException(HTTPException):

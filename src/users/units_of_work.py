@@ -1,8 +1,8 @@
 from typing import Self
 
-from src.auth.interfaces.repositories import UsersRepository
-from src.auth.interfaces.units_of_work import UsersUnitOfWork
-from src.auth.repositories import SQLAlchemyUsersRepository
+from src.users.interfaces.repositories import UsersRepository
+from src.users.interfaces.units_of_work import UsersUnitOfWork
+from src.users.repositories import SQLAlchemyUsersRepository
 from src.core.database.interfaces.units_of_work import SQLAlchemyAbstractUnitOfWork
 
 

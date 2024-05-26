@@ -1,15 +1,15 @@
-from typing import Optional
+from typing import Optional, List
 
-from src.auth.constants import ErrorDetails
-from src.auth.exceptions import UserNotFoundError
-from src.auth.models import UserModel
+from src.users.constants import ErrorDetails
+from src.users.exceptions import UserNotFoundError
+from src.users.models import UserModel
 from src.security.models import JWTDataModel
-from src.auth.schemas import RegisterUserScheme
-from src.auth.interfaces.units_of_work import UsersUnitOfWork
-from src.auth.utils import hash_password
+from src.users.schemas import RegisterUserScheme
+from src.users.interfaces.units_of_work import UsersUnitOfWork
+from src.users.utils import hash_password
 
 
-class AuthService:
+class UsersService:
     """
     Service layer according to DDD, which using a unit of work, will perform operations on the domain model.
     """
@@ -87,3 +87,8 @@ class AuthService:
             await uow.users.update(id=jwt_data.user_id, model=user)
             await uow.commit()
             return user
+
+    async def get_all_users(self) -> List[UserModel]:
+        async with self._uow as uow:
+            users: List[UserModel] = await uow.users.list()
+            return users

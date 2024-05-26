@@ -1,6 +1,6 @@
 from abc import ABC
 
-from src.auth.interfaces.repositories import UsersRepository
+from src.users.interfaces.repositories import UsersRepository
 from src.core.interfaces import AbstractUnitOfWork
 
 

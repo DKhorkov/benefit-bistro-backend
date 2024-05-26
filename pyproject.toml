@@ -18,11 +18,11 @@ ignore_missing_imports = true
 # Avoiding incorrect 'override' error for abstract repositories in list() method:
 [[tool.mypy.overrides]]
 module = [
-    "src.auth.interfaces.repositories",
-    "src.auth.repositories",
+    "src.users.interfaces.repositories",
+    "src.users.repositories",
     "src.groups.interfaces.repositories",
     "src.groups.repositories",
-    "tests.auth.fake_objects",
+    "tests.users.fake_objects",
     "tests.groups.fake_objects",
 ]
 disable_error_code = ["override"]

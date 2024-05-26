@@ -6,8 +6,8 @@ from src.groups.models import GroupModel
 from src.groups.schemas import CreateGroupScheme
 from src.groups.service import GroupsService
 from src.groups.units_of_work import SQLAlchemyGroupsUnitOfWork
-from src.auth.models import UserModel
-from src.auth.dependencies import authenticate_user
+from src.users.models import UserModel
+from src.users.dependencies import authenticate_user
 
 
 async def create_group(group_data: CreateGroupScheme, user: UserModel = Depends(authenticate_user)) -> GroupModel:

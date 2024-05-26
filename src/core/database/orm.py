@@ -47,7 +47,7 @@ def start_mappers():
     """
 
     # Imports here not to ruin alembic logics. Also, only for mappers they needed:
-    from src.auth.models import UserModel
+    from src.users.models import UserModel
     from src.groups.models import GroupModel
 
     mapper_registry.map_imperatively(class_=UserModel, local_table=users_table)

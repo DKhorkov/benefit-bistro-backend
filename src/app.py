@@ -9,7 +9,7 @@ from sqlalchemy.orm import clear_mappers
 from starlette import status
 
 from src.config import PathsConfig, cors_config, URLPathsConfig, URLNamesConfig
-from src.auth.router import router as auth_router
+from src.users.router import router as users_router
 from src.groups.router import router as groups_router
 from src.core.database.orm import start_mappers
 
@@ -40,7 +40,7 @@ app.add_middleware(
 )
 
 # Routers:
-app.include_router(auth_router)
+app.include_router(users_router)
 app.include_router(groups_router)
 
 # Mounts:

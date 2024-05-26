@@ -1,6 +1,6 @@
 from fastapi import status
 
-from src.auth.constants import ErrorDetails
+from src.users.constants import ErrorDetails
 from src.core.exceptions import (
     DetailedHTTPException,
     PreconditionFailedError,

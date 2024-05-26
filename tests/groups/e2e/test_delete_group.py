@@ -7,13 +7,16 @@ from sqlalchemy import insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
-from src.auth.config import cookies_config
-from src.auth.models import UserModel
-from src.auth.utils import hash_password
+from src.users.config import cookies_config
+from src.users.models import UserModel
+from src.users.utils import hash_password
 from src.core.database.connection import DATABASE_URL
 from src.core.utils import get_symbols_before_selected_symbol
 from src.groups.config import RouterConfig, URLPathsConfig
-from src.auth.config import URLPathsConfig as AuthURLPathsConfig, RouterConfig as AuthRouterConfig
+from src.users.config import (
+    URLPathsConfig as UsersURLPathsConfig,
+    RouterConfig as UsersRouterConfig
+)
 from tests.config import TestUserConfig
 
 
@@ -78,7 +81,7 @@ async def test_delete_group_fail_group_does_not_belong_to_current_user(
             await conn.rollback()
 
     token_response: Response = await async_client.post(
-        url=AuthRouterConfig.PREFIX + AuthURLPathsConfig.LOGIN,
+        url=UsersRouterConfig.PREFIX + UsersURLPathsConfig.LOGIN,
         json={
             'username': second_user_username,
             'password': TestUserConfig.PASSWORD

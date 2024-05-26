@@ -2,9 +2,9 @@ import pytest
 from starlette.requests import Request
 from typing import Dict
 
-from src.auth.config import URLPathsConfig
-from src.auth.exceptions import NotAuthenticatedError
-from src.auth.utils import hash_password, verify_password, OAuth2Cookie
+from src.users.config import URLPathsConfig
+from src.users.exceptions import NotAuthenticatedError
+from src.users.utils import hash_password, verify_password, OAuth2Cookie
 from tests.config import TestUserConfig
 from tests.utils import build_request
 

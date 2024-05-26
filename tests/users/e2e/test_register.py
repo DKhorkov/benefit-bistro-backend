@@ -2,9 +2,9 @@ import pytest
 from fastapi import status
 from httpx import Response, AsyncClient
 
-from src.auth.config import RouterConfig, URLPathsConfig, UserValidationConfig
-from src.auth.constants import ErrorDetails
-from src.auth.models import UserModel
+from src.users.config import RouterConfig, URLPathsConfig, UserValidationConfig
+from src.users.constants import ErrorDetails
+from src.users.models import UserModel
 from tests.utils import get_error_message_from_response, generate_random_string
 from tests.config import TestUserConfig
 

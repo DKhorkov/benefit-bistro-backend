@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, field_validator
 
-from src.auth.config import UserValidationConfig
-from src.auth.exceptions import PasswordValidationError, UsernameValidationError
+from src.users.config import UserValidationConfig
+from src.users.exceptions import PasswordValidationError, UsernameValidationError
 
 
 class LoginUserScheme(BaseModel):

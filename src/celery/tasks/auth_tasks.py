@@ -3,14 +3,14 @@ from typing import Dict, Any
 from jinja2 import Template
 
 from src.celery.celery_app import celery
-from src.auth.models import UserModel
+from src.users.models import UserModel
 from src.celery.utils import send_email, get_email_template, create_message_object
 from src.celery.config import PathsConfig, EmailSubjectsConfig
 from src.core.utils import get_symbols_before_selected_symbol
 from src.security.models import JWTDataModel
 from src.security.utils import create_jwt_token
 from src.config import links_config
-from src.auth.config import (
+from src.users.config import (
     URLPathsConfig as AuthURLPathsConfig,
     RouterConfig as AuthRouterConfig
 )

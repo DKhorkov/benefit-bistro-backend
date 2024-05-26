@@ -1,5 +1,5 @@
 from src.core.constants import ErrorDetails as BaseErrorDetails
-from src.auth.config import UserValidationConfig
+from src.users.config import UserValidationConfig
 
 
 class ErrorDetails(BaseErrorDetails):

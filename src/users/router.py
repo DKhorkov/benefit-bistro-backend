@@ -1,17 +1,19 @@
+from typing import List
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import Response, JSONResponse
 
-from src.auth.models import UserModel
-from src.auth.config import RouterConfig, URLPathsConfig, URLNamesConfig, cookies_config
+from src.users.models import UserModel
+from src.users.config import RouterConfig, URLPathsConfig, URLNamesConfig, cookies_config
 from src.celery.tasks.auth_tasks import send_verify_email_message
 from src.security.models import JWTDataModel
 from src.security.utils import create_jwt_token
-from src.auth.dependencies import (
+from src.users.dependencies import (
     login_user,
     register_user,
     authenticate_user,
-    verify_user_email
+    verify_user_email,
+    get_all_users as get_all_users_dependency,
 )
 
 
@@ -90,3 +92,14 @@ async def logout():
 )
 async def get_my_account(user: UserModel = Depends(authenticate_user)):
     return user
+
+
+@router.get(
+    path=URLPathsConfig.ALL,
+    response_class=JSONResponse,
+    response_model=List[UserModel],
+    name=URLNamesConfig.ALL,
+    status_code=status.HTTP_200_OK
+)
+async def get_all_users(users: List[UserModel] = Depends(get_all_users_dependency)):
+    return users
