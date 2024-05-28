@@ -18,6 +18,7 @@ class TestUserConfig(BaseTestConfig):
     EMAIL: str = 'test@yandex.ru'
     PASSWORD: str = 'test_password'
     USERNAME: str = 'test_username'
+    EMAIL_VERIFIED: bool = True
 
 
 @dataclass

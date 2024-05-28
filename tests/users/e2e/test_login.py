@@ -1,9 +1,14 @@
 import pytest
 from fastapi import status
 from httpx import Response, AsyncClient
+from sqlalchemy import update
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
+from src.core.database.connection import DATABASE_URL
 from src.users.config import RouterConfig, URLPathsConfig, cookies_config
 from src.users.constants import ErrorDetails
+from src.users.models import UserModel
 from tests.config import TestUserConfig
 from tests.utils import get_error_message_from_response
 
@@ -58,3 +63,26 @@ async def test_login_fail_incorrect_password(async_client: AsyncClient, create_t
 
     assert response.status_code == status.HTTP_412_PRECONDITION_FAILED
     assert get_error_message_from_response(response=response) == ErrorDetails.INVALID_PASSWORD
+
+
+@pytest.mark.anyio
+async def test_login_fail_email_is_not_verified(
+        async_client: AsyncClient,
+        create_test_user_if_not_exists: None
+) -> None:
+
+    engine: AsyncEngine = create_async_engine(DATABASE_URL)
+    async with engine.begin() as conn:
+        try:
+            await conn.execute(update(UserModel).values(email_verified=False).filter_by(email=TestUserConfig.EMAIL))
+            await conn.commit()
+        except IntegrityError:
+            await conn.rollback()
+
+    response: Response = await async_client.post(
+        url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
+        json=TestUserConfig().to_dict(to_lower=True)
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert get_error_message_from_response(response=response) == ErrorDetails.EMAIL_IS_NOT_VERIFIED

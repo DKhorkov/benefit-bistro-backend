@@ -1,8 +1,17 @@
 import pytest
 from datetime import datetime, timezone
 from typing import List
+from sqlalchemy import update
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
-from src.users.exceptions import UserAlreadyExistsError, InvalidPasswordError, UserNotFoundError
+from src.core.database.connection import DATABASE_URL
+from src.users.exceptions import (
+    UserAlreadyExistsError,
+    InvalidPasswordError,
+    UserNotFoundError,
+    EmailIsNotVerifiedError
+)
 from src.security.exceptions import InvalidTokenError
 from src.users.models import UserModel
 from src.security.models import JWTDataModel
@@ -71,6 +80,20 @@ async def test_login_user_fail_incorrect_password(create_test_user_if_not_exists
     user_data.password = 'some_incorrect_password'
     with pytest.raises(InvalidPasswordError):
         await login_user(user_data=user_data)
+
+
+@pytest.mark.anyio
+async def test_login_user_fail_email_is_not_verified(create_test_user_if_not_exists: None) -> None:
+    engine: AsyncEngine = create_async_engine(DATABASE_URL)
+    async with engine.begin() as conn:
+        try:
+            await conn.execute(update(UserModel).values(email_verified=False).filter_by(email=TestUserConfig.EMAIL))
+            await conn.commit()
+        except IntegrityError:
+            await conn.rollback()
+
+    with pytest.raises(EmailIsNotVerifiedError):
+        await login_user(user_data=LoginUserScheme(**TestUserConfig().to_dict(to_lower=True)))
 
 
 @pytest.mark.anyio

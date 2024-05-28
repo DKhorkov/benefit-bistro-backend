@@ -6,7 +6,8 @@ from src.core.exceptions import (
     PreconditionFailedError,
     AlreadyExistsError,
     NotFoundError,
-    ValidationError
+    ValidationError,
+    PermissionDeniedError
 )
 
 
@@ -37,3 +38,7 @@ class UsernameValidationError(ValidationError):
 
 class PasswordValidationError(ValidationError):
     DETAIL = ErrorDetails.PASSWORD_VALIDATION_ERROR
+
+
+class EmailIsNotVerifiedError(PermissionDeniedError):
+    DETAIL = ErrorDetails.EMAIL_IS_NOT_VERIFIED
