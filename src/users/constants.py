@@ -17,3 +17,4 @@ class ErrorDetails(BaseErrorDetails):
     USER_ALREADY_EXISTS: str = 'User with provided credentials already exists'
     USER_NOT_FOUND: str = 'User with provided credentials not found'
     USER_ATTRIBUTE_REQUIRED: str = 'user id, email or username is required'
+    EMAIL_IS_NOT_VERIFIED: str = 'Email is not verified'

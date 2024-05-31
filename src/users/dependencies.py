@@ -1,7 +1,7 @@
 from fastapi import Depends
 from typing import List
 
-from src.users.exceptions import InvalidPasswordError, UserAlreadyExistsError
+from src.users.exceptions import InvalidPasswordError, UserAlreadyExistsError, EmailIsNotVerifiedError
 from src.users.models import UserModel
 from src.security.models import JWTDataModel
 from src.users.schemas import LoginUserScheme, RegisterUserScheme
@@ -37,6 +37,9 @@ async def login_user(user_data: LoginUserScheme) -> UserModel:
         user = await users_service.get_user_by_email(email=user_data.username)
     else:
         user = await users_service.get_user_by_username(username=user_data.username)
+
+    if not user.email_verified:
+        raise EmailIsNotVerifiedError
 
     if not await verify_password(user_data.password, user.password):
         raise InvalidPasswordError
