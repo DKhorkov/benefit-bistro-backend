@@ -3,8 +3,8 @@ from typing import Any, Dict
 
 from src.core.utils import (
     generate_html_context,
-    get_symbols_before_selected_chars,
-    get_symbols_after_selected_chars
+    get_substring_before_selected_chars,
+    get_substring_after_selected_chars
 )
 
 
@@ -26,27 +26,27 @@ def test_generate_html_context_fail() -> None:
     assert 'validation error for HTMLContextScheme\ntitle' in str(exc_info.value)
 
 
-def test_get_symbols_before_selected_chars_common_case() -> None:
+def test_get_substring_before_selected_chars_common_case() -> None:
     expected_result: str = 'someString'
     chars: str = '_'
     test_string: str = f'{expected_result}{chars}postfix'
-    assert get_symbols_before_selected_chars(string=test_string, chars=chars) == expected_result
+    assert get_substring_before_selected_chars(string=test_string, chars=chars) == expected_result
 
 
-def test_get_symbols_before_selected_chars_without_selected_chars_in_string() -> None:
+def test_get_substring_before_selected_chars_without_selected_chars_in_string() -> None:
     chars: str = '_'
     test_string: str = 'Some text without selected symbol'
-    assert get_symbols_before_selected_chars(string=test_string, chars=chars) == test_string
+    assert get_substring_before_selected_chars(string=test_string, chars=chars) == test_string
 
 
-def test_get_symbols_after_selected_chars_common_case() -> None:
+def test_get_substring_after_selected_chars_common_case() -> None:
     expected_result: str = 'someString'
     chars: str = '_'
     test_string: str = f'prefix{chars}{expected_result}'
-    assert get_symbols_after_selected_chars(string=test_string, chars=chars) == expected_result
+    assert get_substring_after_selected_chars(string=test_string, chars=chars) == expected_result
 
 
-def test_get_symbols_after_selected_chars_without_selected_chars_in_string() -> None:
+def test_get_substring_after_selected_chars_without_selected_chars_in_string() -> None:
     chars: str = '_'
     test_string: str = 'Some text without selected symbol'
-    assert get_symbols_after_selected_chars(string=test_string, chars=chars) == test_string
+    assert get_substring_after_selected_chars(string=test_string, chars=chars) == test_string
