@@ -12,7 +12,7 @@ def generate_html_context(**kwargs) -> Dict[str, Any]:
     return HTMLContextScheme(**kwargs).model_dump()
 
 
-def get_substring_before_selected_chars(string: str, chars: str) -> str:
+def get_substring_before_chars(string: str, chars: str) -> str:
     """
     Iterates through provided string and trys to return first match before provided chars, using RegEx.
     If no provided chars in string, returns the full string back.
@@ -29,7 +29,7 @@ def get_substring_before_selected_chars(string: str, chars: str) -> str:
     return string
 
 
-def get_substring_after_selected_chars(string: str, chars: str) -> str:
+def get_substring_after_chars(string: str, chars: str) -> str:
     """
     Iterates through provided string and trys to return first match after provided chars, using RegEx.
     If no provided chars in string, returns the full string back.
