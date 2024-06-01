@@ -2,6 +2,18 @@
 
 All commands should be executed in project's root directory:
 
+## Before start:
+Due to the fact, that DockerHub doesn't work in Russia now, you need to copy the ```daemon.json``` file
+to one of the following directories depending on your system:
+
+```
+Linux, regular setup:    /etc/docker/daemon.json
+Linux, rootless mode:    ~/.config/docker/daemon.json
+Windows:                 C:\ProgramData\docker\config\daemon.json
+```
+
+After completing the previous step, you must restart your computer for the changes to Docker to take effect. 
+
 ## Getting started
 
 Only at first launch:

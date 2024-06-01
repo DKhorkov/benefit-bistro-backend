@@ -11,7 +11,7 @@ from src.users.config import cookies_config
 from src.users.models import UserModel
 from src.users.utils import hash_password
 from src.core.database.connection import DATABASE_URL
-from src.core.utils import get_symbols_before_selected_symbol
+from src.core.utils import get_substring_before_chars, get_substring_after_chars
 from src.groups.config import RouterConfig, URLPathsConfig
 from src.users.config import (
     URLPathsConfig as UsersURLPathsConfig,
@@ -27,13 +27,18 @@ async def test_delete_group_success(
         cookies: Cookies
 ) -> None:
 
-    delete_group_url_base: str = get_symbols_before_selected_symbol(
-        symbol='{',
+    delete_group_url_prefix: str = get_substring_before_chars(
+        chars='{',
+        string=URLPathsConfig.DELETE_GROUP
+    )
+
+    delete_group_url_postfix: str = get_substring_after_chars(
+        chars='}',
         string=URLPathsConfig.DELETE_GROUP
     )
 
     response: Response = await async_client.delete(
-        url=RouterConfig.PREFIX + delete_group_url_base + '1',
+        url=RouterConfig.PREFIX + delete_group_url_prefix + '1' + delete_group_url_postfix,
         cookies=cookies
     )
 
@@ -47,13 +52,18 @@ async def test_delete_group_fail_group_does_not_exist(
         cookies: Cookies
 ) -> None:
 
-    delete_group_url_base: str = get_symbols_before_selected_symbol(
-        symbol='{',
+    delete_group_url_prefix: str = get_substring_before_chars(
+        chars='{',
+        string=URLPathsConfig.DELETE_GROUP
+    )
+
+    delete_group_url_postfix: str = get_substring_after_chars(
+        chars='}',
         string=URLPathsConfig.DELETE_GROUP
     )
 
     response: Response = await async_client.delete(
-        url=RouterConfig.PREFIX + delete_group_url_base + '1',
+        url=RouterConfig.PREFIX + delete_group_url_prefix + '1' + delete_group_url_postfix,
         cookies=cookies
     )
 
@@ -93,13 +103,18 @@ async def test_delete_group_fail_group_does_not_belong_to_current_user(
     domain: str = os.environ.get('HOST', '0.0.0.0')
     cookies.set(name=cookies_config.COOKIES_KEY, value=access_token, domain=domain)
 
-    delete_group_url_base: str = get_symbols_before_selected_symbol(
-        symbol='{',
+    delete_group_url_prefix: str = get_substring_before_chars(
+        chars='{',
+        string=URLPathsConfig.DELETE_GROUP
+    )
+
+    delete_group_url_postfix: str = get_substring_after_chars(
+        chars='}',
         string=URLPathsConfig.DELETE_GROUP
     )
 
     response: Response = await async_client.delete(
-        url=RouterConfig.PREFIX + delete_group_url_base + '1',
+        url=RouterConfig.PREFIX + delete_group_url_prefix + '1' + delete_group_url_postfix,
         cookies=cookies
     )
 
@@ -112,13 +127,18 @@ async def test_delete_group_fail_user_unauthorized(
         create_test_group: None
 ) -> None:
 
-    delete_group_url_base: str = get_symbols_before_selected_symbol(
-        symbol='{',
+    delete_group_url_prefix: str = get_substring_before_chars(
+        chars='{',
+        string=URLPathsConfig.DELETE_GROUP
+    )
+
+    delete_group_url_postfix: str = get_substring_after_chars(
+        chars='}',
         string=URLPathsConfig.DELETE_GROUP
     )
 
     response: Response = await async_client.delete(
-        url=RouterConfig.PREFIX + delete_group_url_base + '1'
+        url=RouterConfig.PREFIX + delete_group_url_prefix + '1' + delete_group_url_postfix
     )
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED

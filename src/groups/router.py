@@ -1,4 +1,4 @@
-from typing import List
+from typing import MutableSequence
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse, Response
 
@@ -42,8 +42,8 @@ async def delete(deleted: None = Depends(delete_group)):  # Using this style for
     path=URLPathsConfig.MY_GROUPS,
     response_class=JSONResponse,
     name=URLNamesConfig.MY_GROUPS,
-    response_model=List[GroupModel],
+    response_model=MutableSequence[GroupModel],
     status_code=status.HTTP_200_OK
 )
-async def get_my_groups(groups: List[GroupModel] = Depends(get_current_user_groups)):
+async def get_my_groups(groups: MutableSequence[GroupModel] = Depends(get_current_user_groups)):
     return groups

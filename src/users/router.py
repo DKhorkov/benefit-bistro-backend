@@ -1,4 +1,4 @@
-from typing import List
+from typing import MutableSequence
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import Response, JSONResponse
@@ -97,9 +97,9 @@ async def get_my_account(user: UserModel = Depends(authenticate_user)):
 @router.get(
     path=URLPathsConfig.ALL,
     response_class=JSONResponse,
-    response_model=List[UserModel],
+    response_model=MutableSequence[UserModel],
     name=URLNamesConfig.ALL,
     status_code=status.HTTP_200_OK
 )
-async def get_all_users(users: List[UserModel] = Depends(get_all_users_dependency)):
+async def get_all_users(users: MutableSequence[UserModel] = Depends(get_all_users_dependency)):
     return users
