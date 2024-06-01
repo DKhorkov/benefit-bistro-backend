@@ -8,7 +8,7 @@ from src.config import RouterConfig as BaseRouterConfig
 class URLPathsConfig:
     MY_GROUPS: str = '/my_groups'
     CREATE_GROUP: str = '/create'
-    DELETE_GROUP: str = '/delete/{group_id}'
+    DELETE_GROUP: str = '/{group_id}/delete'
 
 
 @dataclass(frozen=True)

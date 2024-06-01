@@ -6,7 +6,7 @@ from src.celery.celery_app import celery
 from src.users.models import UserModel
 from src.celery.utils import send_email, get_email_template, create_message_object
 from src.celery.config import PathsConfig, EmailSubjectsConfig
-from src.core.utils import get_symbols_before_selected_symbol
+from src.core.utils import get_symbols_before_selected_chars
 from src.security.models import JWTDataModel
 from src.security.utils import create_jwt_token
 from src.config import links_config
@@ -22,8 +22,8 @@ def send_verify_email_message(user_data: Dict[str, Any]) -> None:
     template: Template = get_email_template(path=PathsConfig.VERIFY_EMAIL)
     jwt_data: JWTDataModel = JWTDataModel(user_id=user.id)
     token: str = asyncio.run(create_jwt_token(jwt_data=jwt_data))
-    verify_email_path: str = AuthRouterConfig.PREFIX + get_symbols_before_selected_symbol(
-        symbol='{',
+    verify_email_path: str = AuthRouterConfig.PREFIX + get_symbols_before_selected_chars(
+        chars='{',
         string=AuthURLPathsConfig.VERIFY_EMAIL
     )
 
