@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 
 
 @dataclass
@@ -25,3 +25,8 @@ class TestUserConfig(BaseTestConfig):
 class TestGroupConfig(BaseTestConfig):
     NAME: str = 'test_group_name'
     OWNER_ID: int = 1
+
+
+@dataclass
+class TestGroupMembersConfig(BaseTestConfig):
+    GROUP_MEMBER_IDS: Tuple[int] = (1, )

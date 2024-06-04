@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List
 from pydantic import BaseModel, field_validator
 
 from src.groups.config import GroupValidationConfig
@@ -7,7 +7,6 @@ from src.groups.exceptions import GroupNameValidationError
 
 class CreateGroupScheme(BaseModel):
     name: str
-    owner_id: Optional[int] = None
 
     @field_validator('name', mode='before')
     @classmethod
@@ -16,3 +15,7 @@ class CreateGroupScheme(BaseModel):
             raise GroupNameValidationError
 
         return value
+
+
+class UpdateGroupMembersScheme(BaseModel):
+    group_member_ids: List[int] = []

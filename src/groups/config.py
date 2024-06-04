@@ -9,6 +9,7 @@ class URLPathsConfig:
     MY_GROUPS: str = '/my_groups'
     CREATE_GROUP: str = '/create'
     DELETE_GROUP: str = '/{group_id}/delete'
+    UPDATE_GROUP_MEMBERS: str = '/{group_id}/members/update'
 
 
 @dataclass(frozen=True)
@@ -16,6 +17,7 @@ class URLNamesConfig:
     MY_GROUPS: str = 'my_groups'
     CREATE_GROUP: str = 'create_group'
     DELETE_GROUP: str = 'delete_group'
+    UPDATE_GROUP_MEMBERS: str = 'update_group_members'
 
 
 @dataclass(frozen=True)

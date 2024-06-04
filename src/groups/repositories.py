@@ -25,14 +25,22 @@ class SQLAlchemyGroupsRepository(SQLAlchemyAbstractRepository, GroupsRepository)
 
     async def add(self, model: AbstractModel) -> GroupModel:
         result: Result = await self._session.execute(
-            insert(GroupModel).values(**await model.to_dict(exclude={'id'})).returning(GroupModel)
+            insert(GroupModel).values(**await model.to_dict(exclude={'id', 'members'})).returning(GroupModel)
         )
 
         return result.scalar_one()
 
     async def update(self, id: int, model: AbstractModel) -> GroupModel:
         result: Result = await self._session.execute(
-            update(GroupModel).filter_by(id=id).values(**await model.to_dict(exclude={'id'})).returning(GroupModel)
+            update(
+                GroupModel
+            ).filter_by(
+                id=id
+            ).values(
+                **await model.to_dict(exclude={'id', 'members'})
+            ).returning(
+                GroupModel
+            )
         )
 
         return result.scalar_one()

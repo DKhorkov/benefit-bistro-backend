@@ -9,4 +9,4 @@ COPY . /app
 RUN chmod +x /app/docker/entrypoint.sh
 RUN chmod +x /app/scripts/*
 
-RUN pip install -r requirements/prod.txt
+RUN --mount=type=cache,target=/root/.cache pip install -r requirements/prod.txt
