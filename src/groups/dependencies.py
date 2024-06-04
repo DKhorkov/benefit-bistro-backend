@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Set
 from fastapi import Depends
 
 from src.groups.exceptions import GroupAlreadyExistsError, GroupOwnerError
-from src.groups.models import GroupModel
-from src.groups.schemas import CreateGroupScheme
+from src.groups.models import GroupModel, GroupMemberModel
+from src.groups.schemas import CreateGroupScheme, UpdateGroupMembersScheme
 from src.groups.service import GroupsService
 from src.groups.units_of_work import SQLAlchemyGroupsUnitOfWork
 from src.users.models import UserModel
@@ -19,8 +19,7 @@ async def create_group(group_data: CreateGroupScheme, user: UserModel = Depends(
     if await group_service.check_group_existence(name=group_data.name, owner_id=user.id):
         raise GroupAlreadyExistsError
 
-    group_data.owner_id = user.id
-    return await group_service.create_group(group_data=group_data)
+    return await group_service.create_group(group_data=group_data, owner_id=user.id)
 
 
 async def delete_group(group_id: int, user: UserModel = Depends(authenticate_user)) -> None:
@@ -42,5 +41,25 @@ async def get_current_user_groups(user: UserModel = Depends(authenticate_user)) 
     """
 
     group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
-    groups: List[GroupModel] = await group_service.get_owner_groups(owner_id=user.id)
-    return groups
+    return await group_service.get_owner_groups(owner_id=user.id)
+
+
+async def update_group_members(
+        group_members_data: UpdateGroupMembersScheme,
+        group_id: int,
+        user: UserModel = Depends(authenticate_user)
+) -> GroupModel:
+
+    group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
+    group: GroupModel = await group_service.get_group_by_id(id=group_id)
+    if not group.owner_id == user.id:
+        raise GroupOwnerError
+
+    group_members: Set[GroupMemberModel] = {
+        GroupMemberModel(
+            group_id=group_id,
+            user_id=group_member_id,
+        ) for group_member_id in group_members_data.group_member_ids
+    }
+
+    return await group_service.update_group_members(id=group_id, members=group_members)

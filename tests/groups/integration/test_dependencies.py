@@ -6,14 +6,15 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from src.users.dependencies import register_user
 from src.users.schemas import RegisterUserScheme
 from src.groups.exceptions import GroupAlreadyExistsError, GroupNotFoundError, GroupOwnerError
-from src.groups.models import GroupModel
+from src.groups.models import GroupModel, GroupMemberModel
 from src.users.models import UserModel
-from src.groups.schemas import CreateGroupScheme
+from src.groups.schemas import CreateGroupScheme, UpdateGroupMembersScheme
 from tests.config import TestUserConfig, TestGroupConfig
 from src.groups.dependencies import (
     create_group,
     delete_group,
-    get_current_user_groups
+    get_current_user_groups,
+    update_group_members
 )
 
 
@@ -99,3 +100,57 @@ async def test_get_current_user_groups_success_with_existing_groups(create_test_
     group: GroupModel = user_groups[0]
     assert group.name == TestGroupConfig.NAME
     assert group.owner_id == user.id
+
+
+@pytest.mark.anyio
+async def test_update_group_members_success(create_test_group: None, async_connection: AsyncConnection) -> None:
+    cursor: CursorResult = await async_connection.execute(select(GroupMemberModel))
+    result: Optional[Row] = cursor.scalar_one_or_none()
+    assert not result
+
+    user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True), id=1)
+    group_members_data: UpdateGroupMembersScheme = UpdateGroupMembersScheme(group_member_ids=[user.id])
+    group = await update_group_members(group_id=1, user=user, group_members_data=group_members_data)
+
+    assert len(group.members) == 1
+
+
+@pytest.mark.anyio
+async def test_update_group_members_success_with_no_members(create_test_group: None) -> None:
+    user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True), id=1)
+    group_members_data: UpdateGroupMembersScheme = UpdateGroupMembersScheme(group_member_ids=[])
+    group = await update_group_members(group_id=1, user=user, group_members_data=group_members_data)
+
+    assert len(group.members) == 0
+
+
+@pytest.mark.anyio
+async def test_update_group_members_fail_group_does_not_exist(
+        create_test_user_if_not_exists: None,
+        async_connection: AsyncConnection
+) -> None:
+
+    cursor: CursorResult = await async_connection.execute(select(GroupMemberModel))
+    result: Optional[Row] = cursor.scalar_one_or_none()
+    assert not result
+
+    with pytest.raises(GroupNotFoundError):
+        user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True), id=1)
+        group_members_data: UpdateGroupMembersScheme = UpdateGroupMembersScheme(group_member_ids=[user.id])
+        await update_group_members(group_id=1, user=user, group_members_data=group_members_data)
+
+
+@pytest.mark.anyio
+async def test_update_group_members_fail_group_does_not_belong_to_user(
+        create_test_group: None,
+        async_connection: AsyncConnection
+) -> None:
+
+    cursor: CursorResult = await async_connection.execute(select(GroupMemberModel))
+    result: Optional[Row] = cursor.scalar_one_or_none()
+    assert not result
+
+    with pytest.raises(GroupOwnerError):
+        user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True), id=2)
+        group_members_data: UpdateGroupMembersScheme = UpdateGroupMembersScheme(group_member_ids=[user.id])
+        await update_group_members(group_id=1, user=user, group_members_data=group_members_data)

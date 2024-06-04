@@ -1,6 +1,7 @@
 import pytest
 from fastapi import status
 from httpx import Response, AsyncClient, Cookies
+from typing import Dict, Any
 
 from src.groups.config import RouterConfig, URLPathsConfig, GroupValidationConfig
 from src.groups.constants import ErrorDetails
@@ -23,7 +24,9 @@ async def test_create_group_success(
     )
 
     assert response.status_code == status.HTTP_201_CREATED
-    group: GroupModel = GroupModel(**response.json())
+    group_data: Dict[str, Any] = response.json()
+    group_data.pop('members')
+    group: GroupModel = GroupModel(**group_data)
     assert group.name == TestGroupConfig.NAME
 
 

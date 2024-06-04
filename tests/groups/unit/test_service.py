@@ -1,10 +1,10 @@
 import pytest
-from typing import List
+from typing import List, Set
 
 from src.groups.exceptions import GroupNotFoundError
 from src.groups.interfaces.repositories import GroupsRepository
 from src.groups.interfaces.units_of_work import GroupsUnitOfWork
-from src.groups.models import GroupModel
+from src.groups.models import GroupModel, GroupMemberModel
 from src.groups.schemas import CreateGroupScheme
 from src.groups.service import GroupsService
 from tests.groups.fake_objects import FakeGroupsRepository, FakeGroupsUnitOfWork
@@ -31,7 +31,7 @@ async def test_groups_service_create_group_success() -> None:
 
     assert len(await groups_repository.list()) == 0
     group_data: CreateGroupScheme = CreateGroupScheme(**TestGroupConfig().to_dict(to_lower=True))
-    await groups_service.create_group(group_data=group_data)
+    await groups_service.create_group(group_data=group_data, owner_id=1)
     assert len(await groups_repository.list()) == 1
 
 
@@ -123,3 +123,34 @@ async def test_groups_service_check_group_existence_fail_by_name() -> None:
 
     assert len(await groups_repository.list()) == 1
     assert not await groups_service.check_group_existence(owner_id=TestGroupConfig.OWNER_ID, name='some_group_name')
+
+
+@pytest.mark.anyio
+async def test_groups_service_update_group_members_success() -> None:
+    groups_repository: GroupsRepository = create_fake_groups_repository_instance(with_group=True)
+    groups_unit_of_work: GroupsUnitOfWork = FakeGroupsUnitOfWork(groups_repository=groups_repository)
+    groups_service: GroupsService = GroupsService(uow=groups_unit_of_work)
+
+    group_id: int = 1
+    assert len(await groups_repository.list()) == 1
+    group: GroupModel = await groups_service.get_group_by_id(id=group_id)
+    assert len(group.members) == 0
+
+    members: Set[GroupMemberModel] = {
+        GroupMemberModel(
+            group_id=group_id,
+            user_id=1,
+        )
+    }
+    group = await groups_service.update_group_members(id=group_id, members=members)
+    assert len(group.members) == 1
+
+
+@pytest.mark.anyio
+async def test_groups_service_update_group_members_fail_group_not_found() -> None:
+    groups_repository: GroupsRepository = create_fake_groups_repository_instance(with_group=True)
+    groups_unit_of_work: GroupsUnitOfWork = FakeGroupsUnitOfWork(groups_repository=groups_repository)
+    groups_service: GroupsService = GroupsService(uow=groups_unit_of_work)
+
+    with pytest.raises(GroupNotFoundError):
+        await groups_service.update_group_members(id=2, members=set())
