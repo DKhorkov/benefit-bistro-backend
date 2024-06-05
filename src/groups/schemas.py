@@ -5,7 +5,7 @@ from src.groups.config import GroupValidationConfig
 from src.groups.exceptions import GroupNameValidationError
 
 
-class CreateGroupScheme(BaseModel):
+class CreateOrUpdateGroupScheme(BaseModel):
     name: str
 
     @field_validator('name', mode='before')

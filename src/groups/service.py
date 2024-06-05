@@ -1,7 +1,6 @@
 from typing import Optional, List, Set
 
 from src.groups.models import GroupModel, GroupMemberModel
-from src.groups.schemas import CreateGroupScheme
 from src.groups.interfaces.units_of_work import GroupsUnitOfWork
 from src.groups.exceptions import GroupNotFoundError
 
@@ -22,9 +21,9 @@ class GroupsService:
 
             return group
 
-    async def create_group(self, group_data: CreateGroupScheme, owner_id: int) -> GroupModel:
+    async def create_group(self, group: GroupModel) -> GroupModel:
         async with self._uow as uow:
-            group: GroupModel = await uow.groups.add(GroupModel(owner_id=owner_id, **group_data.model_dump()))
+            group = await uow.groups.add(model=group)
             await uow.commit()
             return group
 
@@ -53,5 +52,14 @@ class GroupsService:
                 raise GroupNotFoundError
 
             group.members = members
+            await uow.commit()
+            return group
+
+    async def update_group(self, id: int, group: GroupModel) -> GroupModel:
+        async with self._uow as uow:
+            if not await uow.groups.get(id=id):
+                raise GroupNotFoundError
+
+            group = await uow.groups.update(id=id, model=group)
             await uow.commit()
             return group
