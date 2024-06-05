@@ -3,10 +3,7 @@ from typing import Optional, List
 from src.users.constants import ErrorDetails
 from src.users.exceptions import UserNotFoundError
 from src.users.models import UserModel
-from src.security.models import JWTDataModel
-from src.users.schemas import RegisterUserScheme
 from src.users.interfaces.units_of_work import UsersUnitOfWork
-from src.users.utils import hash_password
 
 
 class UsersService:
@@ -17,10 +14,9 @@ class UsersService:
     def __init__(self, uow: UsersUnitOfWork) -> None:
         self._uow: UsersUnitOfWork = uow
 
-    async def register_user(self, user_data: RegisterUserScheme) -> UserModel:
-        user_data.password = await hash_password(user_data.password)
+    async def register_user(self, user: UserModel) -> UserModel:
         async with self._uow as uow:
-            user: UserModel = await uow.users.add(UserModel(**user_data.model_dump()))
+            user = await uow.users.add(model=user)
             await uow.commit()
             return user
 
@@ -69,22 +65,21 @@ class UsersService:
 
             return user
 
-    async def authenticate_user(self, jwt_data: JWTDataModel) -> UserModel:
+    async def get_user_by_id(self, id: int) -> UserModel:
         async with self._uow as uow:
-            user: Optional[UserModel] = await uow.users.get(id=jwt_data.user_id)
+            user: Optional[UserModel] = await uow.users.get(id=id)
             if not user:
                 raise UserNotFoundError
 
             return user
 
-    async def verify_user_email(self, jwt_data: JWTDataModel) -> UserModel:
+    async def verify_user_email(self, id: int) -> UserModel:
         async with self._uow as uow:
-            user: Optional[UserModel] = await uow.users.get(id=jwt_data.user_id)
+            user: Optional[UserModel] = await uow.users.get(id=id)
             if not user:
                 raise UserNotFoundError
 
             user.email_verified = True
-            await uow.users.update(id=jwt_data.user_id, model=user)
             await uow.commit()
             return user
 
