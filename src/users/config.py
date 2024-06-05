@@ -11,8 +11,8 @@ class URLPathsConfig:
     LOGIN: str = '/login'
     LOGOUT: str = '/logout'
     ME: str = '/me'
-    VERIFY_EMAIL: str = '/verify_email/{token}'
-    ALL: str = '/all'
+    VERIFY_EMAIL: str = '/verify-email/{token}'
+    ALL: str = ''
 
 
 @dataclass(frozen=True)
@@ -20,9 +20,9 @@ class URLNamesConfig:
     REGISTER: str = 'register'
     LOGIN: str = 'login'
     LOGOUT: str = 'logout'
-    ME: str = 'me'
-    VERIFY_EMAIL: str = 'verify_email'
-    ALL: str = 'all'
+    ME: str = 'get my account'
+    VERIFY_EMAIL: str = 'verify email'
+    ALL: str = 'get all users'
 
 
 @dataclass(frozen=True)
