@@ -5,7 +5,6 @@ from fastapi.responses import Response, JSONResponse
 
 from src.users.models import UserModel
 from src.users.config import RouterConfig, URLPathsConfig, URLNamesConfig, cookies_config
-from src.celery.tasks.auth_tasks import send_verify_email_message
 from src.security.models import JWTDataModel
 from src.security.utils import create_jwt_token
 from src.users.dependencies import (
@@ -31,7 +30,6 @@ router = APIRouter(
     response_model=UserModel
 )
 async def register(user: UserModel = Depends(register_user)):
-    send_verify_email_message.delay(user_data=await user.to_dict())
     return user
 
 

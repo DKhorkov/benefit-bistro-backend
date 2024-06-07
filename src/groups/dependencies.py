@@ -55,6 +55,10 @@ async def update_group_members(
         user: UserModel = Depends(authenticate_user)
 ) -> GroupModel:
 
+    """
+    Updates group members, if group belongs to current user.
+    """
+
     group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
     group: GroupModel = await group_service.get_group_by_id(id=group_id)
     if not group.owner_id == user.id:
@@ -74,7 +78,11 @@ async def update_group(
         group_data: CreateOrUpdateGroupScheme,
         group_id: int,
         user: UserModel = Depends(authenticate_user)
-):
+) -> GroupModel:
+
+    """
+    Updates group info, if group belongs to current user.
+    """
 
     group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
     group: GroupModel = await group_service.get_group_by_id(id=group_id)

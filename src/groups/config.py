@@ -11,6 +11,7 @@ class URLPathsConfig:
     DELETE_GROUP: str = '/{group_id}'
     UPDATE_GROUP_MEMBERS: str = '/{group_id}/members'
     UPDATE_GROUP: str = '/{group_id}'
+    INVITE_GROUP_MEMBERS: str = '/{group_id}/invite-members'
 
 
 @dataclass(frozen=True)
@@ -20,6 +21,7 @@ class URLNamesConfig:
     DELETE_GROUP: str = 'delete group'
     UPDATE_GROUP_MEMBERS: str = 'update group members'
     UPDATE_GROUP: str = 'update group info'
+    INVITE_GROUP_MEMBERS: str = 'invite not-registered users to group'
 
 
 @dataclass(frozen=True)

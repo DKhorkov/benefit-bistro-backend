@@ -71,3 +71,17 @@ async def update_group_members(group: GroupModel = Depends(update_group_members_
 )
 async def update_group(group: GroupModel = Depends(update_group_dependency)):
     return group
+
+
+# @router.post(
+#     path=URLPathsConfig.INVITE_GROUP_MEMBERS,
+#     response_class=JSONResponse,
+#     name=URLNamesConfig.INVITE_GROUP_MEMBERS,
+#     response_model=MutableSequence[InvitedGroupMember],
+#     status_code=status.HTTP_201_CREATED
+# )
+# async def invite_group_members(
+#         invited_users: MutableSequence[InvitedGroupMember] = Depends(invite_group_members_dependency)
+# ):
+#
+#     return invited_users

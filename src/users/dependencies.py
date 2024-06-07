@@ -9,6 +9,7 @@ from src.users.utils import oauth2_scheme, verify_password, hash_password
 from src.users.service import UsersService
 from src.users.units_of_work import SQLAlchemyUsersUnitOfWork
 from src.security.utils import parse_jwt_token
+from src.celery.tasks.auth_tasks import send_verify_email_message
 
 
 async def register_user(user_data: RegisterUserScheme) -> UserModel:
@@ -25,6 +26,8 @@ async def register_user(user_data: RegisterUserScheme) -> UserModel:
 
     user = await users_service.register_user(user=user)
     await user.protect_password()
+
+    send_verify_email_message.delay(user_data=await user.to_dict())
     return user
 
 
