@@ -14,7 +14,7 @@ from src.core.database.connection import DATABASE_URL
 from src.core.database.orm import start_mappers, metadata
 from src.users.utils import hash_password
 from src.celery.celery_app import celery
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 from tests.config import TestUserConfig, TestGroupConfig
 from tests.utils import get_base_url, drop_test_db
 

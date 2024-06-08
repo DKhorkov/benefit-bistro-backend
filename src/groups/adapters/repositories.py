@@ -2,7 +2,7 @@ from typing import List, Optional
 from sqlalchemy import insert, select, delete, update, Result
 
 from src.groups.interfaces.repositories import GroupsRepository
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 from src.core.database.interfaces.repositories import SQLAlchemyAbstractRepository
 from src.core.interfaces import AbstractModel
 
@@ -17,8 +17,8 @@ class SQLAlchemyGroupsRepository(SQLAlchemyAbstractRepository, GroupsRepository)
         result: Result = await self._session.execute(select(GroupModel).filter_by(name=name, owner_id=owner_id))
         return result.scalar_one_or_none()
 
-    async def get_owner_groups(self, owner_id: int) -> List[GroupModel]:
-        result: Result = await self._session.execute(select(GroupModel).filter_by(owner_id=owner_id))
+    async def get_user_groups(self, user_id: int) -> List[GroupModel]:
+        result: Result = await self._session.execute(select(GroupModel).filter_by(owner_id=user_id))
 
         # Using this type casting for purpose of passing mypy checks:
         return [GroupModel(**await r.to_dict()) for r in result.scalars().all()]

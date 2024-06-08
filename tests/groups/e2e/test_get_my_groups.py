@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 from httpx import Response, AsyncClient, Cookies
 
 from src.groups.config import RouterConfig, URLPathsConfig
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 from tests.config import TestGroupConfig
 
 

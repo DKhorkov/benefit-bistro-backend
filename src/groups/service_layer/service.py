@@ -1,13 +1,13 @@
 from typing import Optional, List, Set
 
-from src.groups.models import GroupModel, GroupMemberModel
+from src.groups.domain.models import GroupModel, GroupMemberModel
 from src.groups.interfaces.units_of_work import GroupsUnitOfWork
 from src.groups.exceptions import GroupNotFoundError
 
 
 class GroupsService:
     """
-    Service layer according to DDD, which using a unit of work, will perform operations on the domain model.
+    Service layer core according to DDD, which using a unit of work, will perform operations on the domain model.
     """
 
     def __init__(self, uow: GroupsUnitOfWork) -> None:
@@ -40,18 +40,18 @@ class GroupsService:
             await uow.groups.delete(id=id)
             await uow.commit()
 
-    async def get_owner_groups(self, owner_id: int) -> List[GroupModel]:
+    async def get_user_groups(self, user_id: int) -> List[GroupModel]:
         async with self._uow as uow:
-            groups: List[GroupModel] = await uow.groups.get_owner_groups(owner_id=owner_id)
+            groups: List[GroupModel] = await uow.groups.get_user_groups(user_id=user_id)
             return groups
 
-    async def update_group_members(self, id: int, members: Set[GroupMemberModel]) -> GroupModel:
+    async def add_group_members(self, id: int, members: Set[GroupMemberModel]) -> GroupModel:
         async with self._uow as uow:
             group: Optional[GroupModel] = await uow.groups.get(id=id)
             if not group:
                 raise GroupNotFoundError
 
-            group.members = members
+            group.members.update(members)
             await uow.commit()
             return group
 

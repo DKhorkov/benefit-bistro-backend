@@ -18,7 +18,7 @@ class CreateOrUpdateGroupScheme(BaseModel):
 
 
 class UpdateGroupMembersScheme(BaseModel):
-    group_member_ids: List[int] = []
+    group_members_ids: List[int] = []
 
 
 class InviteGroupMembersScheme(BaseModel):

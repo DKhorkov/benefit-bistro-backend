@@ -1,3 +1,3 @@
-from src.core.interfaces.units_of_work import AbstractUnitOfWork
-from src.core.interfaces.repositories import AbstractRepository
-from src.core.interfaces.models import AbstractModel
+from src.groups.interfaces.units_of_work import GroupsUnitOfWork
+from src.groups.interfaces.repositories import GroupsRepository
+from src.groups.interfaces.handlers import GroupEventHandler, GroupCommandHandler

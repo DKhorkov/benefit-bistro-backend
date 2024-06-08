@@ -2,10 +2,10 @@ from typing import List, Set
 from fastapi import Depends
 
 from src.groups.exceptions import GroupAlreadyExistsError, GroupOwnerError
-from src.groups.models import GroupModel, GroupMemberModel
-from src.groups.schemas import CreateOrUpdateGroupScheme, UpdateGroupMembersScheme
-from src.groups.service import GroupsService
-from src.groups.units_of_work import SQLAlchemyGroupsUnitOfWork
+from src.groups.domain.models import GroupModel, GroupMemberModel
+from src.groups.entypoints.schemas import CreateOrUpdateGroupScheme, UpdateGroupMembersScheme
+from src.groups.service_layer.service import GroupsService
+from src.groups.service_layer.units_of_work import SQLAlchemyGroupsUnitOfWork
 from src.users.models import UserModel
 from src.users.dependencies import authenticate_user
 
@@ -68,7 +68,7 @@ async def update_group_members(
         GroupMemberModel(
             group_id=group_id,
             user_id=group_member_id,
-        ) for group_member_id in group_members_data.group_member_ids
+        ) for group_member_id in group_members_data.group_members_ids
     }
 
     return await group_service.update_group_members(id=group_id, members=group_members)

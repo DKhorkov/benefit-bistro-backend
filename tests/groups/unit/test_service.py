@@ -4,8 +4,8 @@ from typing import List, Set
 from src.groups.exceptions import GroupNotFoundError
 from src.groups.interfaces.repositories import GroupsRepository
 from src.groups.interfaces.units_of_work import GroupsUnitOfWork
-from src.groups.models import GroupModel, GroupMemberModel
-from src.groups.service import GroupsService
+from src.groups.domain.models import GroupModel, GroupMemberModel
+from src.groups.service_layer.service import GroupsService
 from tests.groups.fake_objects import FakeGroupsRepository, FakeGroupsUnitOfWork
 from tests.config import TestGroupConfig
 
@@ -46,24 +46,24 @@ async def test_groups_service_delete_group_success() -> None:
 
 
 @pytest.mark.anyio
-async def test_groups_service_get_owner_groups_success_with_no_groups() -> None:
+async def test_groups_service_get_user_groups_success_with_no_groups() -> None:
     groups_repository: GroupsRepository = create_fake_groups_repository_instance()
     groups_unit_of_work: GroupsUnitOfWork = FakeGroupsUnitOfWork(groups_repository=groups_repository)
     groups_service: GroupsService = GroupsService(uow=groups_unit_of_work)
 
     assert len(await groups_repository.list()) == 0
-    user_groups: List[GroupModel] = await groups_service.get_owner_groups(owner_id=TestGroupConfig.OWNER_ID)
+    user_groups: List[GroupModel] = await groups_service.get_user_groups(user_id=TestGroupConfig.OWNER_ID)
     assert len(user_groups) == 0
 
 
 @pytest.mark.anyio
-async def test_groups_service_get_owner_groups_success_with_groups() -> None:
+async def test_groups_service_get_user_groups_success_with_groups() -> None:
     groups_repository: GroupsRepository = create_fake_groups_repository_instance(with_group=True)
     groups_unit_of_work: GroupsUnitOfWork = FakeGroupsUnitOfWork(groups_repository=groups_repository)
     groups_service: GroupsService = GroupsService(uow=groups_unit_of_work)
 
     assert len(await groups_repository.list()) == 1
-    user_groups: List[GroupModel] = await groups_service.get_owner_groups(owner_id=TestGroupConfig.OWNER_ID)
+    user_groups: List[GroupModel] = await groups_service.get_user_groups(user_id=TestGroupConfig.OWNER_ID)
     assert len(user_groups) == 1
     group: GroupModel = user_groups[0]
     assert group.name == TestGroupConfig.NAME

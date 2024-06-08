@@ -6,11 +6,11 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from src.users.dependencies import register_user
 from src.users.schemas import RegisterUserScheme
 from src.groups.exceptions import GroupAlreadyExistsError, GroupNotFoundError, GroupOwnerError
-from src.groups.models import GroupModel, GroupMemberModel
+from src.groups.domain.models import GroupModel, GroupMemberModel
 from src.users.models import UserModel
-from src.groups.schemas import CreateOrUpdateGroupScheme, UpdateGroupMembersScheme
+from src.groups.entypoints.schemas import CreateOrUpdateGroupScheme, UpdateGroupMembersScheme
 from tests.config import TestUserConfig, TestGroupConfig
-from src.groups.dependencies import (
+from src.groups.entypoints.dependencies import (
     create_group,
     delete_group,
     get_current_user_groups,

@@ -4,8 +4,8 @@ from sqlalchemy import select, CursorResult, Row
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession, async_sessionmaker
 
-from src.groups.models import GroupModel
-from src.groups.repositories import SQLAlchemyGroupsRepository
+from src.groups.domain.models import GroupModel
+from src.groups.adapters.repositories import SQLAlchemyGroupsRepository
 from tests.config import TestGroupConfig
 
 

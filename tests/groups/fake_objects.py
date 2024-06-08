@@ -2,7 +2,7 @@ from typing import Dict, Optional, List
 
 from src.groups.interfaces.units_of_work import GroupsUnitOfWork
 from src.groups.interfaces.repositories import GroupsRepository
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 from src.core.interfaces import AbstractModel
 
 

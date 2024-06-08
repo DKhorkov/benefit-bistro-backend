@@ -2,7 +2,7 @@ from typing import Optional, List
 from abc import ABC, abstractmethod
 
 from src.core.interfaces import AbstractRepository, AbstractModel
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 
 
 class GroupsRepository(AbstractRepository, ABC):
@@ -17,7 +17,7 @@ class GroupsRepository(AbstractRepository, ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_owner_groups(self, owner_id: int) -> List[GroupModel]:
+    async def get_user_groups(self, user_id: int) -> List[GroupModel]:
         raise NotImplementedError
 
     @abstractmethod

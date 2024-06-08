@@ -5,7 +5,7 @@ from typing import Dict, Any
 
 from src.groups.config import RouterConfig, URLPathsConfig, GroupValidationConfig
 from src.groups.constants import ErrorDetails
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 from tests.utils import get_error_message_from_response, generate_random_string
 from tests.config import TestGroupConfig
 

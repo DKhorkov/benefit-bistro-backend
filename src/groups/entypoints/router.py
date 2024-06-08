@@ -2,9 +2,9 @@ from typing import MutableSequence
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse, Response
 
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 from src.groups.config import RouterConfig, URLPathsConfig, URLNamesConfig
-from src.groups.dependencies import (
+from src.groups.entypoints.dependencies import (
     create_group,
     delete_group,
     get_current_user_groups,

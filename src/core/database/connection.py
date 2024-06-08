@@ -1,4 +1,6 @@
+from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, async_sessionmaker
+from sqlalchemy.orm import registry
 
 from src.core.database.config import database_config
 
@@ -37,3 +39,6 @@ session_factory: async_sessionmaker = async_sessionmaker(
     autoflush=database_config.DATABASE_AUTO_FLUSH,
     expire_on_commit=database_config.DATABASE_EXPIRE_ON_COMMIT
 )
+
+metadata = MetaData()
+mapper_registry = registry(metadata=metadata)
