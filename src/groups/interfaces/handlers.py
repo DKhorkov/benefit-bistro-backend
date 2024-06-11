@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 from src.core.interfaces.handlers import AbstractEventHandler, AbstractCommandHandler
 from src.core.interfaces.commands import AbstractCommand
@@ -28,5 +29,5 @@ class GroupCommandHandler(AbstractCommandHandler, ABC):
         self._uow: GroupsUnitOfWork = uow
 
     @abstractmethod
-    async def __call__(self, command: AbstractCommand) -> None:
+    async def __call__(self, command: AbstractCommand) -> Any:
         raise NotImplementedError

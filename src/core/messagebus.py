@@ -1,4 +1,4 @@
-from typing import Dict, List, Type
+from typing import Dict, List, Type, Any
 from queue import Queue
 
 from src.core.exceptions import MessageBusMessageError
@@ -22,10 +22,11 @@ class MessageBus:
         self._event_handlers = event_handlers
         self._command_handlers = command_handlers
         self._queue: Queue = Queue()
+        self._command_result: Any = None
 
     async def handle(self, message: Message) -> None:
         self._queue.put(message)
-        while self._queue.not_empty:
+        while not self._queue.empty():
             message = self._queue.get()
             if isinstance(message, AbstractEvent):
                 await self._handle_event(event=message)
@@ -43,6 +44,10 @@ class MessageBus:
 
     async def _handle_command(self, command: AbstractCommand) -> None:
         handler: AbstractCommandHandler = self._command_handlers[type(command)]
-        await handler(command)
+        self._command_result = await handler(command)
         for event in self._uow.events:
             self._queue.put_nowait(event)
+
+    @property
+    def command_result(self) -> Any:
+        return self._command_result

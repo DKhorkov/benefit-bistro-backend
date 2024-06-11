@@ -1,5 +1,5 @@
-from typing import List, Optional
-from sqlalchemy import insert, select, delete, update, Result
+from typing import List, Optional, Sequence, Any
+from sqlalchemy import insert, select, delete, update, Result, Row, RowMapping
 
 from src.groups.interfaces.repositories import GroupsRepository
 from src.groups.domain.models import GroupModel
@@ -49,7 +49,19 @@ class SQLAlchemyGroupsRepository(SQLAlchemyAbstractRepository, GroupsRepository)
         await self._session.execute(delete(GroupModel).filter_by(id=id))
 
     async def list(self) -> List[GroupModel]:
-        result: Result = await self._session.execute(select(GroupModel))
+        """
+        Returning result object instead of converting to new objects by
+                    [GroupModel(**await r.to_dict()) for r in result.scalars().all()]
+        to avoid sqlalchemy.orm.exc.UnmappedInstanceError lately.
 
-        # Using this type casting for purpose of passing mypy checks:
-        return [GroupModel(**await r.to_dict()) for r in result.scalars().all()]
+        Checking by asserts, that expected return type is equal to fact return type.
+        """
+
+        result: Result = await self._session.execute(select(GroupModel))
+        groups: Sequence[Row | RowMapping | Any] = result.scalars().all()
+
+        assert isinstance(groups, List)
+        for group in groups:
+            assert isinstance(group, GroupModel)
+
+        return groups

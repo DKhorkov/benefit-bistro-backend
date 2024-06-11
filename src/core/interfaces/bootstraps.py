@@ -17,7 +17,7 @@ class AbstractBootstrap(ABC):
         self._uow: AbstractUnitOfWork = uow
 
     @abstractmethod
-    async def get_message_bus(self) -> MessageBus:
+    async def get_messagebus(self) -> MessageBus:
         raise NotImplementedError
 
     @staticmethod
@@ -38,4 +38,3 @@ class AbstractBootstrap(ABC):
             if name in params
         }
         return handler(**handler_dependencies)
-    

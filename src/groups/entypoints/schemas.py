@@ -23,4 +23,3 @@ class UpdateGroupMembersScheme(BaseModel):
 
 class InviteGroupMembersScheme(BaseModel):
     emails: List[EmailStr] = []
-    

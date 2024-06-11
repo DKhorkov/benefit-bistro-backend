@@ -1,13 +1,25 @@
 from typing import List, Set
 from fastapi import Depends
 
-from src.groups.exceptions import GroupAlreadyExistsError, GroupOwnerError
+from src.core.interfaces import AbstractBootstrap
+from src.core.messagebus import MessageBus
+from src.groups.domain.commands import (
+    CreateGroupCommand,
+    DeleteGroupCommand,
+    UpdateGroupCommand
+)
+from src.groups.entypoints.bootstraps import GroupsBootstrap
 from src.groups.domain.models import GroupModel, GroupMemberModel
 from src.groups.entypoints.schemas import CreateOrUpdateGroupScheme, UpdateGroupMembersScheme
-from src.groups.service_layer.service import GroupsService
 from src.groups.service_layer.units_of_work import SQLAlchemyGroupsUnitOfWork
+from src.groups.service_layer.views import GroupsViews
 from src.users.models import UserModel
 from src.users.dependencies import authenticate_user
+
+
+"""
+Can not user Bootstrap object in dependencies, so its defined in each dependency body.
+"""
 
 
 async def create_group(
@@ -15,63 +27,32 @@ async def create_group(
         user: UserModel = Depends(authenticate_user)
 ) -> GroupModel:
 
-    """
-    Creates a new group for current user, if user doesn't have group with same name.
-    """
+    bootstrap: AbstractBootstrap = GroupsBootstrap(uow=SQLAlchemyGroupsUnitOfWork())
+    messagebus: MessageBus = await bootstrap.get_messagebus()
+    await messagebus.handle(
+        CreateGroupCommand(
+            user=user,
+            **group_data.model_dump()
+        )
+    )
 
-    group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
-    if await group_service.check_group_existence(name=group_data.name, owner_id=user.id):
-        raise GroupAlreadyExistsError
-
-    group: GroupModel = GroupModel(**group_data.model_dump(), owner_id=user.id)
-    return await group_service.create_group(group=group)
+    return messagebus.command_result
 
 
 async def delete_group(group_id: int, user: UserModel = Depends(authenticate_user)) -> None:
-    """
-    Deletes group, if group belongs to current user.
-    """
-
-    group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
-    group: GroupModel = await group_service.get_group_by_id(id=group_id)
-    if not group.owner_id == user.id:
-        raise GroupOwnerError
-
-    await group_service.delete_group(id=group_id)
+    bootstrap: AbstractBootstrap = GroupsBootstrap(uow=SQLAlchemyGroupsUnitOfWork())
+    messagebus: MessageBus = await bootstrap.get_messagebus()
+    await messagebus.handle(
+        DeleteGroupCommand(
+            user=user,
+            group_id=group_id
+        )
+    )
 
 
 async def get_current_user_groups(user: UserModel = Depends(authenticate_user)) -> List[GroupModel]:
-    """
-    Provides a list of groups, belonging to current user.
-    """
-
-    group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
-    return await group_service.get_owner_groups(owner_id=user.id)
-
-
-async def update_group_members(
-        group_members_data: UpdateGroupMembersScheme,
-        group_id: int,
-        user: UserModel = Depends(authenticate_user)
-) -> GroupModel:
-
-    """
-    Updates group members, if group belongs to current user.
-    """
-
-    group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
-    group: GroupModel = await group_service.get_group_by_id(id=group_id)
-    if not group.owner_id == user.id:
-        raise GroupOwnerError
-
-    group_members: Set[GroupMemberModel] = {
-        GroupMemberModel(
-            group_id=group_id,
-            user_id=group_member_id,
-        ) for group_member_id in group_members_data.group_members_ids
-    }
-
-    return await group_service.update_group_members(id=group_id, members=group_members)
+    groups_views: GroupsViews = GroupsViews(uow=SQLAlchemyGroupsUnitOfWork())
+    return await groups_views.get_user_groups(user_id=user.id)
 
 
 async def update_group(
@@ -80,15 +61,14 @@ async def update_group(
         user: UserModel = Depends(authenticate_user)
 ) -> GroupModel:
 
-    """
-    Updates group info, if group belongs to current user.
-    """
+    bootstrap: AbstractBootstrap = GroupsBootstrap(uow=SQLAlchemyGroupsUnitOfWork())
+    messagebus: MessageBus = await bootstrap.get_messagebus()
+    await messagebus.handle(
+        UpdateGroupCommand(
+            user=user,
+            group_id=group_id,
+            **group_data.model_dump()
+        )
+    )
 
-    group_service: GroupsService = GroupsService(uow=SQLAlchemyGroupsUnitOfWork())
-    group: GroupModel = await group_service.get_group_by_id(id=group_id)
-    if not group.owner_id == user.id:
-        raise GroupOwnerError
-
-    # Excluding all relationships to avoid SQLAlchemy errors:
-    group = GroupModel(**await group.to_dict(exclude={'members'}) | group_data.model_dump())
-    return await group_service.update_group(id=group_id, group=group)
+    return messagebus.command_result

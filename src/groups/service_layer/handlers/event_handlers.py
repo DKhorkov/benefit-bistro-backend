@@ -12,6 +12,13 @@ class GroupMembersAddedToGroupEventHandler(GroupEventHandler):
         pass
 
 
+class GroupMembersRemovedFromGroupEventHandler(GroupEventHandler):
+
+    async def __call__(self, event: GroupMembersAddedToGroupEvent) -> None:
+        # TODO should send notifications to added users
+        pass
+
+
 class GroupMembersInvitedEventHandler(GroupEventHandler):
 
     async def __call__(self, event: GroupMembersInvitedEvent) -> None:

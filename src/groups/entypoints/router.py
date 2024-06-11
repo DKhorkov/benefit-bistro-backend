@@ -8,7 +8,6 @@ from src.groups.entypoints.dependencies import (
     create_group,
     delete_group,
     get_current_user_groups,
-    update_group_members as update_group_members_dependency,
     update_group as update_group_dependency
 )
 
@@ -49,17 +48,6 @@ async def delete(deleted: None = Depends(delete_group)):  # Using this style for
 )
 async def get_my_groups(groups: MutableSequence[GroupModel] = Depends(get_current_user_groups)):
     return groups
-
-
-@router.put(
-    path=URLPathsConfig.UPDATE_GROUP_MEMBERS,
-    response_class=JSONResponse,
-    name=URLNamesConfig.UPDATE_GROUP_MEMBERS,
-    response_model=GroupModel,
-    status_code=status.HTTP_200_OK
-)
-async def update_group_members(group: GroupModel = Depends(update_group_members_dependency)):
-    return group
 
 
 @router.put(

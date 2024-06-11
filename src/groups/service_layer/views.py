@@ -5,7 +5,7 @@ from src.groups.interfaces.units_of_work import GroupsUnitOfWork
 from src.groups.service_layer.service import GroupsService
 
 
-class GroupViews:
+class GroupsViews:
     """
     Views related to groups, which purpose is to return information upon read requests,
     due to the fact that write requests (represented by commands) are different from read requests.

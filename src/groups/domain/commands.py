@@ -7,7 +7,7 @@ from src.users.models import UserModel
 
 @dataclass(frozen=True)
 class CreateGroupCommand(AbstractCommand):
-    group_name: str
+    name: str
     user: UserModel
 
 
@@ -21,11 +21,18 @@ class DeleteGroupCommand(AbstractCommand):
 class UpdateGroupCommand(AbstractCommand):
     group_id: int
     user: UserModel
-    group_name: str
+    name: str
 
 
 @dataclass(frozen=True)
 class AddGroupMembersCommand(AbstractCommand):
+    group_id: int
+    user: UserModel
+    group_members: List[UserModel]
+
+
+@dataclass(frozen=True)
+class RemoveGroupMembersCommand(AbstractCommand):
     group_id: int
     user: UserModel
     group_members: List[UserModel]

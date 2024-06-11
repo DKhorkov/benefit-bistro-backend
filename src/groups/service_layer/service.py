@@ -55,6 +55,18 @@ class GroupsService:
             await uow.commit()
             return group
 
+    async def remove_group_members(self, id: int, members: Set[GroupMemberModel]) -> GroupModel:
+        async with self._uow as uow:
+            group: Optional[GroupModel] = await uow.groups.get(id=id)
+            if not group:
+                raise GroupNotFoundError
+
+            for member in members:
+                group.members.remove(member)
+
+            await uow.commit()
+            return group
+
     async def update_group(self, id: int, group: GroupModel) -> GroupModel:
         async with self._uow as uow:
             if not await uow.groups.get(id=id):

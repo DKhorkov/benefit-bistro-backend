@@ -1,5 +1,5 @@
-from typing import List, Optional
-from sqlalchemy import insert, select, delete, update, Result
+from typing import List, Optional, Sequence, Any
+from sqlalchemy import insert, select, delete, update, Result, RowMapping, Row
 
 from src.users.interfaces.repositories import UsersRepository
 from src.users.models import UserModel
@@ -39,7 +39,19 @@ class SQLAlchemyUsersRepository(SQLAlchemyAbstractRepository, UsersRepository):
         await self._session.execute(delete(UserModel).filter_by(id=id))
 
     async def list(self) -> List[UserModel]:
-        result: Result = await self._session.execute(select(UserModel))
+        """
+        Returning result object instead of converting to new objects by
+                    [UserModel(**await r.to_dict()) for r in result.scalars().all()]
+        to avoid sqlalchemy.orm.exc.UnmappedInstanceError lately.
 
-        # Using this type casting for purpose of passing mypy checks:
-        return [UserModel(**await r.to_dict()) for r in result.scalars().all()]
+        Checking by asserts, that expected return type is equal to fact return type.
+        """
+
+        result: Result = await self._session.execute(select(UserModel))
+        users: Sequence[Row | RowMapping | Any] = result.scalars().all()
+
+        assert isinstance(users, List)
+        for user in users:
+            assert isinstance(user, UserModel)
+
+        return users
