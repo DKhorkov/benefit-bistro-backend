@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from src.core.interfaces.commands import AbstractCommand
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 
 
 @dataclass(frozen=True)

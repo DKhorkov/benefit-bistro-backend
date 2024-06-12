@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from src.users.constants import ErrorDetails
 from src.users.exceptions import UserNotFoundError
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.users.interfaces.units_of_work import UsersUnitOfWork
 
 

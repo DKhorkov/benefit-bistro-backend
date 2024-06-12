@@ -1,9 +1,7 @@
 import asyncio
-from typing import Dict, Any
 from jinja2 import Template
 
 from src.celery.celery_app import celery
-from src.users.models import UserModel
 from src.celery.utils import send_email, get_email_template, create_message_object
 from src.celery.config import PathsConfig, EmailSubjectsConfig
 from src.core.utils import get_substring_before_chars
@@ -17,10 +15,9 @@ from src.users.config import (
 
 
 @celery.task
-def send_verify_email_message(user_data: Dict[str, Any]) -> None:
-    user: UserModel = UserModel(**user_data)
+def send_verify_email_message(user_id: int, username: str, email: str) -> None:
     template: Template = get_email_template(path=PathsConfig.VERIFY_EMAIL)
-    jwt_data: JWTDataModel = JWTDataModel(user_id=user.id)
+    jwt_data: JWTDataModel = JWTDataModel(user_id=user_id)
     token: str = asyncio.run(create_jwt_token(jwt_data=jwt_data))
     verify_email_path: str = AuthRouterConfig.PREFIX + get_substring_before_chars(
         chars='{',
@@ -30,10 +27,10 @@ def send_verify_email_message(user_data: Dict[str, Any]) -> None:
     link: str = f'{links_config.HTTP_PROTOCOL}://{links_config.DOMAIN}{verify_email_path}{token}'
     text: str = template.render(
         data={
-            'username': user.username,
+            'username': username,
             'link': link,
         }
     )
 
-    message: str = create_message_object(text=text, subject=EmailSubjectsConfig.VERIFY_EMAIL, email_to=user.email)
-    send_email(to_addrs=user.email, message=message)
+    message: str = create_message_object(text=text, subject=EmailSubjectsConfig.VERIFY_EMAIL, email_to=email)
+    send_email(to_addrs=email, message=message)

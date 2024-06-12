@@ -5,8 +5,8 @@ from src.users.constants import ErrorDetails
 from src.users.exceptions import UserNotFoundError
 from src.users.interfaces.repositories import UsersRepository
 from src.users.interfaces.units_of_work import UsersUnitOfWork
-from src.users.models import UserModel
-from src.users.service import UsersService
+from src.users.domain.models import UserModel
+from src.users.service_layer.service import UsersService
 from tests.users.fake_objects import FakeUsersUnitOfWork, FakeUsersRepository
 from tests.config import TestUserConfig
 

@@ -17,8 +17,9 @@ from src.groups.domain.commands import (
     RemoveGroupMembersCommand,
 )
 from src.groups.service_layer.handlers.event_handlers import (
-    GroupMembersAddedToGroupEventHandler,
-    GroupMembersRemovedFromGroupEventHandler
+    SendRegisterMessageToInvitedUsersEventHandler,
+    SendAddToGroupNotificationsEventHandler,
+    SendRemoveFromGroupNotificationEventHandler
 )
 from src.groups.service_layer.handlers.command_handlers import (
     CreateGroupCommandHandler,
@@ -29,13 +30,13 @@ from src.groups.service_layer.handlers.command_handlers import (
 )
 
 
-EVENTS_HANDLERS_RAW: Dict[Type[AbstractEvent], List[Type[AbstractEventHandler]]] = {
-    GroupMembersInvitedEvent: [],
-    GroupMembersAddedToGroupEvent: [GroupMembersAddedToGroupEventHandler],
-    GroupMembersRemovedFromGroupEvent: [GroupMembersRemovedFromGroupEventHandler],
+EVENTS_HANDLERS_FOR_INJECTION: Dict[Type[AbstractEvent], List[Type[AbstractEventHandler]]] = {
+    GroupMembersInvitedEvent: [SendRegisterMessageToInvitedUsersEventHandler],
+    GroupMembersAddedToGroupEvent: [SendAddToGroupNotificationsEventHandler],
+    GroupMembersRemovedFromGroupEvent: [SendRemoveFromGroupNotificationEventHandler],
 }
 
-COMMANDS_HANDLERS_RAW: Dict[Type[AbstractCommand], Type[AbstractCommandHandler]] = {
+COMMANDS_HANDLERS_FOR_INJECTION: Dict[Type[AbstractCommand], Type[AbstractCommandHandler]] = {
     CreateGroupCommand: CreateGroupCommandHandler,
     DeleteGroupCommand: DeleteGroupCommandHandler,
     UpdateGroupCommand: UpdateGroupCommandHandler,

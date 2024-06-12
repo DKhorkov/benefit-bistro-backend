@@ -9,7 +9,7 @@ from typing import AsyncGenerator
 
 from src.app import app
 from src.users.config import RouterConfig, URLPathsConfig, cookies_config
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.core.database.connection import DATABASE_URL
 from src.core.database.orm import start_mappers, metadata
 from src.users.utils import hash_password

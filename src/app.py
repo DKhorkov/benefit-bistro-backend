@@ -9,9 +9,9 @@ from sqlalchemy.orm import clear_mappers
 from starlette import status
 
 from src.config import PathsConfig, cors_config, URLPathsConfig, URLNamesConfig
-from src.users.router import router as users_router
+from src.users.entrypoints.router import router as users_router
 from src.groups.entypoints.router import router as groups_router
-from src.core.database.orm import start_mappers as start_users_mappers
+from src.users.adapters.orm import start_mappers as start_users_mappers
 from src.groups.adapters.orm import start_mappers as start_groups_mappers
 
 

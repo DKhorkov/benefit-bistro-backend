@@ -2,7 +2,7 @@ from typing import List, Optional, Sequence, Any
 from sqlalchemy import insert, select, delete, update, Result, RowMapping, Row
 
 from src.users.interfaces.repositories import UsersRepository
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.core.database.interfaces.repositories import SQLAlchemyAbstractRepository
 from src.core.interfaces import AbstractModel
 

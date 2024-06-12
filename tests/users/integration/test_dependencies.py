@@ -13,12 +13,12 @@ from src.users.exceptions import (
     EmailIsNotVerifiedError
 )
 from src.security.exceptions import InvalidTokenError
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.security.models import JWTDataModel
-from src.users.schemas import RegisterUserScheme, LoginUserScheme
+from src.users.entrypoints.schemas import RegisterUserScheme, LoginUserScheme
 from src.security.utils import create_jwt_token
 from tests.config import TestUserConfig
-from src.users.dependencies import (
+from src.users.entrypoints.dependencies import (
     register_user,
     authenticate_user,
     login_user,

@@ -7,9 +7,9 @@ from src.core.interfaces.events import AbstractEvent
 from src.groups.interfaces.units_of_work import GroupsUnitOfWork
 
 
-class GroupEventHandler(AbstractEventHandler, ABC):
+class GroupsEventHandler(AbstractEventHandler, ABC):
     """
-    Abstract event handler class, from every event handler should be inherited from.
+    Abstract event handler class, from which every groups event handler should be inherited from.
     """
 
     def __init__(self, uow: GroupsUnitOfWork) -> None:
@@ -20,9 +20,9 @@ class GroupEventHandler(AbstractEventHandler, ABC):
         raise NotImplementedError
 
 
-class GroupCommandHandler(AbstractCommandHandler, ABC):
+class GroupsCommandHandler(AbstractCommandHandler, ABC):
     """
-    Abstract command handler class, from every command handler should be inherited from.
+    Abstract command handler class, from which every groups command handler should be inherited from.
     """
 
     def __init__(self, uow: GroupsUnitOfWork) -> None:

@@ -39,13 +39,13 @@ class MessageBus:
         handler: AbstractEventHandler
         for handler in self._event_handlers[type(event)]:
             await handler(event)
-            for event in self._uow.events:
+            for event in self._uow.get_events():
                 self._queue.put_nowait(event)
 
     async def _handle_command(self, command: AbstractCommand) -> None:
         handler: AbstractCommandHandler = self._command_handlers[type(command)]
         self._command_result = await handler(command)
-        for event in self._uow.events:
+        for event in self._uow.get_events():
             self._queue.put_nowait(event)
 
     @property

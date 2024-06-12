@@ -4,7 +4,7 @@ from sqlalchemy import insert, select, CursorResult, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncConnection
 
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.core.database.interfaces.units_of_work import SQLAlchemyAbstractUnitOfWork
 from tests.config import TestUserConfig
 

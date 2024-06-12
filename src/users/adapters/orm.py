@@ -30,6 +30,6 @@ def start_mappers():
     """
 
     # Imports here not to ruin alembic logics. Also, only for mappers they needed:
-    from src.users.models import UserModel
+    from src.users.domain.models import UserModel
 
     mapper_registry.map_imperatively(class_=UserModel, local_table=users_table)

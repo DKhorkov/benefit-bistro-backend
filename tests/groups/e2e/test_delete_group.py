@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from src.users.config import cookies_config
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.users.utils import hash_password
 from src.core.database.connection import DATABASE_URL
 from src.core.utils import get_substring_before_chars, get_substring_after_chars

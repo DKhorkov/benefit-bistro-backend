@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from src.core.database.connection import DATABASE_URL
 from src.users.config import RouterConfig, URLPathsConfig, cookies_config
 from src.users.constants import ErrorDetails
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from tests.config import TestUserConfig
 from tests.utils import get_error_message_from_response
 
