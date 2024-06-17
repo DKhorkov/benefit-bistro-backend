@@ -2,7 +2,7 @@ from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship, Mapper
 from datetime import datetime, timezone
 
-from src.core.database.connection import mapper_registry
+from src.core.database.metadata import mapper_registry
 
 
 group_members_table = Table(

@@ -21,8 +21,9 @@ from tests.config import TestUserConfig
 from src.users.entrypoints.dependencies import (
     register_user,
     authenticate_user,
-    login_user,
+    verify_user_credentials,
     verify_user_email,
+    get_my_account,
     get_all_users
 )
 
@@ -46,9 +47,9 @@ async def test_register_user_fail(create_test_user_if_not_exists: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_login_user_by_username_success(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_by_username_success(create_test_user_if_not_exists: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(username=TestUserConfig.USERNAME, password=TestUserConfig.PASSWORD)
-    user: UserModel = await login_user(user_data=user_data)
+    user: UserModel = await verify_user_credentials(user_data=user_data)
 
     assert user.id == 1
     assert user.username == TestUserConfig.USERNAME
@@ -57,9 +58,9 @@ async def test_login_user_by_username_success(create_test_user_if_not_exists: No
 
 
 @pytest.mark.anyio
-async def test_login_user_by_email_success(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_by_email_success(create_test_user_if_not_exists: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(username=TestUserConfig.EMAIL, password=TestUserConfig.PASSWORD)
-    user: UserModel = await login_user(user_data=user_data)
+    user: UserModel = await verify_user_credentials(user_data=user_data)
 
     assert user.id == 1
     assert user.username == TestUserConfig.USERNAME
@@ -68,22 +69,22 @@ async def test_login_user_by_email_success(create_test_user_if_not_exists: None)
 
 
 @pytest.mark.anyio
-async def test_login_user_fail_user_does_not_exist(map_models_to_orm: None) -> None:
+async def test_verify_user_credentials_fail_user_does_not_exist(map_models_to_orm: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(**TestUserConfig().to_dict(to_lower=True))
     with pytest.raises(UserNotFoundError):
-        await login_user(user_data=user_data)
+        await verify_user_credentials(user_data=user_data)
 
 
 @pytest.mark.anyio
-async def test_login_user_fail_incorrect_password(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_fail_incorrect_password(create_test_user_if_not_exists: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(**TestUserConfig().to_dict(to_lower=True))
     user_data.password = 'some_incorrect_password'
     with pytest.raises(InvalidPasswordError):
-        await login_user(user_data=user_data)
+        await verify_user_credentials(user_data=user_data)
 
 
 @pytest.mark.anyio
-async def test_login_user_fail_email_is_not_verified(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_fail_email_is_not_verified(create_test_user_if_not_exists: None) -> None:
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
     async with engine.begin() as conn:
         try:
@@ -93,7 +94,7 @@ async def test_login_user_fail_email_is_not_verified(create_test_user_if_not_exi
             await conn.rollback()
 
     with pytest.raises(EmailIsNotVerifiedError):
-        await login_user(user_data=LoginUserScheme(**TestUserConfig().to_dict(to_lower=True)))
+        await verify_user_credentials(user_data=LoginUserScheme(**TestUserConfig().to_dict(to_lower=True)))
 
 
 @pytest.mark.anyio
@@ -156,3 +157,33 @@ async def test_get_all_users_with_existing_user(create_test_user_if_not_exists: 
 async def test_get_all_users_with_no_existing_users(map_models_to_orm: None) -> None:
     users: List[UserModel] = await get_all_users()
     assert len(users) == 0
+
+
+@pytest.mark.anyio
+async def test_get_my_account_success(map_models_to_orm: None, access_token: str) -> None:
+    user: UserModel = await get_my_account(token=access_token)
+    assert user.email == TestUserConfig.EMAIL
+    assert user.username == TestUserConfig.USERNAME
+    assert not user.password
+
+
+@pytest.mark.anyio
+async def test_get_my_account_fail_invalid_token(map_models_to_orm: None) -> None:
+    with pytest.raises(InvalidTokenError):
+        await get_my_account(token='someInvalidToken')
+
+
+@pytest.mark.anyio
+async def test_get_my_account_fail_token_expired(map_models_to_orm: None) -> None:
+    jwt_data: JWTDataModel = JWTDataModel(user_id=1, exp=datetime.now(timezone.utc))
+    token: str = await create_jwt_token(jwt_data=jwt_data)
+    with pytest.raises(InvalidTokenError):
+        await get_my_account(token=token)
+
+
+@pytest.mark.anyio
+async def test_aget_my_account_fail_user_does_not_exist(map_models_to_orm: None) -> None:
+    jwt_data: JWTDataModel = JWTDataModel(user_id=1)
+    token: str = await create_jwt_token(jwt_data=jwt_data)
+    with pytest.raises(UserNotFoundError):
+        await get_my_account(token=token)

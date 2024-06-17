@@ -17,9 +17,5 @@ class CreateOrUpdateGroupScheme(BaseModel):
         return value
 
 
-class UpdateGroupMembersScheme(BaseModel):
-    group_members_ids: List[int] = []
-
-
 class InviteGroupMembersScheme(BaseModel):
     emails: List[EmailStr] = []

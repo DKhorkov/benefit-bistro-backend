@@ -51,6 +51,7 @@ class FakeUsersRepository(UsersRepository):
 class FakeUsersUnitOfWork(UsersUnitOfWork):
 
     def __init__(self, users_repository: UsersRepository) -> None:
+        super().__init__()
         self.users: UsersRepository = users_repository
         self.committed: bool = False
 

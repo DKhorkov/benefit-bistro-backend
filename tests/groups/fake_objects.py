@@ -14,8 +14,8 @@ class FakeGroupsRepository(GroupsRepository):
     async def get(self, id: int) -> Optional[GroupModel]:
         return self.groups.get(id)
 
-    async def get_owner_groups(self, owner_id: int) -> List[GroupModel]:
-        return [group for group in self.groups.values() if group.id == owner_id]
+    async def get_user_groups(self, user_id: int) -> List[GroupModel]:
+        return [group for group in self.groups.values() if group.owner_id == user_id]
 
     async def get_by_owner_and_name(self, name: str, owner_id: int) -> Optional[GroupModel]:
         for group in self.groups.values():
@@ -47,6 +47,7 @@ class FakeGroupsRepository(GroupsRepository):
 class FakeGroupsUnitOfWork(GroupsUnitOfWork):
 
     def __init__(self, groups_repository: GroupsRepository) -> None:
+        super().__init__()
         self.groups: GroupsRepository = groups_repository
         self.committed: bool = False
 

@@ -11,7 +11,9 @@ from src.app import app
 from src.users.config import RouterConfig, URLPathsConfig, cookies_config
 from src.users.domain.models import UserModel
 from src.core.database.connection import DATABASE_URL
-from src.core.database.orm import start_mappers, metadata
+from src.core.database.metadata import metadata
+from src.users.adapters.orm import start_mappers as start_users_mappers
+from src.groups.adapters.orm import start_mappers as start_groups_mappers
 from src.users.utils import hash_password
 from src.celery.celery_app import celery
 from src.groups.domain.models import GroupModel
@@ -49,7 +51,8 @@ async def map_models_to_orm(create_test_db: None) -> None:
     """
 
     try:
-        start_mappers()
+        start_users_mappers()
+        start_groups_mappers()
     except ArgumentError:
         pass
 

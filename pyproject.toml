@@ -15,17 +15,24 @@ exclude = ['database_data/', 'database_backups/', 'alembic/']
 module = "celery.*"
 ignore_missing_imports = true
 
-# Avoiding incorrect 'override' error for abstract repositories in list() method:
+# Avoiding incorrect 'override' error:
 [[tool.mypy.overrides]]
 module = [
     "src.users.interfaces.repositories",
-    "src.users.repositories",
-    "src.groups.interfaces.repositories",
-    "src.groups.repositories",
+    "src.users.adapters.repositories",
+    "src.users.service_layer.handlers.*",
     "tests.users.fake_objects",
+    "src.groups.interfaces.repositories",
+    "src.groups.adapters.repositories",
+    "src.groups.service_layer.handlers.*",
     "tests.groups.fake_objects",
 ]
 disable_error_code = ["override"]
+
+# Avoiding incorrect 'misc' error during dependency injection to event-handlers and command-handlers:
+[[tool.mypy.overrides]]
+module = "src.core.bootstrap"
+disable_error_code = ["misc"]
 
 [tool.pytest.ini_options]
 testpaths = [

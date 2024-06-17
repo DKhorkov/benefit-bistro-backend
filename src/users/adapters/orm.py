@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, DateTime, Boolean
 from datetime import datetime, timezone
 
-from src.core.database.connection import mapper_registry
+from src.core.database.metadata import mapper_registry
 
 
 users_table = Table(
