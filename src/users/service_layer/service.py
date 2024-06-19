@@ -2,13 +2,13 @@ from typing import Optional, List
 
 from src.users.constants import ErrorDetails
 from src.users.exceptions import UserNotFoundError
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.users.interfaces.units_of_work import UsersUnitOfWork
 
 
 class UsersService:
     """
-    Service layer according to DDD, which using a unit of work, will perform operations on the domain model.
+    Service layer core according to DDD, which using a unit of work, will perform operations on the domain model.
     """
 
     def __init__(self, uow: UsersUnitOfWork) -> None:

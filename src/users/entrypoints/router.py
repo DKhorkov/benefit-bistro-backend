@@ -3,15 +3,14 @@ from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import Response, JSONResponse
 
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.users.config import RouterConfig, URLPathsConfig, URLNamesConfig, cookies_config
-from src.celery.tasks.auth_tasks import send_verify_email_message
 from src.security.models import JWTDataModel
 from src.security.utils import create_jwt_token
-from src.users.dependencies import (
-    login_user,
+from src.users.entrypoints.dependencies import (
+    verify_user_credentials,
     register_user,
-    authenticate_user,
+    get_my_account as get_my_account_dependency,
     verify_user_email,
     get_all_users as get_all_users_dependency,
 )
@@ -31,7 +30,6 @@ router = APIRouter(
     response_model=UserModel
 )
 async def register(user: UserModel = Depends(register_user)):
-    send_verify_email_message.delay(user_data=await user.to_dict())
     return user
 
 
@@ -51,7 +49,7 @@ async def verify_email(user: UserModel = Depends(verify_user_email)):   # Using 
     name=URLNamesConfig.LOGIN,
     status_code=status.HTTP_204_NO_CONTENT
 )
-async def login(user: UserModel = Depends(login_user)):
+async def login(user: UserModel = Depends(verify_user_credentials)):
     jwt_data: JWTDataModel = JWTDataModel(user_id=user.id)
     token: str = await create_jwt_token(jwt_data=jwt_data)
     response: Response = Response()
@@ -90,7 +88,7 @@ async def logout():
     name=URLNamesConfig.ME,
     status_code=status.HTTP_200_OK
 )
-async def get_my_account(user: UserModel = Depends(authenticate_user)):
+async def get_my_account(user: UserModel = Depends(get_my_account_dependency)):
     return user
 
 

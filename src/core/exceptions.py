@@ -1,7 +1,7 @@
 from typing import Any
 from fastapi import HTTPException, status
 
-from src.users.constants import ErrorDetails
+from src.core.constants import ErrorDetails
 
 
 class DetailedHTTPException(HTTPException):
@@ -36,3 +36,8 @@ class PreconditionFailedError(DetailedHTTPException):
 
 class ValidationError(DetailedHTTPException):
     STATUS_CODE = status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+class MessageBusMessageError(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_500_INTERNAL_SERVER_ERROR
+    DETAIL = ErrorDetails.MESSAGEBUS_MESSAGE_ERROR

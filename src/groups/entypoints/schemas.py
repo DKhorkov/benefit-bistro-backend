@@ -1,5 +1,5 @@
-from typing import List
-from pydantic import BaseModel, field_validator
+from typing import Set
+from pydantic import BaseModel, field_validator, EmailStr
 
 from src.groups.config import GroupValidationConfig
 from src.groups.exceptions import GroupNameValidationError
@@ -17,5 +17,5 @@ class CreateOrUpdateGroupScheme(BaseModel):
         return value
 
 
-class UpdateGroupMembersScheme(BaseModel):
-    group_member_ids: List[int] = []
+class InviteGroupMembersScheme(BaseModel):
+    emails: Set[EmailStr] = set()

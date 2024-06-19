@@ -4,7 +4,7 @@ from httpx import Response, AsyncClient
 from typing import Dict, Any, List
 
 from src.users.config import RouterConfig, URLPathsConfig
-from tests.config import TestUserConfig
+from tests.config import FakeUserConfig
 
 
 @pytest.mark.anyio
@@ -20,8 +20,8 @@ async def test_get_all_users_with_existing_user(
     assert len(response_content) == 1
     user: Dict[str, Any] = response_content[0]
     assert user['id'] == 1
-    assert user['email'] == TestUserConfig.EMAIL
-    assert user['username'] == TestUserConfig.USERNAME
+    assert user['email'] == FakeUserConfig.EMAIL
+    assert user['username'] == FakeUserConfig.USERNAME
     assert not user['password']
 
 

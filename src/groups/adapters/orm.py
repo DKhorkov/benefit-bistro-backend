@@ -1,27 +1,9 @@
-from sqlalchemy import Table, Column, Integer, String, DateTime, Boolean, MetaData, ForeignKey
-from sqlalchemy.orm import registry, relationship, Mapper
+from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship, Mapper
 from datetime import datetime, timezone
 
-metadata = MetaData()
-mapper_registry = registry(metadata=metadata)
+from src.core.database.metadata import mapper_registry
 
-users_table = Table(
-    'users',
-    mapper_registry.metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True, nullable=False, unique=True),
-    Column('email', String(50), nullable=False, unique=True),
-    Column('password', String(100), nullable=False),
-    Column('username', String(20), nullable=False, unique=True),
-    Column('email_verified', Boolean(), nullable=False, default=False),
-    Column('created_at', DateTime(timezone=True), nullable=False, default=datetime.now(tz=timezone.utc)),
-    Column(
-        'updated_at',
-        DateTime(timezone=True),
-        nullable=False,
-        default=datetime.now(tz=timezone.utc),
-        onupdate=datetime.now(tz=timezone.utc)
-    )
-)
 
 group_members_table = Table(
     'group_members',
@@ -73,15 +55,12 @@ groups_table = Table(
 
 def start_mappers():
     """
-    Map all domain models to ORM models, for purpose of using domain models directly during work with the database,
+    Map domain models to ORM models, for purpose of using domain models directly during work with the database,
     according to DDD.
     """
 
     # Imports here not to ruin alembic logics. Also, only for mappers they needed:
-    from src.users.models import UserModel
-    from src.groups.models import GroupModel, GroupMemberModel
-
-    mapper_registry.map_imperatively(class_=UserModel, local_table=users_table)
+    from src.groups.domain.models import GroupModel, GroupMemberModel
 
     group_members_mapper: Mapper = mapper_registry.map_imperatively(
         class_=GroupMemberModel,

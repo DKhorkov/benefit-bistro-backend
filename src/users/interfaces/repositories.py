@@ -2,7 +2,7 @@ from typing import Optional, List
 from abc import ABC, abstractmethod
 
 from src.core.interfaces import AbstractRepository, AbstractModel
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 
 
 class UsersRepository(AbstractRepository, ABC):

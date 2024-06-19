@@ -1,6 +1,16 @@
 name: main-workflow
 run-name: ${{ github.actor }} is testing changes
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - dkhorkov
+      - hikfe
+  pull_request:
+    branches:
+      - master
+      - dkhorkov
+      - hikfe
 jobs:
   flake8:
     runs-on: ubuntu-latest

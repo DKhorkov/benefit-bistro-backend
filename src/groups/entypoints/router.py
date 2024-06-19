@@ -2,13 +2,12 @@ from typing import MutableSequence
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse, Response
 
-from src.groups.models import GroupModel
+from src.groups.domain.models import GroupModel
 from src.groups.config import RouterConfig, URLPathsConfig, URLNamesConfig
-from src.groups.dependencies import (
+from src.groups.entypoints.dependencies import (
     create_group,
     delete_group,
     get_current_user_groups,
-    update_group_members as update_group_members_dependency,
     update_group as update_group_dependency
 )
 
@@ -52,17 +51,6 @@ async def get_my_groups(groups: MutableSequence[GroupModel] = Depends(get_curren
 
 
 @router.put(
-    path=URLPathsConfig.UPDATE_GROUP_MEMBERS,
-    response_class=JSONResponse,
-    name=URLNamesConfig.UPDATE_GROUP_MEMBERS,
-    response_model=GroupModel,
-    status_code=status.HTTP_200_OK
-)
-async def update_group_members(group: GroupModel = Depends(update_group_members_dependency)):
-    return group
-
-
-@router.put(
     path=URLPathsConfig.UPDATE_GROUP,
     response_class=JSONResponse,
     name=URLNamesConfig.UPDATE_GROUP,
@@ -71,3 +59,17 @@ async def update_group_members(group: GroupModel = Depends(update_group_members_
 )
 async def update_group(group: GroupModel = Depends(update_group_dependency)):
     return group
+
+
+# @router.post(
+#     path=URLPathsConfig.INVITE_GROUP_MEMBERS,
+#     response_class=JSONResponse,
+#     name=URLNamesConfig.INVITE_GROUP_MEMBERS,
+#     response_model=MutableSequence[InvitedGroupMember],
+#     status_code=status.HTTP_201_CREATED
+# )
+# async def invite_group_members(
+#         invited_users: MutableSequence[InvitedGroupMember] = Depends(invite_group_members_dependency)
+# ):
+#
+#     return invited_users

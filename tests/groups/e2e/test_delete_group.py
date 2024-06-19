@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from src.users.config import cookies_config
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.users.utils import hash_password
 from src.core.database.connection import DATABASE_URL
 from src.core.utils import get_substring_before_chars, get_substring_after_chars
@@ -17,7 +17,7 @@ from src.users.config import (
     URLPathsConfig as UsersURLPathsConfig,
     RouterConfig as UsersRouterConfig
 )
-from tests.config import TestUserConfig
+from tests.config import FakeUserConfig
 
 
 @pytest.mark.anyio
@@ -79,7 +79,7 @@ async def test_delete_group_fail_group_does_not_belong_to_current_user(
     second_user_email: str = 'someNewEmail@gmail.com'
     second_user_username: str = 'someNewUsername'
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
-    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config: FakeUserConfig = FakeUserConfig()
     test_user_config.EMAIL = second_user_email
     test_user_config.USERNAME = second_user_username
     test_user_config.PASSWORD = await hash_password(test_user_config.PASSWORD)
@@ -94,7 +94,7 @@ async def test_delete_group_fail_group_does_not_belong_to_current_user(
         url=UsersRouterConfig.PREFIX + UsersURLPathsConfig.LOGIN,
         json={
             'username': second_user_username,
-            'password': TestUserConfig.PASSWORD
+            'password': FakeUserConfig.PASSWORD
         }
     )
     access_token: str = token_response.cookies[cookies_config.COOKIES_KEY]

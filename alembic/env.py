@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.core.database.orm import mapper_registry
+from src.core.database.metadata import mapper_registry
 
 import os
 from pathlib import Path

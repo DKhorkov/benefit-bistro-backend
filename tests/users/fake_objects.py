@@ -2,7 +2,7 @@ from typing import Dict, Optional, List
 
 from src.users.interfaces.units_of_work import UsersUnitOfWork
 from src.users.interfaces.repositories import UsersRepository
-from src.users.models import UserModel
+from src.users.domain.models import UserModel
 from src.core.interfaces import AbstractModel
 
 
@@ -51,6 +51,7 @@ class FakeUsersRepository(UsersRepository):
 class FakeUsersUnitOfWork(UsersUnitOfWork):
 
     def __init__(self, users_repository: UsersRepository) -> None:
+        super().__init__()
         self.users: UsersRepository = users_repository
         self.committed: bool = False
 

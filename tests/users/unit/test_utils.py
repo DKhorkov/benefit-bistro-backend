@@ -5,20 +5,20 @@ from typing import Dict
 from src.users.config import URLPathsConfig
 from src.users.exceptions import NotAuthenticatedError
 from src.users.utils import hash_password, verify_password, OAuth2Cookie
-from tests.config import TestUserConfig
+from tests.config import FakeUserConfig
 from tests.utils import build_request
 
 
 @pytest.mark.anyio
 async def test_verify_password_success() -> None:
-    hashed_password: str = await hash_password(TestUserConfig.PASSWORD)
-    assert await verify_password(plain_password=TestUserConfig.PASSWORD, hashed_password=hashed_password)
+    hashed_password: str = await hash_password(FakeUserConfig.PASSWORD)
+    assert await verify_password(plain_password=FakeUserConfig.PASSWORD, hashed_password=hashed_password)
 
 
 @pytest.mark.anyio
 async def test_verify_password_fail() -> None:
     hashed_password: str = await hash_password('some other password')
-    assert not await verify_password(plain_password=TestUserConfig.PASSWORD, hashed_password=hashed_password)
+    assert not await verify_password(plain_password=FakeUserConfig.PASSWORD, hashed_password=hashed_password)
 
 
 @pytest.mark.anyio
