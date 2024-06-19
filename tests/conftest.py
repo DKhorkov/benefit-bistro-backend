@@ -17,7 +17,7 @@ from src.groups.adapters.orm import start_mappers as start_groups_mappers
 from src.users.utils import hash_password
 from src.celery.celery_app import celery
 from src.groups.domain.models import GroupModel
-from tests.config import TestUserConfig, TestGroupConfig
+from tests.config import FakeUserConfig, FakeGroupConfig
 from tests.utils import get_base_url, drop_test_db
 
 
@@ -74,7 +74,7 @@ async def create_test_user_if_not_exists(map_models_to_orm: None) -> None:
     """
 
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
-    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config: FakeUserConfig = FakeUserConfig()
     test_user_config.PASSWORD = await hash_password(test_user_config.PASSWORD)
     async with engine.begin() as conn:
         try:
@@ -93,7 +93,7 @@ async def access_token(async_client: AsyncClient, create_test_user_if_not_exists
 
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json=TestUserConfig().to_dict(to_lower=True)
+        json=FakeUserConfig().to_dict(to_lower=True)
     )
     access_token: str = response.cookies[cookies_config.COOKIES_KEY]
     return access_token
@@ -127,7 +127,7 @@ async def create_test_group(create_test_user_if_not_exists: None) -> None:
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
     async with engine.begin() as conn:
         try:
-            await conn.execute(insert(GroupModel).values(**TestGroupConfig().to_dict(to_lower=True)))
+            await conn.execute(insert(GroupModel).values(**FakeGroupConfig().to_dict(to_lower=True)))
             await conn.commit()
         except IntegrityError:
             await conn.rollback()

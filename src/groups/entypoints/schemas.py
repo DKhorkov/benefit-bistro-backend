@@ -1,4 +1,4 @@
-from typing import List
+from typing import Set
 from pydantic import BaseModel, field_validator, EmailStr
 
 from src.groups.config import GroupValidationConfig
@@ -18,4 +18,4 @@ class CreateOrUpdateGroupScheme(BaseModel):
 
 
 class InviteGroupMembersScheme(BaseModel):
-    emails: List[EmailStr] = []
+    emails: Set[EmailStr] = set()

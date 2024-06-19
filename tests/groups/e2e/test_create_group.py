@@ -7,7 +7,7 @@ from src.groups.config import RouterConfig, URLPathsConfig, GroupValidationConfi
 from src.groups.constants import ErrorDetails
 from src.groups.domain.models import GroupModel
 from tests.utils import get_error_message_from_response, generate_random_string
-from tests.config import TestGroupConfig
+from tests.config import FakeGroupConfig
 
 
 @pytest.mark.anyio
@@ -19,7 +19,7 @@ async def test_create_group_success(
 
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.CREATE_GROUP,
-        json=TestGroupConfig().to_dict(to_lower=True),
+        json=FakeGroupConfig().to_dict(to_lower=True),
         cookies=cookies
     )
 
@@ -27,7 +27,7 @@ async def test_create_group_success(
     group_data: Dict[str, Any] = response.json()
     group_data.pop('members')
     group: GroupModel = GroupModel(**group_data)
-    assert group.name == TestGroupConfig.NAME
+    assert group.name == FakeGroupConfig.NAME
 
 
 @pytest.mark.anyio
@@ -38,7 +38,7 @@ async def test_create_group_fail_user_unauthorized(
 
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.CREATE_GROUP,
-        json=TestGroupConfig().to_dict(to_lower=True)
+        json=FakeGroupConfig().to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -53,7 +53,7 @@ async def test_create_group_fail_group_already_exists(
 
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.CREATE_GROUP,
-        json=TestGroupConfig().to_dict(to_lower=True),
+        json=FakeGroupConfig().to_dict(to_lower=True),
         cookies=cookies
     )
 
@@ -68,7 +68,7 @@ async def test_create_group_fail_group_name_too_short(
         cookies: Cookies
 ) -> None:
 
-    test_group_config: TestGroupConfig = TestGroupConfig()
+    test_group_config: FakeGroupConfig = FakeGroupConfig()
     test_group_config.NAME = generate_random_string(GroupValidationConfig.NAME_MIN_LENGTH - 1)
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.CREATE_GROUP,
@@ -87,7 +87,7 @@ async def test_create_group_fail_group_name_too_long(
         cookies: Cookies
 ) -> None:
 
-    test_group_config: TestGroupConfig = TestGroupConfig()
+    test_group_config: FakeGroupConfig = FakeGroupConfig()
     test_group_config.NAME = generate_random_string(GroupValidationConfig.NAME_MAX_LENGTH + 1)
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.CREATE_GROUP,

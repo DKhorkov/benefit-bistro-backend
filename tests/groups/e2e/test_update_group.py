@@ -7,7 +7,7 @@ from src.core.utils import get_substring_before_chars, get_substring_after_chars
 from src.groups.config import RouterConfig, URLPathsConfig
 from src.groups.constants import ErrorDetails
 from tests.utils import get_error_message_from_response
-from tests.config import TestGroupConfig
+from tests.config import FakeGroupConfig
 
 
 @pytest.mark.anyio
@@ -27,7 +27,7 @@ async def test_update_group_success(
         string=URLPathsConfig.UPDATE_GROUP
     )
 
-    new_group_data = TestGroupConfig()
+    new_group_data = FakeGroupConfig()
     new_group_data.NAME = 'SomeNewName'
     response: Response = await async_client.put(
         url=RouterConfig.PREFIX + update_group_url_prefix + '1' + update_group_url_postfix,
@@ -58,7 +58,7 @@ async def test_update_group_fail_group_does_not_exist(
 
     response: Response = await async_client.put(
         url=RouterConfig.PREFIX + update_group_url_prefix + '1' + update_group_url_postfix,
-        json=TestGroupConfig().to_dict(to_lower=True),
+        json=FakeGroupConfig().to_dict(to_lower=True),
         cookies=cookies
     )
 

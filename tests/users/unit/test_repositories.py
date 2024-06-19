@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession, async_sessionm
 
 from src.users.domain.models import UserModel
 from src.users.adapters.repositories import SQLAlchemyUsersRepository
-from tests.config import TestUserConfig
+from tests.config import FakeUserConfig
 
 
 @pytest.mark.anyio
@@ -21,8 +21,8 @@ async def test_sqlalchemy_user_repository_get_success(
 
     assert user is not None
     assert user.id == 1
-    assert user.email == TestUserConfig.EMAIL
-    assert user.username == TestUserConfig.USERNAME
+    assert user.email == FakeUserConfig.EMAIL
+    assert user.username == FakeUserConfig.USERNAME
 
 
 @pytest.mark.anyio
@@ -46,13 +46,13 @@ async def test_sqlalchemy_user_repository_get_by_email_success(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get_by_email(
-        email=TestUserConfig.EMAIL
+        email=FakeUserConfig.EMAIL
     )
 
     assert user is not None
     assert user.id == 1
-    assert user.email == TestUserConfig.EMAIL
-    assert user.username == TestUserConfig.USERNAME
+    assert user.email == FakeUserConfig.EMAIL
+    assert user.username == FakeUserConfig.USERNAME
 
 
 @pytest.mark.anyio
@@ -79,13 +79,13 @@ async def test_sqlalchemy_user_repository_get_by_username_success(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     user: Optional[UserModel] = await SQLAlchemyUsersRepository(session=session).get_by_username(
-        username=TestUserConfig.USERNAME
+        username=FakeUserConfig.USERNAME
     )
 
     assert user is not None
     assert user.id == 1
-    assert user.email == TestUserConfig.EMAIL
-    assert user.username == TestUserConfig.USERNAME
+    assert user.email == FakeUserConfig.EMAIL
+    assert user.username == FakeUserConfig.USERNAME
 
 
 @pytest.mark.anyio
@@ -115,8 +115,8 @@ async def test_sqlalchemy_user_repository_list(
     assert len(users_list) == 1
     user: UserModel = users_list[0]
     assert user.id == 1
-    assert user.email == TestUserConfig.EMAIL
-    assert user.username == TestUserConfig.USERNAME
+    assert user.email == FakeUserConfig.EMAIL
+    assert user.username == FakeUserConfig.USERNAME
 
 
 @pytest.mark.anyio
@@ -171,16 +171,16 @@ async def test_sqlalchemy_user_repository_add_user_success(
         async_connection: AsyncConnection
 ) -> None:
 
-    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=TestUserConfig.EMAIL))
+    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=FakeUserConfig.EMAIL))
     result: Optional[Row] = cursor.first()
     assert not result
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True))
+    user: UserModel = UserModel(**FakeUserConfig().to_dict(to_lower=True))
     await SQLAlchemyUsersRepository(session=session).add(model=user)
 
-    cursor = await async_connection.execute(select(UserModel).filter_by(email=TestUserConfig.EMAIL))
+    cursor = await async_connection.execute(select(UserModel).filter_by(email=FakeUserConfig.EMAIL))
     result = cursor.first()
     assert result
 
@@ -202,7 +202,7 @@ async def test_sqlalchemy_user_repository_add_user_success_with_provided_already
         id=1,
         email='someTestEmail@gmail.com',
         username=username,
-        password=TestUserConfig.PASSWORD
+        password=FakeUserConfig.PASSWORD
     )
 
     await SQLAlchemyUsersRepository(session=session).add(model=user)
@@ -218,16 +218,16 @@ async def test_sqlalchemy_user_repository_add_user_fail_username_already_exists(
         async_connection: AsyncConnection
 ) -> None:
 
-    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(username=TestUserConfig.USERNAME))
+    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(username=FakeUserConfig.USERNAME))
     result: Optional[Row] = cursor.first()
     assert result
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     user: UserModel = UserModel(
-        username=TestUserConfig.USERNAME,
+        username=FakeUserConfig.USERNAME,
         email='someTestEmail@gmail.com',
-        password=TestUserConfig.PASSWORD
+        password=FakeUserConfig.PASSWORD
     )
 
     with pytest.raises(IntegrityError):
@@ -240,16 +240,16 @@ async def test_sqlalchemy_user_repository_add_user_fail_email_already_exists(
         async_connection: AsyncConnection
 ) -> None:
 
-    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=TestUserConfig.EMAIL))
+    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=FakeUserConfig.EMAIL))
     result: Optional[Row] = cursor.first()
     assert result
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     user: UserModel = UserModel(
-        email=TestUserConfig.EMAIL,
+        email=FakeUserConfig.EMAIL,
         username='someUsername',
-        password=TestUserConfig.PASSWORD
+        password=FakeUserConfig.PASSWORD
     )
 
     with pytest.raises(IntegrityError):
@@ -270,9 +270,9 @@ async def test_sqlalchemy_user_repository_update_existing_user(
     session: AsyncSession = async_session_factory()
     username: str = 'someUsername'
     user: UserModel = UserModel(
-        email=TestUserConfig.EMAIL,
+        email=FakeUserConfig.EMAIL,
         username=username,
-        password=TestUserConfig.PASSWORD
+        password=FakeUserConfig.PASSWORD
     )
 
     await SQLAlchemyUsersRepository(session=session).update(id=1, model=user)
@@ -294,6 +294,6 @@ async def test_sqlalchemy_user_repository_update_non_existing_user(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True))
+    user: UserModel = UserModel(**FakeUserConfig().to_dict(to_lower=True))
     with pytest.raises(NoResultFound):
         await SQLAlchemyUsersRepository(session=session).update(id=1, model=user)

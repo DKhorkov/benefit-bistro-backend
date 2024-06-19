@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 from src.users.domain.models import UserModel
 from src.core.database.interfaces.units_of_work import SQLAlchemyAbstractUnitOfWork
-from tests.config import TestUserConfig
+from tests.config import FakeUserConfig
 
 
 @pytest.mark.anyio
@@ -17,11 +17,11 @@ async def test_sqlalchemy_abstract_unit_of_work_saves_correct_model_and_commits(
 
     uow: SQLAlchemyAbstractUnitOfWork = SQLAlchemyAbstractUnitOfWork()
     async with uow:
-        new_user: UserModel = UserModel(**TestUserConfig().to_dict(to_lower=True))
+        new_user: UserModel = UserModel(**FakeUserConfig().to_dict(to_lower=True))
         await uow._session.execute(insert(UserModel).values(**await new_user.to_dict()))
         await uow.commit()
 
-    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=TestUserConfig.EMAIL))
+    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=FakeUserConfig.EMAIL))
     result: Optional[Row] = cursor.first()
     assert result
 
@@ -38,6 +38,6 @@ async def test_sqlalchemy_abstract_unit_of_work_not_saves_incorrect_model_and_ro
             await uow._session.execute(insert(UserModel))
             await uow.commit()
 
-    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=TestUserConfig.EMAIL))
+    cursor: CursorResult = await async_connection.execute(select(UserModel).filter_by(email=FakeUserConfig.EMAIL))
     result: Sequence[Row] = cursor.all()
     assert not result

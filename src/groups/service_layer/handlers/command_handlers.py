@@ -90,8 +90,8 @@ class AddGroupMembersCommandHandler(GroupsCommandHandler):
                 GroupMembersAddedToGroupEvent(
                     group_name=group.name,
                     group_owner_username=command.user.username,
-                    group_members_emails=[group_member.email for group_member in command.group_members],
-                    group_members_usernames=[group_member.username for group_member in command.group_members]
+                    group_members_emails={group_member.email for group_member in command.group_members},
+                    group_members_usernames={group_member.username for group_member in command.group_members}
                 )
             )
 
@@ -124,8 +124,8 @@ class RemoveGroupMembersCommandHandler(GroupsCommandHandler):
                 GroupMembersRemovedFromGroupEvent(
                     group_name=group.name,
                     group_owner_username=command.user.username,
-                    group_members_emails=[group_member.email for group_member in command.group_members],
-                    group_members_usernames=[group_member.username for group_member in command.group_members]
+                    group_members_emails={group_member.email for group_member in command.group_members},
+                    group_members_usernames={group_member.username for group_member in command.group_members}
                 )
             )
 

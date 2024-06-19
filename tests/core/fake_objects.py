@@ -12,7 +12,7 @@ from src.core.interfaces import (
 
 
 @dataclass
-class TestModel(AbstractModel):
+class FakeModel(AbstractModel):
     """
     Inherited model from base just to test AbstractModel's methods.
     """
@@ -22,7 +22,7 @@ class TestModel(AbstractModel):
 
 
 @dataclass(frozen=True)
-class TestEvent(AbstractEvent):
+class FakeEvent(AbstractEvent):
     """
     Inherited event from base just to test AbstractEvent's methods.
     """
@@ -32,7 +32,7 @@ class TestEvent(AbstractEvent):
 
 
 @dataclass(frozen=True)
-class TestCommand(AbstractCommand):
+class FakeCommand(AbstractCommand):
     """
     Inherited command from base just to test AbstractCommand's methods.
     """
@@ -54,7 +54,7 @@ class FakeEventHandler(AbstractEventHandler):
     async def __call__(self, event: AbstractEvent) -> None:
         self.called = True
         if self.create_recursion_event:
-            await self.uow.add_event(TestEvent())
+            await self.uow.add_event(FakeEvent())
 
     def __hash__(self) -> int:
         return hash(f'{self.field1}_{self.field2}_{self.uow}')
@@ -74,7 +74,7 @@ class FakeCommandHandler(AbstractCommandHandler):
 
     async def __call__(self, command: AbstractCommand) -> None:
         self.called = True
-        await self.uow.add_event(TestEvent())
+        await self.uow.add_event(FakeEvent())
 
     def __hash__(self) -> int:
         return hash(f'{self.field1}_{self.field2}_{self.uow}')

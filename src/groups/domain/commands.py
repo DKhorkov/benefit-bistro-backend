@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import Set
 
 from src.core.interfaces.commands import AbstractCommand
 from src.users.domain.models import UserModel
@@ -28,18 +28,18 @@ class UpdateGroupCommand(AbstractCommand):
 class AddGroupMembersCommand(AbstractCommand):
     group_id: int
     user: UserModel
-    group_members: List[UserModel]
+    group_members: Set[UserModel]
 
 
 @dataclass(frozen=True)
 class RemoveGroupMembersCommand(AbstractCommand):
     group_id: int
     user: UserModel
-    group_members: List[UserModel]
+    group_members: Set[UserModel]
 
 
 @dataclass(frozen=True)
 class InviteGroupMembersCommand(AbstractCommand):
     group_id: int
     user: UserModel
-    invited_group_members_emails: List[str]
+    invited_group_members_emails: Set[str]

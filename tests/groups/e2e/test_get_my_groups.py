@@ -5,7 +5,7 @@ from httpx import Response, AsyncClient, Cookies
 
 from src.groups.config import RouterConfig, URLPathsConfig
 from src.groups.domain.models import GroupModel
-from tests.config import TestGroupConfig
+from tests.config import FakeGroupConfig
 
 
 @pytest.mark.anyio
@@ -30,7 +30,7 @@ async def test_get_my_groups_success(
 
     assert len(groups) == 1
     group: GroupModel = groups[0]
-    assert group.name == TestGroupConfig.NAME
+    assert group.name == FakeGroupConfig.NAME
     assert len(group.members) == 0
 
 

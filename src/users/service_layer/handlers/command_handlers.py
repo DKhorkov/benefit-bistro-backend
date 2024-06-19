@@ -7,7 +7,12 @@ from src.users.domain.commands import (
     GetUserCommand
 )
 from src.users.domain.models import UserModel
-from src.users.exceptions import InvalidPasswordError, UserAlreadyExistsError, EmailIsNotVerifiedError
+from src.users.exceptions import (
+    InvalidPasswordError,
+    UserAlreadyExistsError,
+    EmailIsNotVerifiedError,
+    UserNotFoundError
+)
 from src.users.service_layer.service import UsersService
 from src.users.utils import hash_password, verify_password
 
@@ -53,8 +58,10 @@ class VerifyUserCredentialsCommandHandler(UsersCommandHandler):
         user: UserModel
         if await users_service.check_user_existence(email=command.username):
             user = await users_service.get_user_by_email(email=command.username)
-        else:
+        elif await users_service.check_user_existence(username=command.username):
             user = await users_service.get_user_by_username(username=command.username)
+        else:
+            raise UserNotFoundError
 
         if not user.email_verified:
             raise EmailIsNotVerifiedError

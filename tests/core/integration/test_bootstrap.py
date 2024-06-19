@@ -11,8 +11,8 @@ from src.core.interfaces import (
 from src.core.messagebus import MessageBus
 from src.core.bootstrap import Bootstrap
 from tests.core.fake_objects import (
-    TestEvent,
-    TestCommand,
+    FakeEvent,
+    FakeCommand,
     FakeCommandHandler,
     FakeEventHandler,
     FakeCoreUnitOfWork
@@ -22,9 +22,9 @@ from tests.core.fake_objects import (
 @pytest.mark.anyio
 async def test_bootstrap_inject_dependencies_success() -> None:
     uow: AbstractUnitOfWork = FakeCoreUnitOfWork()
-    dependencies: Dict[str, Any] = await TestEvent().to_dict()
+    dependencies: Dict[str, Any] = await FakeEvent().to_dict()
     events_handlers_for_injection: Dict[Type[AbstractEvent], List[Type[AbstractEventHandler]]] = {
-        TestEvent: [FakeEventHandler]
+        FakeEvent: [FakeEventHandler]
     }
 
     bootstrap: Bootstrap = Bootstrap(
@@ -47,7 +47,7 @@ async def test_bootstrap_inject_dependencies_success() -> None:
 async def test_bootstrap_inject_dependencies_fail_not_all_dependencies_provided() -> None:
     uow: AbstractUnitOfWork = FakeCoreUnitOfWork()
     events_handlers_for_injection: Dict[Type[AbstractEvent], List[Type[AbstractEventHandler]]] = {
-        TestEvent: [FakeEventHandler]
+        FakeEvent: [FakeEventHandler]
     }
 
     bootstrap: Bootstrap = Bootstrap(
@@ -63,13 +63,13 @@ async def test_bootstrap_inject_dependencies_fail_not_all_dependencies_provided(
 @pytest.mark.anyio
 async def test_bootstrap_get_messagebus_success() -> None:
     uow: AbstractUnitOfWork = FakeCoreUnitOfWork()
-    dependencies: Dict[str, Any] = await TestEvent().to_dict()
+    dependencies: Dict[str, Any] = await FakeEvent().to_dict()
     events_handlers_for_injection: Dict[Type[AbstractEvent], List[Type[AbstractEventHandler]]] = {
-        TestEvent: [FakeEventHandler]
+        FakeEvent: [FakeEventHandler]
     }
 
     command_handlers_for_injection: Dict[Type[AbstractCommand], Type[AbstractCommandHandler]] = {
-        TestCommand: FakeCommandHandler
+        FakeCommand: FakeCommandHandler
     }
 
     bootstrap: Bootstrap = Bootstrap(
@@ -81,9 +81,9 @@ async def test_bootstrap_get_messagebus_success() -> None:
 
     messagebus: MessageBus = await bootstrap.get_messagebus()
     assert messagebus._command_handlers == {
-        TestCommand: FakeCommandHandler(uow=uow, field1='test', field2=123)
+        FakeCommand: FakeCommandHandler(uow=uow, field1='test', field2=123)
     }
 
     assert messagebus._event_handlers == {
-        TestEvent: [FakeEventHandler(uow=uow, field1='test', field2=123)]
+        FakeEvent: [FakeEventHandler(uow=uow, field1='test', field2=123)]
     }

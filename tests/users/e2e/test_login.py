@@ -9,7 +9,7 @@ from src.core.database.connection import DATABASE_URL
 from src.users.config import RouterConfig, URLPathsConfig, cookies_config
 from src.users.constants import ErrorDetails
 from src.users.domain.models import UserModel
-from tests.config import TestUserConfig
+from tests.config import FakeUserConfig
 from tests.utils import get_error_message_from_response
 
 
@@ -18,8 +18,8 @@ async def test_login_by_email_success(async_client: AsyncClient, create_test_use
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json={
-            'username': TestUserConfig.EMAIL,
-            'password': TestUserConfig.PASSWORD
+            'username': FakeUserConfig.EMAIL,
+            'password': FakeUserConfig.PASSWORD
         }
     )
 
@@ -32,8 +32,8 @@ async def test_login_by_username_success(async_client: AsyncClient, create_test_
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json={
-            'username': TestUserConfig.USERNAME,
-            'password': TestUserConfig.PASSWORD
+            'username': FakeUserConfig.USERNAME,
+            'password': FakeUserConfig.PASSWORD
         }
     )
 
@@ -45,7 +45,7 @@ async def test_login_by_username_success(async_client: AsyncClient, create_test_
 async def test_login_fail_user_not_found(async_client: AsyncClient, map_models_to_orm: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json=TestUserConfig().to_dict(to_lower=True)
+        json=FakeUserConfig().to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -54,7 +54,7 @@ async def test_login_fail_user_not_found(async_client: AsyncClient, map_models_t
 
 @pytest.mark.anyio
 async def test_login_fail_incorrect_password(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
-    test_user_config: TestUserConfig = TestUserConfig()
+    test_user_config: FakeUserConfig = FakeUserConfig()
     test_user_config.PASSWORD = 'incorrectPassword'
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
@@ -74,14 +74,14 @@ async def test_login_fail_email_is_not_verified(
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
     async with engine.begin() as conn:
         try:
-            await conn.execute(update(UserModel).values(email_verified=False).filter_by(email=TestUserConfig.EMAIL))
+            await conn.execute(update(UserModel).values(email_verified=False).filter_by(email=FakeUserConfig.EMAIL))
             await conn.commit()
         except IntegrityError:
             await conn.rollback()
 
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
-        json=TestUserConfig().to_dict(to_lower=True)
+        json=FakeUserConfig().to_dict(to_lower=True)
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN

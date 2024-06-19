@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession, async_sessionm
 
 from src.groups.domain.models import GroupModel
 from src.groups.adapters.repositories import SQLAlchemyGroupsRepository
-from tests.config import TestGroupConfig
+from tests.config import FakeGroupConfig
 
 
 @pytest.mark.anyio
@@ -21,8 +21,8 @@ async def test_sqlalchemy_groups_repository_get_success(
 
     assert group is not None
     assert group.id == 1
-    assert group.name == TestGroupConfig.NAME
-    assert group.owner_id == TestGroupConfig.OWNER_ID
+    assert group.name == FakeGroupConfig.NAME
+    assert group.owner_id == FakeGroupConfig.OWNER_ID
 
 
 @pytest.mark.anyio
@@ -46,13 +46,13 @@ async def test_sqlalchemy_groups_repository_get_by_owner_and_name_success(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     group: Optional[GroupModel] = await SQLAlchemyGroupsRepository(session=session).get_by_owner_and_name(
-        owner_id=TestGroupConfig.OWNER_ID,
-        name=TestGroupConfig.NAME
+        owner_id=FakeGroupConfig.OWNER_ID,
+        name=FakeGroupConfig.NAME
     )
 
     assert group is not None
-    assert group.name == TestGroupConfig.NAME
-    assert group.owner_id == TestGroupConfig.OWNER_ID
+    assert group.name == FakeGroupConfig.NAME
+    assert group.owner_id == FakeGroupConfig.OWNER_ID
 
 
 @pytest.mark.anyio
@@ -65,7 +65,7 @@ async def test_sqlalchemy_groups_repository_get_by_owner_and_name_fail_by_owner_
     session: AsyncSession = async_session_factory()
     group: Optional[GroupModel] = await SQLAlchemyGroupsRepository(session=session).get_by_owner_and_name(
         owner_id=2,
-        name=TestGroupConfig.NAME
+        name=FakeGroupConfig.NAME
     )
 
     assert group is None
@@ -80,7 +80,7 @@ async def test_sqlalchemy_groups_repository_get_by_owner_and_name_fail_by_name(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     group: Optional[GroupModel] = await SQLAlchemyGroupsRepository(session=session).get_by_owner_and_name(
-        owner_id=TestGroupConfig.OWNER_ID,
+        owner_id=FakeGroupConfig.OWNER_ID,
         name='someGroupName'
     )
 
@@ -96,13 +96,13 @@ async def test_sqlalchemy_groups_repository_get_user_groups(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     user_groups: List[GroupModel] = await SQLAlchemyGroupsRepository(session=session).get_user_groups(
-        user_id=TestGroupConfig.OWNER_ID
+        user_id=FakeGroupConfig.OWNER_ID
     )
     assert len(user_groups) == 1
     group: GroupModel = user_groups[0]
     assert group.id == 1
-    assert group.owner_id == TestGroupConfig.OWNER_ID
-    assert group.name == TestGroupConfig.NAME
+    assert group.owner_id == FakeGroupConfig.OWNER_ID
+    assert group.name == FakeGroupConfig.NAME
 
 
 @pytest.mark.anyio
@@ -114,7 +114,7 @@ async def test_sqlalchemy_groups_repository_get_empty_user_groups(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     user_groups: List[GroupModel] = await SQLAlchemyGroupsRepository(session=session).get_user_groups(
-        user_id=TestGroupConfig.OWNER_ID
+        user_id=FakeGroupConfig.OWNER_ID
     )
     assert len(user_groups) == 0
 
@@ -131,8 +131,8 @@ async def test_sqlalchemy_groups_repository_list(
     assert len(groups_list) == 1
     group: GroupModel = groups_list[0]
     assert group.id == 1
-    assert group.owner_id == TestGroupConfig.OWNER_ID
-    assert group.name == TestGroupConfig.NAME
+    assert group.owner_id == FakeGroupConfig.OWNER_ID
+    assert group.name == FakeGroupConfig.NAME
 
 
 @pytest.mark.anyio
@@ -189,8 +189,8 @@ async def test_sqlalchemy_groups_repository_add_group_success(
 
     cursor: CursorResult = await async_connection.execute(
         select(GroupModel).filter_by(
-            name=TestGroupConfig.NAME,
-            owner_id=TestGroupConfig.OWNER_ID
+            name=FakeGroupConfig.NAME,
+            owner_id=FakeGroupConfig.OWNER_ID
         )
     )
     result: Optional[Row] = cursor.first()
@@ -198,13 +198,13 @@ async def test_sqlalchemy_groups_repository_add_group_success(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    group: GroupModel = GroupModel(**TestGroupConfig().to_dict(to_lower=True))
+    group: GroupModel = GroupModel(**FakeGroupConfig().to_dict(to_lower=True))
     await SQLAlchemyGroupsRepository(session=session).add(model=group)
 
     cursor = await async_connection.execute(
         select(GroupModel).filter_by(
-            name=TestGroupConfig.NAME,
-            owner_id=TestGroupConfig.OWNER_ID
+            name=FakeGroupConfig.NAME,
+            owner_id=FakeGroupConfig.OWNER_ID
         )
     )
     result = cursor.first()
@@ -224,7 +224,7 @@ async def test_sqlalchemy_groups_repository_add_group_success_with_provided_alre
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     group_name: str = 'someGroupName'
-    group: GroupModel = GroupModel(**TestGroupConfig().to_dict(to_lower=True))
+    group: GroupModel = GroupModel(**FakeGroupConfig().to_dict(to_lower=True))
     group.name = group_name
     group.id = 1
 
@@ -233,7 +233,7 @@ async def test_sqlalchemy_groups_repository_add_group_success_with_provided_alre
     cursor = await async_connection.execute(
         select(GroupModel).filter_by(
             name=group_name,
-            owner_id=TestGroupConfig.OWNER_ID
+            owner_id=FakeGroupConfig.OWNER_ID
         )
     )
     result = cursor.first()
@@ -253,7 +253,7 @@ async def test_sqlalchemy_groups_repository_update_existing_group(
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
     group_name: str = 'someGroupName'
-    group: GroupModel = GroupModel(**TestGroupConfig().to_dict(to_lower=True))
+    group: GroupModel = GroupModel(**FakeGroupConfig().to_dict(to_lower=True))
     group.name = group_name
 
     await SQLAlchemyGroupsRepository(session=session).update(id=1, model=group)
@@ -275,6 +275,6 @@ async def test_sqlalchemy_groups_repository_update_non_existing_group(
 
     async_session_factory: async_sessionmaker = async_sessionmaker(bind=async_connection)
     session: AsyncSession = async_session_factory()
-    group: GroupModel = GroupModel(**TestGroupConfig().to_dict(to_lower=True))
+    group: GroupModel = GroupModel(**FakeGroupConfig().to_dict(to_lower=True))
     with pytest.raises(NoResultFound):
         await SQLAlchemyGroupsRepository(session=session).update(id=1, model=group)

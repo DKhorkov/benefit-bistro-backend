@@ -5,7 +5,7 @@ from typing import Dict, Any
 
 from src.users.config import RouterConfig, URLPathsConfig, cookies_config
 from src.users.constants import ErrorDetails
-from tests.config import TestUserConfig
+from tests.config import FakeUserConfig
 from tests.utils import get_error_message_from_response
 
 
@@ -24,8 +24,8 @@ async def test_get_my_account_success(
     assert response.status_code == status.HTTP_200_OK
 
     response_content: Dict[str, Any] = response.json()
-    assert response_content['email'] == TestUserConfig.EMAIL
-    assert response_content['username'] == TestUserConfig.USERNAME
+    assert response_content['email'] == FakeUserConfig.EMAIL
+    assert response_content['username'] == FakeUserConfig.USERNAME
 
 
 @pytest.mark.anyio
