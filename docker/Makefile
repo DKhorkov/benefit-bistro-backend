@@ -8,6 +8,12 @@ help:
 	@echo "make build                        - build docker and it's environment."
 	@echo "make run							 - run docker."
 	@echo "make clean                        - cleanup docker kitchen."
+	@echo "make network                      - create docker network for project."
+	@echo "make prod                         - run docker for production purposes."
+	@echo "make local                        - run docker for local purposes."
+	@echo "make makemigrations               - create alembic migration."
+	@echo "make migrate                      - upgrade database according to alembic migration."
+	@echo "make downgrade                    - downgrade database according to alembic migration."
 
 network:
 	sudo docker network create benefit_bistro_network

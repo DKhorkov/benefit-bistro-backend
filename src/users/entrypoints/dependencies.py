@@ -10,7 +10,7 @@ from src.users.service_layer.handlers import EVENTS_HANDLERS_FOR_INJECTION, COMM
 from src.users.utils import oauth2_scheme
 from src.users.service_layer.units_of_work import SQLAlchemyUsersUnitOfWork
 from src.security.utils import parse_jwt_token
-from src.users.service_layer.views import UsersViews
+from src.users.entrypoints.views import UsersViews
 from src.users.domain.commands import (
     RegisterUserCommand,
     GetUserCommand,

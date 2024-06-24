@@ -4,7 +4,7 @@ from typing import List
 from src.users.domain.models import UserModel
 from src.users.exceptions import UserNotFoundError
 from src.users.interfaces import UsersUnitOfWork, UsersRepository
-from src.users.service_layer.views import UsersViews
+from src.users.entrypoints.views import UsersViews
 from tests.config import FakeUserConfig
 from tests.users.fake_objects import FakeUsersUnitOfWork
 from tests.users.utils import create_fake_users_repository_instance

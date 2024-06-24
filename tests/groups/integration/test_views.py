@@ -3,7 +3,7 @@ from typing import List
 
 from src.groups.domain.models import GroupModel
 from src.groups.interfaces import GroupsRepository, GroupsUnitOfWork
-from src.groups.service_layer.views import GroupsViews
+from src.groups.entypoints.views import GroupsViews
 from tests.config import FakeGroupConfig
 from tests.groups.fake_objects import FakeGroupsUnitOfWork
 from tests.groups.utils import create_fake_groups_repository_instance
