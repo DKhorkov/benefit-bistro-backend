@@ -43,7 +43,7 @@ python -m venv venv
 
 source venv/bin/activate
 
-pip install -r requirements.txt
+pip install -r requirements/prod.txt
 
 uvicorn src.app:app --env-file .env --host <Ypur host here> --port <Your por here> --reload 
 ```

@@ -12,7 +12,7 @@ from src.groups.domain.models import GroupModel
 from src.groups.entypoints.schemas import CreateOrUpdateGroupScheme
 from src.groups.service_layer.units_of_work import SQLAlchemyGroupsUnitOfWork
 from src.groups.service_layer.handlers import EVENTS_HANDLERS_FOR_INJECTION, COMMANDS_HANDLERS_FOR_INJECTION
-from src.groups.service_layer.views import GroupsViews
+from src.groups.entypoints.views import GroupsViews
 from src.users.domain.models import UserModel
 from src.users.entrypoints.dependencies import authenticate_user
 
