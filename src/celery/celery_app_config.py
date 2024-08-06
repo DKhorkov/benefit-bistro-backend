@@ -27,5 +27,5 @@ DEFAULT_RESULT_BACKEND: str = 'rpc'
 celery_app_config: CeleryAppConfig = CeleryAppConfig(
     broker_url=REDIS_URL if celery_config.USE_BROKER else DEFAULT_BROKER_URL,
     result_backend=REDIS_URL if celery_config.USE_RESULT_BACKEND else DEFAULT_RESULT_BACKEND,
-    include=['src.celery.tasks.auth_tasks']
+    include=['src.celery.tasks.users_tasks']
 )

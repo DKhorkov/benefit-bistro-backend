@@ -94,7 +94,7 @@ async def test_register_success(async_client: AsyncClient) -> None:
 @pytest.mark.anyio
 async def test_register_fail_email_already_taken(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None
+        create_test_user: None
 ) -> None:
 
     test_user_config: FakeUserConfig = FakeUserConfig()
@@ -111,7 +111,7 @@ async def test_register_fail_email_already_taken(
 @pytest.mark.anyio
 async def test_register_fail_username_already_taken(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None
+        create_test_user: None
 ) -> None:
 
     test_user_config: FakeUserConfig = FakeUserConfig()

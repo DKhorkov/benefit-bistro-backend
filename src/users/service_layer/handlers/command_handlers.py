@@ -66,7 +66,7 @@ class VerifyUserCredentialsCommandHandler(UsersCommandHandler):
         if not user.email_verified:
             raise EmailIsNotVerifiedError
 
-        if not await verify_password(command.password, user.password):
+        if not await verify_password(plain_password=command.password, hashed_password=user.password):
             raise InvalidPasswordError
 
         await user.protect_password()

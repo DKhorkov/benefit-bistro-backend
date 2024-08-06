@@ -43,7 +43,7 @@ async def test_verify_email_fail_user_does_not_exist(async_client: AsyncClient) 
 
 
 @pytest.mark.anyio
-async def test_verify_email_fail_invalid_token(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+async def test_verify_email_fail_invalid_token(async_client: AsyncClient, create_test_user: None) -> None:
     verify_email_url_base: str = get_substring_before_chars(
         chars='{',
         string=URLPathsConfig.VERIFY_EMAIL

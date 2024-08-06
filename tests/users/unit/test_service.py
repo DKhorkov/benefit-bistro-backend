@@ -177,7 +177,7 @@ async def test_users_service_get_all_users_with_existing_user() -> None:
 
 
 @pytest.mark.anyio
-async def test_users_service_get_all_users_with_no_existing_users() -> None:
+async def test_users_service_get_all_users_without_existing_users() -> None:
     users_repository: UsersRepository = await create_fake_users_repository_instance()
     users_unit_of_work: UsersUnitOfWork = FakeUsersUnitOfWork(users_repository=users_repository)
     users_service: UsersService = UsersService(uow=users_unit_of_work)

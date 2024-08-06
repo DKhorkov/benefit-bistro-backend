@@ -48,7 +48,7 @@ async def test_delete_group_success(
 @pytest.mark.anyio
 async def test_delete_group_fail_group_does_not_exist(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
         cookies: Cookies
 ) -> None:
 
