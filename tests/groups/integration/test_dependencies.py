@@ -19,7 +19,7 @@ from src.groups.entypoints.dependencies import (
 
 
 @pytest.mark.anyio
-async def test_create_group_success(create_test_user_if_not_exists: None) -> None:
+async def test_create_group_success(create_test_user: None) -> None:
     group_data: CreateOrUpdateGroupScheme = CreateOrUpdateGroupScheme(**FakeGroupConfig().to_dict(to_lower=True))
     user: UserModel = UserModel(**FakeUserConfig().to_dict(to_lower=True), id=1)
     group: GroupModel = await create_group(group_data=group_data, user=user)
@@ -74,7 +74,7 @@ async def test_delete_group_fail_group_does_not_belong_to_current_user(
 
 @pytest.mark.anyio
 async def test_delete_group_fail_group_does_not_exist(
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -84,7 +84,7 @@ async def test_delete_group_fail_group_does_not_exist(
 
 
 @pytest.mark.anyio
-async def test_get_current_user_groups_success_with_no_existing_groups(create_test_user_if_not_exists: None) -> None:
+async def test_get_current_user_groups_success_without_existing_groups(create_test_user: None) -> None:
     user: UserModel = UserModel(**FakeUserConfig().to_dict(to_lower=True), id=1)
     user_groups: List[GroupModel] = await get_current_user_groups(user=user)
 
@@ -114,7 +114,7 @@ async def test_update_group_success(create_test_group: None) -> None:
 
 @pytest.mark.anyio
 async def test_update_group_fail_group_does_not_exist(
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 

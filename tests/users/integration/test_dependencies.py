@@ -40,14 +40,14 @@ async def test_register_user_success(map_models_to_orm: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_register_user_fail(create_test_user_if_not_exists: None) -> None:
+async def test_register_user_fail(create_test_user: None) -> None:
     user_data: RegisterUserScheme = RegisterUserScheme(**FakeUserConfig().to_dict(to_lower=True))
     with pytest.raises(UserAlreadyExistsError):
         await register_user(user_data=user_data)
 
 
 @pytest.mark.anyio
-async def test_verify_user_credentials_by_username_success(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_by_username_success(create_test_user: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(username=FakeUserConfig.USERNAME, password=FakeUserConfig.PASSWORD)
     user: UserModel = await verify_user_credentials(user_data=user_data)
 
@@ -58,7 +58,7 @@ async def test_verify_user_credentials_by_username_success(create_test_user_if_n
 
 
 @pytest.mark.anyio
-async def test_verify_user_credentials_by_email_success(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_by_email_success(create_test_user: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(username=FakeUserConfig.EMAIL, password=FakeUserConfig.PASSWORD)
     user: UserModel = await verify_user_credentials(user_data=user_data)
 
@@ -76,7 +76,7 @@ async def test_verify_user_credentials_fail_user_does_not_exist(map_models_to_or
 
 
 @pytest.mark.anyio
-async def test_verify_user_credentials_fail_incorrect_password(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_fail_incorrect_password(create_test_user: None) -> None:
     user_data: LoginUserScheme = LoginUserScheme(**FakeUserConfig().to_dict(to_lower=True))
     user_data.password = 'some_incorrect_password'
     with pytest.raises(InvalidPasswordError):
@@ -84,7 +84,7 @@ async def test_verify_user_credentials_fail_incorrect_password(create_test_user_
 
 
 @pytest.mark.anyio
-async def test_verify_user_credentials_fail_email_is_not_verified(create_test_user_if_not_exists: None) -> None:
+async def test_verify_user_credentials_fail_email_is_not_verified(create_test_user: None) -> None:
     engine: AsyncEngine = create_async_engine(DATABASE_URL)
     async with engine.begin() as conn:
         try:
@@ -143,7 +143,7 @@ async def test_verify_user_email_fail_user_does_not_exist(map_models_to_orm: Non
 
 
 @pytest.mark.anyio
-async def test_get_all_users_with_existing_user(create_test_user_if_not_exists: None) -> None:
+async def test_get_all_users_with_existing_user(create_test_user: None) -> None:
     users: List[UserModel] = await get_all_users()
     assert len(users) == 1
     user: UserModel = users[0]
@@ -154,7 +154,7 @@ async def test_get_all_users_with_existing_user(create_test_user_if_not_exists: 
 
 
 @pytest.mark.anyio
-async def test_get_all_users_with_no_existing_users(map_models_to_orm: None) -> None:
+async def test_get_all_users_without_existing_users(map_models_to_orm: None) -> None:
     users: List[UserModel] = await get_all_users()
     assert len(users) == 0
 

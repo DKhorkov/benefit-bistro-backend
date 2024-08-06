@@ -13,7 +13,7 @@ from tests.config import FakeGroupConfig
 @pytest.mark.anyio
 async def test_create_group_success(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
         cookies: Cookies
 ) -> None:
 
@@ -33,7 +33,7 @@ async def test_create_group_success(
 @pytest.mark.anyio
 async def test_create_group_fail_user_unauthorized(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None
+        create_test_user: None
 ) -> None:
 
     response: Response = await async_client.post(
@@ -64,7 +64,7 @@ async def test_create_group_fail_group_already_exists(
 @pytest.mark.anyio
 async def test_create_group_fail_group_name_too_short(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
         cookies: Cookies
 ) -> None:
 
@@ -83,7 +83,7 @@ async def test_create_group_fail_group_name_too_short(
 @pytest.mark.anyio
 async def test_create_group_fail_group_name_too_long(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
         cookies: Cookies
 ) -> None:
 

@@ -10,8 +10,8 @@ from tests.config import FakeUserConfig
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_get_success(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_get_success(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -26,8 +26,8 @@ async def test_sqlalchemy_user_repository_get_success(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_get_fail(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_get_fail(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -38,8 +38,8 @@ async def test_sqlalchemy_user_repository_get_fail(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_get_by_email_success(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_get_by_email_success(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -56,8 +56,8 @@ async def test_sqlalchemy_user_repository_get_by_email_success(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_get_by_email_fail(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_get_by_email_fail(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -71,8 +71,8 @@ async def test_sqlalchemy_user_repository_get_by_email_fail(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_get_by_username_success(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_get_by_username_success(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -89,8 +89,8 @@ async def test_sqlalchemy_user_repository_get_by_username_success(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_get_by_username_fail(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_get_by_username_fail(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -104,8 +104,8 @@ async def test_sqlalchemy_user_repository_get_by_username_fail(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_list(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_list(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -120,7 +120,7 @@ async def test_sqlalchemy_user_repository_list(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_empty_list(
+async def test_sqlalchemy_users_repository_empty_list(
         map_models_to_orm: None,
         async_connection: AsyncConnection
 ) -> None:
@@ -132,8 +132,8 @@ async def test_sqlalchemy_user_repository_empty_list(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_delete_existing_user(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_delete_existing_user(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -151,7 +151,7 @@ async def test_sqlalchemy_user_repository_delete_existing_user(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_delete_non_existing_user(
+async def test_sqlalchemy_users_repository_delete_non_existing_user(
         map_models_to_orm: None,
         async_connection: AsyncConnection
 ) -> None:
@@ -166,7 +166,7 @@ async def test_sqlalchemy_user_repository_delete_non_existing_user(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_add_user_success(
+async def test_sqlalchemy_users_repository_add_user_success(
         map_models_to_orm: None,
         async_connection: AsyncConnection
 ) -> None:
@@ -186,8 +186,8 @@ async def test_sqlalchemy_user_repository_add_user_success(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_add_user_success_with_provided_already_existing_id(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_add_user_success_with_provided_already_existing_id(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -213,8 +213,8 @@ async def test_sqlalchemy_user_repository_add_user_success_with_provided_already
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_add_user_fail_username_already_exists(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_add_user_fail_username_already_exists(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -235,8 +235,8 @@ async def test_sqlalchemy_user_repository_add_user_fail_username_already_exists(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_add_user_fail_email_already_exists(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_add_user_fail_email_already_exists(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -257,8 +257,8 @@ async def test_sqlalchemy_user_repository_add_user_fail_email_already_exists(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_update_existing_user(
-        create_test_user_if_not_exists: None,
+async def test_sqlalchemy_users_repository_update_existing_user(
+        create_test_user: None,
         async_connection: AsyncConnection
 ) -> None:
 
@@ -283,7 +283,7 @@ async def test_sqlalchemy_user_repository_update_existing_user(
 
 
 @pytest.mark.anyio
-async def test_sqlalchemy_user_repository_update_non_existing_user(
+async def test_sqlalchemy_users_repository_update_non_existing_user(
         map_models_to_orm: None,
         async_connection: AsyncConnection
 ) -> None:

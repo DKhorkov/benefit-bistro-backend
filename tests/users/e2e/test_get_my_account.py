@@ -12,7 +12,7 @@ from tests.utils import get_error_message_from_response
 @pytest.mark.anyio
 async def test_get_my_account_success(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
         cookies: Cookies
 ) -> None:
 
@@ -29,7 +29,7 @@ async def test_get_my_account_success(
 
 
 @pytest.mark.anyio
-async def test_get_my_account_fail(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+async def test_get_my_account_fail(async_client: AsyncClient, create_test_user: None) -> None:
     # Deleting cookies from async client, because if used as a "session" fixture:
     async_client.cookies.delete(cookies_config.COOKIES_KEY)
 

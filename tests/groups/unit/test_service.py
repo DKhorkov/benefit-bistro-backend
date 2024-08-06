@@ -35,7 +35,7 @@ async def test_groups_service_delete_group_success() -> None:
 
 
 @pytest.mark.anyio
-async def test_groups_service_get_user_groups_success_with_no_groups() -> None:
+async def test_groups_service_get_user_groups_success_without_groups() -> None:
     groups_repository: GroupsRepository = create_fake_groups_repository_instance()
     groups_unit_of_work: GroupsUnitOfWork = FakeGroupsUnitOfWork(groups_repository=groups_repository)
     groups_service: GroupsService = GroupsService(uow=groups_unit_of_work)

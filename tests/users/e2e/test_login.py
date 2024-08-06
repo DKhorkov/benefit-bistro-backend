@@ -14,7 +14,7 @@ from tests.utils import get_error_message_from_response
 
 
 @pytest.mark.anyio
-async def test_login_by_email_success(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+async def test_login_by_email_success(async_client: AsyncClient, create_test_user: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json={
@@ -28,7 +28,7 @@ async def test_login_by_email_success(async_client: AsyncClient, create_test_use
 
 
 @pytest.mark.anyio
-async def test_login_by_username_success(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+async def test_login_by_username_success(async_client: AsyncClient, create_test_user: None) -> None:
     response: Response = await async_client.post(
         url=RouterConfig.PREFIX + URLPathsConfig.LOGIN,
         json={
@@ -53,7 +53,7 @@ async def test_login_fail_user_not_found(async_client: AsyncClient, map_models_t
 
 
 @pytest.mark.anyio
-async def test_login_fail_incorrect_password(async_client: AsyncClient, create_test_user_if_not_exists: None) -> None:
+async def test_login_fail_incorrect_password(async_client: AsyncClient, create_test_user: None) -> None:
     test_user_config: FakeUserConfig = FakeUserConfig()
     test_user_config.PASSWORD = 'incorrectPassword'
     response: Response = await async_client.post(
@@ -68,7 +68,7 @@ async def test_login_fail_incorrect_password(async_client: AsyncClient, create_t
 @pytest.mark.anyio
 async def test_login_fail_email_is_not_verified(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None
+        create_test_user: None
 ) -> None:
 
     engine: AsyncEngine = create_async_engine(DATABASE_URL)

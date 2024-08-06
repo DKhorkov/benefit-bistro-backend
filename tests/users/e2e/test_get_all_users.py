@@ -10,7 +10,7 @@ from tests.config import FakeUserConfig
 @pytest.mark.anyio
 async def test_get_all_users_with_existing_user(
         async_client: AsyncClient,
-        create_test_user_if_not_exists: None,
+        create_test_user: None,
 ) -> None:
 
     response: Response = await async_client.get(url=RouterConfig.PREFIX + URLPathsConfig.ALL)
@@ -26,7 +26,7 @@ async def test_get_all_users_with_existing_user(
 
 
 @pytest.mark.anyio
-async def test_get_all_users_with_no_existing_users(async_client: AsyncClient, map_models_to_orm: None) -> None:
+async def test_get_all_users_without_existing_users(async_client: AsyncClient, map_models_to_orm: None) -> None:
     response: Response = await async_client.get(url=RouterConfig.PREFIX + URLPathsConfig.ALL)
     assert response.status_code == status.HTTP_200_OK
 
