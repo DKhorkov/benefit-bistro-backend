@@ -7,7 +7,7 @@ from src.config import PathsConfig as BasePathsConfig
 @dataclass(frozen=True)
 class PathsConfig(BasePathsConfig):
     EMAIL_TEMPLATES: str = BasePathsConfig.TEMPLATES + 'email_templates/'
-    VERIFY_EMAIL: str = 'verify_email.html'
+    VERIFY_EMAIL_TEMPLATE: str = 'verify_email.html'
 
 
 @dataclass(frozen=True)
