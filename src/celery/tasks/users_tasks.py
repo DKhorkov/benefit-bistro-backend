@@ -16,7 +16,7 @@ from src.users.config import (
 
 @celery.task
 def send_verify_email_message(user_id: int, username: str, email: str) -> None:
-    template: Template = get_email_template(path=PathsConfig.VERIFY_EMAIL)
+    template: Template = get_email_template(path=PathsConfig.VERIFY_EMAIL_TEMPLATE)
     jwt_data: JWTDataModel = JWTDataModel(user_id=user_id)
     token: str = asyncio.run(create_jwt_token(jwt_data=jwt_data))
     verify_email_path: str = AuthRouterConfig.PREFIX + get_substring_before_chars(

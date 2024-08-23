@@ -6,8 +6,8 @@ from src.celery.config import PathsConfig
 
 
 def test_get_email_template_success() -> None:
-    template: Template = get_email_template(path=PathsConfig.VERIFY_EMAIL)
-    assert template.name == PathsConfig.VERIFY_EMAIL
+    template: Template = get_email_template(path=PathsConfig.VERIFY_EMAIL_TEMPLATE)
+    assert template.name == PathsConfig.VERIFY_EMAIL_TEMPLATE
 
 
 def test_get_email_template_fail() -> None:
